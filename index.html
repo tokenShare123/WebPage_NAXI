@@ -681,7 +681,7 @@
                 <i class="fa-solid fa-chart-pie" style="margin-right: 6px;"></i>
                 <span id="connectionStatus">Dashboard</span>
             </button>
-            <button class="top-tab" onclick="switchMainView('Whitepaper', this)">
+            <button id="whitepaperTabBtn" class="top-tab" onclick="switchMainView('Whitepaper', this)">
                 <i class="fa-solid fa-book-open" style="margin-right: 6px;"></i>Whitepaper
             </button>
         </div>
@@ -1816,6 +1816,9 @@
         async function initWallet() {
             if (typeof window.ethereum === 'undefined') {
                 document.getElementById("connectionStatus").innerText = "Disconnected..";
+                const whitepaperBtn = document.getElementById('whitepaperTabBtn');       
+                switchMainView('Whitepaper', whitepaperBtn);
+                
                 return;
             }
             try {
