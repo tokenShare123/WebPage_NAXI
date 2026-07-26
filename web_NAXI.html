@@ -1,0 +1,2276 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NAXI Token WEB</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+    <!-- Include html5-qrcode for actual barcode/QR code scanning support -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+
+    <style>
+        :root {
+            --bg: #060608;
+            --panel: #0e1013;
+            --panel-2: #14171a;
+            --panel-3: #1c2128;
+            --muted: #8b949e;
+            --text: #F0F6FC;
+            --accent: #6f5af8;
+            --accent-hover: #5a45d0;
+            --accent-glow: rgba(111, 90, 248, 0.25);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --card-border-hover: rgba(111, 90, 248, 0.4);
+            --success: #00ea91;
+            --danger: #ff4a5a;
+            --info: #00bfff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 24px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Top Level Main View Switcher Tabs */
+        .top-level-tabs {
+            display: flex;
+            background: var(--panel);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 4px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .top-tab {
+            flex: 1;
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 700;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .top-tab:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .top-tab.active {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .connection-status {
+            text-align: center;
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        /* Top Header Wallet Info Card */
+        .wallet-header-card {
+            background: var(--panel);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 22px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .token-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .token-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .token-icon {
+            width: 44px;
+            height: 44px;
+            background: #00ea91;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 19px;
+            color: #fff;
+            
+        }
+
+        .token-name-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .token-right {
+            text-align: right;
+        }
+
+        .token-balance {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .token-balance-usd {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 2px;
+            font-weight: 500;
+        }
+
+        /* Market Price Box */
+        .market-price-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .market-left {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--muted);
+        }
+
+        .market-right {
+            text-align: right;
+        }
+
+        .market-rate {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .market-rate-usd {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* Refined 5-Tab Navigation Bar */
+        .nav-tabs {
+            display: flex;
+            justify-content: space-between;
+            background: var(--panel);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 6px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-tab {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 10px 12px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+            flex: 1;
+        }
+
+        .nav-tab i {
+            font-size: 15px;
+        }
+
+        .nav-tab:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .nav-tab.active {
+            color: #fff;
+            background: var(--accent);
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        /* Panel Cards & Forms */
+        .panel-card {
+            background: var(--panel);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: border-color 0.2s;
+        }
+
+        .panel-card:hover {
+            border-color: var(--card-border-hover);
+        }
+
+        .panel-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text);
+        }
+
+        .panel-title i {
+            color: var(--accent);
+            font-size: 16px;
+            width: 24px;
+            text-align: center;
+        }
+
+        label {
+            font-size: 11px;
+            color: var(--muted);
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            background: var(--panel-2);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            color: var(--text);
+            padding: 12px;
+            font-size: 14px;
+            margin-bottom: 14px;
+            transition: all 0.2s;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        button.action-btn {
+            width: 100%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px var(--accent-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        button.action-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .result-msg {
+            font-size: 12px;
+            margin-top: 10px;
+            word-break: break-all;
+            display: none;
+            padding: 10px;
+            background: var(--panel-2);
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            line-height: 1.4;
+        }
+
+        /* Transit Swap Specific UI Styles */
+        .transit-box {
+            background: var(--panel-2);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .transit-row-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .transit-label {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .transit-bal-info {
+            font-size: 12px;
+            color: var(--info);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .transit-bal-info:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+
+        .transit-row-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .token-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--panel-3);
+            border: 1px solid var(--card-border);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .transit-input {
+            background: transparent;
+            border: none;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text);
+            text-align: right;
+            width: 55%;
+            margin-bottom: 0;
+            padding: 0;
+        }
+
+        .transit-input:focus {
+            box-shadow: none;
+            border: none;
+        }
+
+        .transit-usd-sub {
+            font-size: 12px;
+            color: var(--muted);
+            text-align: right;
+            margin-top: 4px;
+        }
+
+        .transit-switch-icon {
+            text-align: center;
+            margin: -6px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .transit-switch-btn {
+            background: var(--panel-3);
+            border: 1px solid var(--card-border);
+            color: var(--accent);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .transit-switch-btn:hover {
+            transform: rotate(180deg);
+        }
+
+        .transit-details {
+            background: var(--panel-2);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin: 16px 0;
+            font-size: 13px;
+        }
+
+        .transit-detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            color: var(--muted);
+        }
+
+        .transit-detail-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .transit-detail-val {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .transit-recent-card {
+            background: var(--panel-2);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-top: 20px;
+        }
+
+        /* Explorer Banner for Record Tab */
+        .explorer-banner {
+            background: linear-gradient(135deg, rgba(111, 90, 248, 0.12) 0%, rgba(0, 191, 255, 0.08) 100%);
+            border: 1px solid rgba(111, 90, 248, 0.3);
+            border-radius: 16px;
+            padding: 28px 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .explorer-banner i.main-icon {
+            font-size: 36px;
+            color: var(--accent);
+            margin-bottom: 14px;
+        }
+
+        .explorer-banner h3 {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .explorer-banner p {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 18px;
+            line-height: 1.5;
+        }
+
+        .explore-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 26px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        /* Transfer Specific Styles */
+        .transfer-card {
+            background: var(--panel);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .transfer-input-box {
+            background: var(--panel-2);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-bottom: 14px;
+        }
+
+        .transfer-input-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--muted);
+        }
+
+        .transfer-input-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .transfer-text-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-size: 15px;
+            padding: 4px 0;
+            margin-bottom: 0;
+
+            text-align: left !important;
+            direction: ltr;
+            text-overflow: clip;
+            white-space: nowrap;
+            overflow-x: auto;
+        }
+
+        .transfer-text-input:focus {
+            box-shadow: none;
+            border: none;
+        }
+
+        .max-btn {
+            background: rgba(111, 90, 248, 0.15);
+            color: var(--accent);
+            border: 1px solid rgba(111, 90, 248, 0.3);
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .max-btn:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .gas-fee-box {
+            background: var(--panel-2);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+
+        .gas-fee-detail {
+            background: var(--panel-3);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 10px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* QR Scanner Modal Container Style */
+        #qr-reader-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .qr-modal-content {
+            background: var(--panel);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #reader {
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--card-border);
+            margin-bottom: 15px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+
+        <!-- 頂層大頁籤 (Dashboard / Whitepaper) -->
+        <div class="top-level-tabs">
+            <button class="top-tab active" onclick="switchMainView('Dashboard', this)">
+                <i class="fa-solid fa-chart-pie" style="margin-right: 6px;"></i>
+                <span id="connectionStatus">Dashboard</span>
+            </button>
+            <button class="top-tab" onclick="switchMainView('Whitepaper', this)">
+                <i class="fa-solid fa-book-open" style="margin-right: 6px;"></i>Whitepaper
+            </button>
+        </div>
+
+        <!-- MAIN VIEW 1: DASHBOARD (包含原本所有完整功能) -->
+        <div id="mainView-Dashboard">
+            <!-- Top Header Layout -->
+            <!-- Top Header Layout -->
+            <div class="wallet-header-card">
+                <div class="token-row">
+                    <div class="token-left">
+                        <div class="token-icon">N</div>
+                        <div class="token-name-wrap" onclick="copyTokenAddress()" title="Copy Contract Address">
+                            <span id="tokenSymbol">NAXI</span> <i class="fa-regular fa-copy"></i>
+                        </div>
+                    </div>
+                    <div class="token-right">
+                        <div class="token-balance" id="tokenBalance">0.0000</div>
+                        <div class="token-balance-usd" id="tokenBalanceUsd">$0.00</div>
+                    </div>
+                </div>
+
+                <div class="market-price-card">
+                    <div class="market-left">Market Price</div>
+                    <div class="market-right">
+                        <div class="market-rate" id="marketRate">0.0000 BNB</div>
+                        <div class="market-rate-usd" id="marketRateUsd">$0.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Refined 5-Tab Navigation Bar -->
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="switchTab('Record')">
+                    <i class="fa-solid fa-clock-rotate-left"></i>Record
+                </button>
+                <button class="nav-tab" onclick="switchTab('Fn')">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>Fn()
+                </button>
+                <button class="nav-tab" onclick="switchTab('Swap')">
+                    <i class="fa-solid fa-right-left"></i>Swap
+                </button>
+                <button class="nav-tab" onclick="switchTab('Transfer')">
+                    <i class="fa-solid fa-paper-plane"></i>Transfer
+                </button>
+                <button class="nav-tab hidden" id="tabSetBtn" onclick="switchTab('Set')">
+                    <i class="fa-solid fa-gear"></i>Set
+                </button>
+            </div>
+
+            <!-- TAB CONTENT: RECORD -->
+            <div id="tabContent-Record" class="explorer-banner">
+                <i class="main-icon fa-solid fa-compass"></i>
+                <h3>Complete Transaction History</h3>
+                <p>View all your incoming, outgoing, and historical interaction logs securely and instantly on BscScan.
+                </p>
+                <a id="explorerLink" href="#" target="_blank" class="explore-btn">
+                    Open in BscScan <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:12px;"></i>
+                </a>
+            </div>
+
+            <!-- TAB CONTENT: Fn() -->
+            <div id="tabContent-Fn" class="hidden">
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-gavel"></i> Bid for Referral Rights</div>
+                    <input type="text" id="bid_day" placeholder="Relative Day (1-10)">
+                    <input type="text" id="bid_amt" placeholder="Bid Amount (NAXI)">
+                    <button class="action-btn" onclick="executeBid()"><i class="fa-solid fa-check"></i> Submit
+                        Bid</button>
+                    <div id="res_bidReferralRights" class="result-msg"></div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-link"></i> Bind Next Orphan Account</div>
+                    <button class="action-btn" onclick="executeWrite('bindNextOrphan', [])"><i
+                            class="fa-solid fa-link-slash"></i> Bind Orphan</button>
+                    <div id="res_bindNextOrphan" class="result-msg"></div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-chart-line"></i> My Account Stats</div>
+                    <button class="action-btn" onclick="runAccountQuery('checkMyLevel')" style="margin-bottom:10px;"><i
+                            class="fa-solid fa-medal"></i> Check Holder Level</button>
+                    <button class="action-btn" onclick="runAccountQuery('getMyReferral')" style="margin-bottom:10px;"><i
+                            class="fa-solid fa-user-shield"></i> Check My Referrer</button>
+                    <button class="action-btn" onclick="runAccountQuery('getMyShareClaimed')"><i
+                            class="fa-solid fa-gift"></i> Check Claimed Incentives</button>
+                    <div id="res_stats" class="result-msg"></div>
+                </div>
+            </div>
+
+            <!-- TAB CONTENT: SWAP -->
+            <div id="tabContent-Swap" class="hidden">
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-right-left"></i> BNB / NAXI Swap DEX</div>
+
+                    <!-- Pay Box -->
+                    <div class="transit-box">
+                        <div class="transit-row-top">
+                            <span class="transit-label">Pay (Send)</span>
+                            <span class="transit-bal-info" id="swapPayBalance" onclick="fillMaxBalance()"
+                                title="Click to max balance">Balance: 0.00</span>
+                        </div>
+                        <div class="transit-row-bottom">
+                            <div class="token-pill" id="payTokenLabel">
+                                <i class="fa-solid fa-coins" style="color:var(--accent);"></i> <span
+                                    id="payTokenSymbol">BNB</span>
+                            </div>
+                            <input type="text" id="swap_pay_amount" class="transit-input" placeholder="0.0"
+                                oninput="calculateSwapReceive()">
+                        </div>
+                        <div class="transit-usd-sub" id="swapPayUsd">≈ $0.00</div>
+                    </div>
+
+                    <!-- Switch Direction Button -->
+                    <div class="transit-switch-icon">
+                        <button class="transit-switch-btn" onclick="toggleSwapDirection()" title="Switch Direction">
+                            <i class="fa-solid fa-right-left fa-rotate-90"></i>
+                        </button>
+                    </div>
+
+                    <!-- Receive Box -->
+                    <div class="transit-box" style="margin-top: 0;">
+                        <div class="transit-row-top">
+                            <span class="transit-label">Receive (Estimated)</span>
+                            <span class="transit-bal-info" id="swapReceiveBalance"
+                                style="cursor: default; color: var(--muted);">Balance: 0.00</span>
+                        </div>
+                        <div class="transit-row-bottom">
+                            <div class="token-pill" id="receiveTokenLabel">
+                                <i class="fa-solid fa-n" style="color:var(--info);"></i> <span
+                                    id="receiveTokenSymbol">NAXI</span>
+                            </div>
+                            <input type="text" id="swap_receive_amount" class="transit-input" placeholder="0.0" readonly
+                                style="color: var(--muted);">
+                        </div>
+                        <div class="transit-usd-sub" id="swapReceiveUsd">≈ $0.00</div>
+                    </div>
+
+                    <!-- Detailed Metrics -->
+                    <div class="transit-details">
+                        <div class="transit-detail-row">
+                            <span>Exchange Rate</span>
+                            <span class="transit-detail-val" id="swapRateText">1 BNB ≈ 13,680 NAXI</span>
+                        </div>
+                        <div class="transit-detail-row">
+                            <span>Slippage Tolerance</span>
+                            <span class="transit-detail-val" style="color: var(--success);">0.5% <i
+                                    class="fa-solid fa-shield-halved"></i></span>
+                        </div>
+                        <div class="transit-detail-row">
+                            <span>Service Fee</span>
+                            <span class="transit-detail-val">0.3%</span>
+                        </div>
+                    </div>
+
+                    <button class="action-btn" id="swapActionBtn" onclick="executeTransitSwap()"
+                        style="padding: 14px; font-size: 15px;">
+                        <span id="swapBtnText">
+                            <i class="fa-solid fa-bolt"></i> Confirm Swap
+                        </span>
+                    </button>
+                    <div id="res_transitSwap" class="result-msg"></div>
+
+                    <!-- Recent Record Widget -->
+                    <div class="transit-recent-card">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 6px;">
+                            <span style="color: var(--muted); font-weight: 600;">Recent Transaction</span>
+                            <span style="color: var(--success); font-weight: 700;"><i
+                                    class="fa-solid fa-circle-check"></i>
+                                Success</span>
+                        </div>
+                        <div style="font-size: 13px; font-weight: 600;" id="recentSwapTxInfo">No recent swap in session
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB CONTENT: TRANSFER (All English) -->
+            <div id="tabContent-Transfer" class="hidden">
+                <div class="transfer-card">
+                    <div class="panel-title" style="justify-content: space-between; margin-bottom: 20px;">
+                        <span><i class="fa-solid fa-arrow-right-arrow-left"></i> Transfer</span>
+                        <span style="font-size: 13px; color: var(--accent); cursor: pointer; font-weight: 600;">
+                            Select Wallet <i class="fa-solid fa-chevron-right" style="font-size:10px;"></i></span>
+                    </div>
+
+                    <!-- Recipient Address -->
+                    <div class="transfer-input-box">
+                        <div class="transfer-input-header">
+                            <span>Recipient Address</span>
+                        </div>
+                        <div class="transfer-input-row">
+                            <input type="text" id="transfer_to" class="transfer-text-input"
+                                placeholder="Enter or paste wallet address">
+                            <i class="fa-solid fa-qrcode"
+                                style="font-size: 18px; color: var(--accent); cursor: pointer;"
+                                onclick="openQRScanner()" title="Scan QR Code"></i>
+                        </div>
+                    </div>
+
+                    <!-- Transfer Amount -->
+                    <div class="transfer-input-box">
+                        <div class="transfer-input-header">
+                            <span>Transfer Amount</span>
+                            <span style="color: var(--text); font-weight: 700; cursor: pointer;">
+                                NAXI <i class="fa-solid fa-chevron-right" style="font-size:10px;"></i></span>
+                        </div>
+                        <div class="transfer-input-row" style="margin-bottom: 10px;">
+                            <input type="text" id="transfer_amount" class="transfer-text-input" placeholder="0"
+                                style="font-size: 24px; font-weight: 700;" oninput="calculateTransferUsd()">
+                            <button class="max-btn" onclick="fillTransferMax()">MAX</button>
+                        </div>
+                        <div
+                            style="display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); border-top: 1px solid var(--card-border); padding-top: 8px;">
+                            <span>Balance</span>
+                            <span id="transferBalanceText" style="color: var(--text); font-weight: 600;">0.0000
+                                NAXI</span>
+                        </div>
+                    </div>
+
+                    <!-- Network Fee Section -->
+                    <div class="gas-fee-box">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <div
+                                style="display: flex; align-items: center; gap: 6px; font-weight: 600; color: var(--muted);">
+                                <span>Network Fee</span> <i class="fa-regular fa-circle-question"
+                                    style="font-size: 12px;"></i>
+                                <span
+                                    style="font-size: 11px; color: var(--success); font-weight: 500; margin-left: 6px;"><i
+                                        class="fa-solid fa-rotate" style="font-size: 10px;"></i> Update in 6s</span>
+                            </div>
+                        </div>
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; background: var(--panel-3); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--card-border);">
+                            <span style="font-size: 12px; font-weight: 600;">Payment Method</span>
+                            <span
+                                style="display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 13px;"><i
+                                    class="fa-solid fa-coins" style="color:var(--accent);"></i> BNB <i
+                                    class="fa-solid fa-chevron-right"
+                                    style="font-size: 10px; color: var(--muted);"></i></span>
+                        </div>
+
+                        <!-- Recommended Fee Option Dropdown Box -->
+                        <div class="gas-fee-detail">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <span
+                                    style="display: flex; align-items: center; gap: 6px; color: var(--text); font-weight: 600;"><i
+                                        class="fa-solid fa-gauge-high" style="color: var(--accent);"></i>
+                                    Recommended</span>
+                                <span style="color: var(--info);">Est. within 15s <i class="fa-solid fa-chevron-right"
+                                        style="font-size: 10px;"></i></span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                <span>Est. Fee</span>
+                                <span style="color: var(--text); font-weight: 600;">$0.002250 &nbsp; 0.000003939
+                                    BNB</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span>Max Fee</span>
+                                <span style="color: var(--text); font-weight: 600;">$0.003342 &nbsp; 0.00000585
+                                    BNB</span>
+                            </div>
+                            <div
+                                style="border-top: 1px solid var(--card-border); padding-top: 6px; font-size: 11px; line-height: 1.4; color: var(--muted);">
+                                Estimated Fee: Normal expected cost under regular conditions<br>
+                                Max Fee: Maximum acceptable cost during network volatility, adjustable
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="action-btn" onclick="executeTransfer()"
+                        style="padding: 14px; font-size: 15px; border-radius: 14px;"><i class="fa-solid fa-check"></i>
+                        Confirm</button>
+                    <div id="res_transfer" class="result-msg"></div>
+                </div>
+            </div>
+
+            <!-- TAB CONTENT: SET -->
+            <div id="tabContent-Set" class="hidden">
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-sliders"></i> Contract Address Setting</div>
+                    <input type="text" id="contractAddress" value="0x8151501C333e017D938FF892fb74067f8A162C26">
+                    <button class="action-btn" onclick="initWallet()"><i class="fa-solid fa-rotate"></i> Reconnect &
+                        Refresh</button>
+                </div>
+
+                <!-- Public Swap Status Toggles -->
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-toggle-on"></i> Public Swap Toggles</div>
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; background: var(--panel-2); padding: 12px; border-radius: 10px; border: 1px solid var(--card-border);">
+                            <span style="font-size: 13px; font-weight: 600;">Public Swap Enabled</span>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" id="val-public-is-swap"
+                                    style="width: 18px; height: 18px; accent-color: var(--accent); margin:0;">
+                                <button class="action-btn" style="width: auto; padding: 6px 14px; font-size: 12px;"
+                                    onclick="executeBoolWrite('setPublicIsSwap', 'val-public-is-swap')">Set</button>
+                            </div>
+                        </div>
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; background: var(--panel-2); padding: 12px; border-radius: 10px; border: 1px solid var(--card-border);">
+                            <span style="font-size: 13px; font-weight: 600;">Only Swap Out</span>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" id="val-public-only-out"
+                                    style="width: 18px; height: 18px; accent-color: var(--accent); margin:0;">
+                                <button class="action-btn" style="width: auto; padding: 6px 14px; font-size: 12px;"
+                                    onclick="executeBoolWrite('setPublicOnlySwapOut', 'val-public-only-out')">Set</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="res_publicSwapToggles" class="result-msg"></div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-clock"></i> Trade Cooldown (Minutes)</div>
+                    <input type="text" id="input-cooldown" placeholder="Cooldown in minutes">
+                    <button class="action-btn" onclick="executeWrite('setTRADE_COOLDOWN', ['input-cooldown'])"><i
+                            class="fa-solid fa-pen-to-square"></i> Set Cooldown</button>
+                    <div id="res_setTRADE_COOLDOWN" class="result-msg"></div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-coins"></i> Update Default Rate</div>
+                    <input type="text" id="new_default_rate" placeholder="New Rate (e.g. 13680)">
+                    <button class="action-btn" onclick="executeWrite('setDefaultRate', ['new_default_rate'])"><i
+                            class="fa-solid fa-pen-to-square"></i> Set Default Rate</button>
+                    <div id="res_setDefaultRate" class="result-msg"></div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-percent"></i> Mark Up</div>
+                    <input type="text" id="input-markup" placeholder="Mark up value">
+                    <button class="action-btn" onclick="executeWrite('setMark_up', ['input-markup'])"><i
+                            class="fa-solid fa-pen-to-square"></i> Set Mark Up</button>
+                    <div id="res_setMark_up" class="result-msg"></div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-hand-holding-dollar"></i> Incentive Percentage (%)
+                    </div>
+                    <input type="text" id="input-incentive" placeholder="Incentive percentage">
+                    <button class="action-btn" onclick="executeWrite('setINCENTIVE_PERCENTAGE', ['input-incentive'])"><i
+                            class="fa-solid fa-pen-to-square"></i> Set Incentive %</button>
+                    <div id="res_setINCENTIVE_PERCENTAGE" class="result-msg"></div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-file-invoice-dollar"></i> Bind Orphan Fee</div>
+                    <input type="text" id="input-orphan-fee" placeholder="Fee amount">
+                    <button class="action-btn" onclick="executeWrite('setBindOrphanFee', ['input-orphan-fee'])"><i
+                            class="fa-solid fa-pen-to-square"></i> Set Orphan Fee</button>
+                    <div id="res_setBindOrphanFee" class="result-msg"></div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-shield-halved"></i> Transfer Contract Ownership</div>
+                    <input type="text" id="new_owner_addr" placeholder="New Owner Address (0x...)">
+                    <button class="action-btn" style="background: var(--danger);"
+                        onclick="executeWrite('transferOwnership', ['new_owner_addr'])"><i
+                            class="fa-solid fa-triangle-exclamation"></i> Transfer Ownership</button>
+                    <div id="res_transferOwnership" class="result-msg"></div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-vault"></i> Emergency & Fund Withdraw</div>
+                    <button class="action-btn" onclick="executeWrite('withdrawBNB', [])" style="margin-bottom: 10px;"><i
+                            class="fa-solid fa-money-bill-wave"></i> Withdraw Contract BNB</button>
+                    <button class="action-btn" onclick="executeWrite('emergencyWithdraw', [])"><i
+                            class="fa-solid fa-lock"></i> Emergency Withdraw Tokens</button>
+                    <div id="res_withdrawBNB" class="result-msg"></div>
+                    <div id="res_emergencyWithdraw" class="result-msg"></div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-magnifying-glass-dollar"></i> Query Address Balance
+                    </div>
+                    <input type="text" id="bal_account" placeholder="Enter address 0x...">
+                    <button class="action-btn" onclick="runQuery('balanceOf', ['bal_account'])"><i
+                            class="fa-solid fa-search"></i> Check Balance</button>
+                    <div id="res_balanceOf" class="result-msg"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN VIEW 2: WHITEPAPER (精美英文白皮書內容) -->
+        <div id="mainView-Whitepaper" class="hidden">
+            <!DOCTYPE html>
+            <html lang="en">
+
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>NAXI Protocol Whitepaper</title>
+                <!-- Tailwind CSS for modern styling and layout -->
+                <script src="https://cdn.tailwindcss.com"></script>
+                <!-- FontAwesome for icons -->
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+                <!-- Google Fonts: Inter -->
+                <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+                    rel="stylesheet">
+                <script>
+                    tailwind.config = {
+                        theme: {
+                            extend: {
+                                colors: {
+                                    dark: {
+                                        900: '#0B0F19',
+                                        800: '#111827',
+                                        700: '#1F2937',
+                                        600: '#374151'
+                                    },
+                                    accent: {
+                                        500: '#6366F1',
+                                        600: '#4F46E5',
+                                        glow: 'rgba(99, 102, 241, 0.4)'
+                                    }
+                                },
+                                fontFamily: {
+                                    sans: ['Inter', 'sans-serif'],
+                                }
+                            }
+                        }
+                    }
+                </script>
+                <style>
+                    .slide {
+                        display: none;
+                        opacity: 0;
+                        transition: opacity 0.5s ease-in-out;
+                    }
+
+                    .slide.active {
+                        display: flex;
+                        opacity: 1;
+                    }
+
+                    /* Custom scrollbar */
+                    ::-webkit-scrollbar {
+                        width: 8px;
+                    }
+
+                    ::-webkit-scrollbar-track {
+                        background: #0B0F19;
+                    }
+
+                    ::-webkit-scrollbar-thumb {
+                        background: #374151;
+                        border-radius: 4px;
+                    }
+
+                    ::-webkit-scrollbar-thumb:hover {
+                        background: #4F46E5;
+                    }
+                </style>
+            </head>
+
+            <body
+                class="bg-dark-900 text-gray-100 font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-accent-500 selection:text-white">
+
+                <!-- Top Navigation / Header Bar -->
+                <header
+                    class="w-full border-b border-dark-700 bg-dark-800/80 backdrop-blur-md sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center shadow-lg shadow-accent-glow">
+                            <i class="fa-solid fa-cube text-white text-lg"></i>
+                        </div>
+                        <div>
+                            <h1 class="font-bold text-lg tracking-wide text-white">NAXI Protocol</h1>
+                            <p class="text-xs text-gray-400">Next Artificial X Intelligence — Web3 Ecosystem</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span id="slideIndicator"
+                            class="text-xs font-semibold px-3 py-1 bg-dark-700 text-indigo-400 rounded-full border border-dark-600">Slide
+                            1 / 9</span>
+                        <div class="flex space-x-2">
+                            <button onclick="prevSlide()"
+                                class="w-9 h-9 rounded-lg bg-dark-700 hover:bg-dark-600 border border-dark-600 flex items-center justify-center transition text-gray-300 hover:text-white">
+                                <i class="fa-solid fa-chevron-left text-sm"></i>
+                            </button>
+                            <button onclick="nextSlide()"
+                                class="w-9 h-9 rounded-lg bg-indigo-600 hover:bg-indigo-500 flex items-center justify-center transition text-white shadow-md shadow-accent-glow">
+                                <i class="fa-solid fa-chevron-right text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Main Presentation Container -->
+                <main class="flex-grow max-w-7xl mx-auto w-full p-6 lg:p-10 flex items-center justify-center">
+
+                    <!-- SLIDE 1: Title & Overview -->
+                    <div id="slide-1" class="slide active w-full flex-col lg:flex-row gap-10 items-center">
+                        <div class="lg:w-1/2 space-y-6">
+                            <div
+                                class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-semibold uppercase tracking-wider">
+                                <i class="fa-solid fa-shield-halved"></i> <span>Protocol Whitepaper v2.0</span>
+                            </div>
+                            <h2 class="text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                                NAXI <span
+                                    class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-400">(Next
+                                    Artificial X Intelligence)</span>
+                            </h2>
+                            <p class="text-gray-400 text-base leading-relaxed">
+                                A next-generation experimental smart contract ecosystem integrating automated AMM
+                                mechanics, deflationary tokenomics, and a multi-tier holder matrix.
+                            </p>
+                            <div class="pt-4 flex flex-wrap gap-4 text-sm">
+                                <div
+                                    class="bg-dark-800 border border-dark-700 px-4 py-3 rounded-xl flex items-center space-x-3">
+                                    <i class="fa-solid fa-network-wired text-indigo-400 text-lg"></i>
+                                    <div>
+                                        <p class="text-xs text-gray-500">Network</p>
+                                        <p class="font-semibold text-gray-200">Binance Smart Chain (BSC)</p>
+                                    </div>
+                                </div>
+                                <div
+                                    class="bg-dark-800 border border-dark-700 px-4 py-3 rounded-xl flex items-center space-x-3">
+                                    <i class="fa-solid fa-coins text-indigo-400 text-lg"></i>
+                                    <div>
+                                        <p class="text-xs text-gray-500">Max Supply</p>
+                                        <p class="font-semibold text-gray-200">10 Billion NAXI</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="lg:w-1/2 w-full bg-dark-800 border border-dark-700 p-8 rounded-2xl shadow-2xl relative overflow-hidden">
+                            <div
+                                class="absolute -right-10 -bottom-10 w-48 h-48 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none">
+                            </div>
+                            <h3 class="text-lg font-bold text-white mb-6 flex items-center space-x-2">
+                                <i class="fa-solid fa-fingerprint text-indigo-400"></i>
+                                <span>Contract Verification Details</span>
+                            </h3>
+                            <div class="space-y-4 text-sm">
+                                <div class="bg-dark-900/60 p-4 rounded-xl border border-dark-700">
+                                    <span class="text-xs text-gray-500 block mb-1">Contract Address (BSC)</span>
+                                    <code
+                                        class="text-indigo-300 font-mono text-xs break-all">0x8151501C333e017D938FF892fb74067f8A162C26</code>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="bg-dark-900/60 p-4 rounded-xl border border-dark-700">
+                                        <span class="text-xs text-gray-500 block mb-1">Token Symbol</span>
+                                        <span class="font-bold text-white text-base">NAXI</span>
+                                    </div>
+                                    <div class="bg-dark-900/60 p-4 rounded-xl border border-dark-700">
+                                        <span class="text-xs text-gray-500 block mb-1">Standard</span>
+                                        <span class="font-bold text-white text-base">BEP-20</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 2: Executive Summary & Compliance -->
+                    <div id="slide-2" class="slide w-full flex-col space-y-8">
+                        <div class="text-center max-w-2xl mx-auto space-y-3">
+                            <span class="text-indigo-400 text-xs font-semibold uppercase tracking-wider">Legal &
+                                Compliance</span>
+                            <h2 class="text-3xl lg:text-4xl font-extrabold text-white">Executive Summary & Framework
+                            </h2>
+                            <p class="text-gray-400 text-sm">Built with rigorous compliance guardrails to protect
+                                participants and maintain stability.</p>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-6 rounded-2xl flex flex-col justify-between hover:border-indigo-500/50 transition">
+                                <div>
+                                    <div
+                                        class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xl mb-4">
+                                        <i class="fa-solid fa-scale-balanced"></i>
+                                    </div>
+                                    <h3 class="font-bold text-white text-lg mb-2">Non-Bank Compliance</h3>
+                                    <p class="text-gray-400 text-sm leading-relaxed">No traditional deposit or capital
+                                        solicitation attributes. All interactions and dynamic swaps execute autonomously
+                                        via smart contracts without interest guarantees.</p>
+                                </div>
+                                <div class="mt-6 pt-4 border-t border-dark-700 text-xs text-indigo-400 font-medium">
+                                    Fully Automated Execution</div>
+                            </div>
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-6 rounded-2xl flex flex-col justify-between hover:border-indigo-500/50 transition">
+                                <div>
+                                    <div
+                                        class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xl mb-4">
+                                        <i class="fa-solid fa-file-contract"></i>
+                                    </div>
+                                    <h3 class="font-bold text-white text-lg mb-2">Utility-Driven Design</h3>
+                                    <p class="text-gray-400 text-sm leading-relaxed">NAXI tokens do not constitute
+                                        securities, equity certificates, or profit-sharing agreements. Tokens drive
+                                        decentralized liquidity matrices and ecosystem governance.</p>
+                                </div>
+                                <div class="mt-6 pt-4 border-t border-dark-700 text-xs text-indigo-400 font-medium">
+                                    Decentralized Governance</div>
+                            </div>
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-6 rounded-2xl flex flex-col justify-between hover:border-indigo-500/50 transition">
+                                <div>
+                                    <div
+                                        class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xl mb-4">
+                                        <i class="fa-solid fa-shield-dog"></i>
+                                    </div>
+                                    <h3 class="font-bold text-white text-lg mb-2">AML & Risk Control</h3>
+                                    <p class="text-gray-400 text-sm leading-relaxed">Built-in blacklist/whitelist
+                                        management, strict trade cooldown intervals, and per-transaction caps eliminate
+                                        illicit flows and malicious manipulation.</p>
+                                </div>
+                                <div class="mt-6 pt-4 border-t border-dark-700 text-xs text-indigo-400 font-medium">
+                                    Smart Defense Standards</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 3: Vision & Macro Economic Context -->
+                    <div id="slide-3" class="slide w-full flex-col lg:flex-row gap-10 items-center">
+                        <div class="lg:w-1/2 space-y-6">
+                            <span class="text-indigo-400 text-xs font-semibold uppercase tracking-wider">Project
+                                Vision</span>
+                            <h2 class="text-3xl lg:text-4xl font-extrabold text-white leading-tight">
+                                Breaking Free from Traditional DeFi Pitfalls
+                            </h2>
+                            <p class="text-gray-400 text-base leading-relaxed">
+                                Addressing liquidity drainage, unsustainable reward models, and Ponzi traps common in
+                                legacy DeFi protocols.
+                            </p>
+                            <div class="space-y-4">
+                                <div class="flex items-start space-x-3">
+                                    <div
+                                        class="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-xs mt-1 shrink-0">
+                                        <i class="fa-solid fa-check"></i></div>
+                                    <p class="text-gray-300 text-sm"><strong>Dynamic Matrix Incentives:</strong> Merging
+                                        traditional AMM liquidity pools with on-chain referral and tier governance.</p>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <div
+                                        class="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-xs mt-1 shrink-0">
+                                        <i class="fa-solid fa-check"></i></div>
+                                    <p class="text-gray-300 text-sm"><strong>Self-Healing Ecosystem:</strong> Autonomous
+                                        value support and high-efficiency ROI optimization for global participants.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="lg:w-1/2 w-full bg-dark-800 border border-dark-700 p-8 rounded-2xl shadow-2xl space-y-6">
+                            <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+                                <i class="fa-solid fa-bridge text-indigo-400"></i>
+                                <span>Dual-Way Liquidity Bridge</span>
+                            </h3>
+                            <div class="space-y-4 text-sm">
+                                <div
+                                    class="p-4 rounded-xl bg-dark-900 border border-dark-700 flex items-center justify-between">
+                                    <span class="text-gray-400">Traditional AMM Pools</span>
+                                    <i class="fa-solid fa-arrow-right text-indigo-400"></i>
+                                    <span class="text-gray-200 font-semibold">Decentralized Exchange</span>
+                                </div>
+                                <div
+                                    class="p-4 rounded-xl bg-dark-900 border border-dark-700 flex items-center justify-between">
+                                    <span class="text-gray-400">On-Chain Referrals</span>
+                                    <i class="fa-solid fa-arrow-right text-indigo-400"></i>
+                                    <span class="text-gray-200 font-semibold">Community Growth Matrix</span>
+                                </div>
+                                <div
+                                    class="p-4 rounded-xl bg-dark-900 border border-dark-700 flex items-center justify-between">
+                                    <span class="text-gray-400">Sustainable ROI</span>
+                                    <i class="fa-solid fa-arrow-right text-indigo-400"></i>
+                                    <span class="text-gray-200 font-semibold">Real BNB Reserve Support</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 4: Core Tech & AMM Integration -->
+                    <div id="slide-4" class="slide w-full flex-col space-y-8">
+                        <div class="text-center max-w-2xl mx-auto space-y-3">
+                            <span class="text-indigo-400 text-xs font-semibold uppercase tracking-wider">Technical
+                                Architecture</span>
+                            <h2 class="text-3xl lg:text-4xl font-extrabold text-white">Smart Liquidity Recognition
+                                System</h2>
+                            <p class="text-gray-400 text-sm">Deeply integrated with PancakeSwap Router & Factory
+                                protocols for seamless asset exchange.</p>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-dark-800 border border-dark-700 p-8 rounded-2xl space-y-4">
+                                <div
+                                    class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xl">
+                                    <i class="fa-solid fa-brain"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-white">Algorithm & Gas Optimization</h3>
+                                <p class="text-gray-400 text-sm leading-relaxed">
+                                    Built-in high-performance <code
+                                        class="text-indigo-300 font-mono text-xs">_isNAXIPair</code> and <code
+                                        class="text-indigo-300 font-mono text-xs">_getOtherToken</code> algorithms
+                                    precisely identify pairings with major liquidity pools (e.g., NAXI/WBNB).
+                                </p>
+                                <ul class="space-y-2 text-sm text-gray-300 pt-2">
+                                    <li class="flex items-center space-x-2"><i
+                                            class="fa-solid fa-check text-indigo-400"></i><span>Low-level Assembly Gas
+                                            Optimization</span></li>
+                                    <li class="flex items-center space-x-2"><i
+                                            class="fa-solid fa-check text-indigo-400"></i><span>External Contract Length
+                                            Detection</span></li>
+                                </ul>
+                            </div>
+                            <div class="bg-dark-800 border border-dark-700 p-8 rounded-2xl space-y-4">
+                                <div
+                                    class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xl">
+                                    <i class="fa-solid fa-shield-virus"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-white">Security & Anti-Exploit Guard</h3>
+                                <p class="text-gray-400 text-sm leading-relaxed">
+                                    Ensures maximum route safety for every transaction, eliminating flash loan attack
+                                    vectors and malicious re-entrancy risks.
+                                </p>
+                                <div
+                                    class="p-4 rounded-xl bg-dark-900 border border-dark-700 font-mono text-xs text-gray-400 space-y-1">
+                                    <p class="text-indigo-400">// Router Security Check</p>
+                                    <p>require(msg.sender == router, "Unauthorized");</p>
+                                    <p>reentrancyGuard();</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 5: Tokenomics & Deflationary Model -->
+                    <div id="slide-5" class="slide w-full flex-col lg:flex-row gap-10 items-center">
+                        <div class="lg:w-1/2 space-y-6">
+                            <span
+                                class="text-indigo-400 text-xs font-semibold uppercase tracking-wider">Tokenomics</span>
+                            <h2 class="text-3xl lg:text-4xl font-extrabold text-white leading-tight">
+                                Deflationary Sell Tax & Fixed Supply
+                            </h2>
+                            <p class="text-gray-400 text-base leading-relaxed">
+                                Designed around permanent scarcity, dynamic reduction, and robust value capture
+                                mechanics.
+                            </p>
+                            <div class="space-y-4">
+                                <div
+                                    class="bg-dark-800 border border-dark-700 p-4 rounded-xl flex items-center justify-between">
+                                    <span class="text-gray-300 text-sm">Max Supply Cap</span>
+                                    <span class="font-bold text-white text-base">10,000,000,000 NAXI</span>
+                                </div>
+                                <div
+                                    class="bg-dark-800 border border-dark-700 p-4 rounded-xl flex items-center justify-between">
+                                    <span class="text-gray-300 text-sm">Sell Tax Rate</span>
+                                    <span class="font-bold text-indigo-400 text-base">15% (Whitelist Exempt)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="lg:w-1/2 w-full bg-dark-800 border border-dark-700 p-8 rounded-2xl shadow-2xl space-y-6">
+                            <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+                                <i class="fa-solid fa-fire text-indigo-400"></i>
+                                <span>Automated Burn Mechanism</span>
+                            </h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">
+                                When users sell NAXI back to the liquidity pool, a 15% transaction tax is automatically
+                                triggered. Tax tokens are permanently burned from total supply (<code
+                                    class="text-indigo-300 font-mono text-xs">totalSupply -= tax</code>).
+                            </p>
+                            <div
+                                class="p-4 rounded-xl bg-dark-900 border border-dark-700 space-y-2 text-xs text-gray-300">
+                                <div class="flex justify-between"><span>Circulating Supply:</span> <span
+                                        class="text-red-400">Decreasing Exponentially</span></div>
+                                <div class="w-full bg-dark-700 h-2 rounded-full overflow-hidden">
+                                    <div class="bg-gradient-to-r from-indigo-500 to-violet-500 w-3/4 h-full"></div>
+                                </div>
+                                <div class="flex justify-between text-gray-500 text-[10px]"><span>High
+                                        Activity</span><span>Deflationary Defense Wall</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 6: Multi-Tier Holder System (Part 1) -->
+                    <div id="slide-6" class="slide w-full flex-col space-y-6">
+                        <div class="text-center max-w-2xl mx-auto space-y-2">
+                            <span class="text-indigo-400 text-xs font-semibold uppercase tracking-wider">Holder
+                                System</span>
+                            <h2 class="text-3xl font-extrabold text-white">10-Tier Holder Rights Matrix (Levels 1–5)
+                            </h2>
+                            <p class="text-gray-400 text-sm">Higher holding tiers unlock greater voting weights and
+                                global matrix incentive distributions.</p>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-5 rounded-xl flex flex-col justify-between">
+                                <div>
+                                    <span class="text-xs text-indigo-400 font-bold">LEVEL 1</span>
+                                    <h4 class="font-bold text-white text-base mt-1">&gt;= 2,500 NAXI</h4>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-4 pt-3 border-t border-dark-700">Entry node, unlocks
+                                    basic profit sharing eligibility.</p>
+                            </div>
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-5 rounded-xl flex flex-col justify-between">
+                                <div>
+                                    <span class="text-xs text-indigo-400 font-bold">LEVEL 2</span>
+                                    <h4 class="font-bold text-white text-base mt-1">&gt;= 5,000 NAXI</h4>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-4 pt-3 border-t border-dark-700">Active participating
+                                    node.</p>
+                            </div>
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-5 rounded-xl flex flex-col justify-between">
+                                <div>
+                                    <span class="text-xs text-indigo-400 font-bold">LEVEL 3</span>
+                                    <h4 class="font-bold text-white text-base mt-1">&gt;= 10,000 NAXI</h4>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-4 pt-3 border-t border-dark-700">Robust stabilizing
+                                    node.</p>
+                            </div>
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-5 rounded-xl flex flex-col justify-between">
+                                <div>
+                                    <span class="text-xs text-indigo-400 font-bold">LEVEL 4</span>
+                                    <h4 class="font-bold text-white text-base mt-1">&gt;= 20,000 NAXI</h4>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-4 pt-3 border-t border-dark-700">Advanced holder
+                                    tier.</p>
+                            </div>
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-5 rounded-xl flex flex-col justify-between">
+                                <div>
+                                    <span class="text-xs text-indigo-400 font-bold">LEVEL 5</span>
+                                    <h4 class="font-bold text-white text-base mt-1">&gt;= 50,000 NAXI</h4>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-4 pt-3 border-t border-dark-700">Mid-high tier node.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 7: Multi-Tier Holder System (Part 2) -->
+                    <div id="slide-7" class="slide w-full flex-col space-y-6">
+                        <div class="text-center max-w-2xl mx-auto space-y-2">
+                            <span class="text-indigo-400 text-xs font-semibold uppercase tracking-wider">Holder
+                                System</span>
+                            <h2 class="text-3xl font-extrabold text-white">10-Tier Holder Rights Matrix (Levels 6–10)
+                            </h2>
+                            <p class="text-gray-400 text-sm">Elite tiers with maximum weight and prioritized global pool
+                                distribution.</p>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-5 rounded-xl flex flex-col justify-between">
+                                <div>
+                                    <span class="text-xs text-indigo-400 font-bold">LEVEL 6</span>
+                                    <h4 class="font-bold text-white text-base mt-1">&gt;= 100,000 NAXI</h4>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-4 pt-3 border-t border-dark-700">Core community
+                                    promoter.</p>
+                            </div>
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-5 rounded-xl flex flex-col justify-between">
+                                <div>
+                                    <span class="text-xs text-indigo-400 font-bold">LEVEL 7</span>
+                                    <h4 class="font-bold text-white text-base mt-1">&gt;= 200,000 NAXI</h4>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-4 pt-3 border-t border-dark-700">High liquidity
+                                    contributor.</p>
+                            </div>
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-5 rounded-xl flex flex-col justify-between">
+                                <div>
+                                    <span class="text-xs text-indigo-400 font-bold">LEVEL 8</span>
+                                    <h4 class="font-bold text-white text-base mt-1">&gt;= 300,000 NAXI</h4>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-4 pt-3 border-t border-dark-700">Outstanding node.
+                                </p>
+                            </div>
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-5 rounded-xl flex flex-col justify-between">
+                                <div>
+                                    <span class="text-xs text-indigo-400 font-bold">LEVEL 9</span>
+                                    <h4 class="font-bold text-white text-base mt-1">&gt;= 500,000 NAXI</h4>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-4 pt-3 border-t border-dark-700">Super node status.
+                                </p>
+                            </div>
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-5 rounded-xl flex flex-col justify-between border-indigo-500/50 shadow-lg shadow-accent-glow">
+                                <div>
+                                    <span class="text-xs text-indigo-400 font-bold">LEVEL 10</span>
+                                    <h4 class="font-bold text-white text-base mt-1">&gt;= 1,000,000 NAXI</h4>
+                                </div>
+                                <p class="text-xs text-gray-300 mt-4 pt-3 border-t border-dark-700">Top VIP privileges,
+                                    maximum distribution weight (12x).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 8: Matrix Incentives & Referral Systems -->
+                    <div id="slide-8" class="slide w-full flex-col lg:flex-row gap-10 items-center">
+                        <div class="lg:w-1/2 space-y-6">
+                            <span class="text-indigo-400 text-xs font-semibold uppercase tracking-wider">Global
+                                Incentives</span>
+                            <h2 class="text-3xl lg:text-4xl font-extrabold text-white leading-tight">
+                                Global Circular Matrix & Referral Bidding
+                            </h2>
+                            <p class="text-gray-400 text-base leading-relaxed">
+                                10% of newly minted tokens from market demand are allocated into the incentive pool for
+                                automated, transparent distribution.
+                            </p>
+                            <div class="space-y-3 text-sm text-gray-300">
+                                <div class="flex items-center space-x-3"><i
+                                        class="fa-solid fa-circle-check text-indigo-400"></i><span><strong>Direct
+                                            Referral Reward:</strong> Automatic 2.5% direct incentive to scale community
+                                        growth.</span></div>
+                                <div class="flex items-center space-x-3"><i
+                                        class="fa-solid fa-circle-check text-indigo-400"></i><span><strong>Orphan
+                                            Binding:</strong> Burn NAXI tokens to claim unassigned nodes, boosting
+                                        deflation.</span></div>
+                                <div class="flex items-center space-x-3"><i
+                                        class="fa-solid fa-circle-check text-indigo-400"></i><span><strong>7-Day Rolling
+                                            Bidding:</strong> Bid referral rights; 100% of bid tokens are permanently
+                                        burned.</span></div>
+                            </div>
+                        </div>
+                        <div
+                            class="lg:w-1/2 w-full bg-dark-800 border border-dark-700 p-8 rounded-2xl shadow-2xl space-y-4">
+                            <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+                                <i class="fa-solid fa-calculator text-indigo-400"></i>
+                                <span>Matrix Distribution Logic</span>
+                            </h3>
+                            <div class="space-y-3 text-xs font-mono text-gray-300">
+                                <div class="p-3 bg-dark-900 rounded-lg border border-dark-700">
+                                    <span class="text-indigo-400">unrealizedIncentives</span> = totalBuyIncentives -
+                                    realizedIncentives
+                                </div>
+                                <div class="p-3 bg-dark-900 rounded-lg border border-dark-700">
+                                    <span class="text-indigo-400">directReward</span> = baseQty * 2.5% (Max cap
+                                    enforced)
+                                </div>
+                                <div class="p-3 bg-dark-900 rounded-lg border border-dark-700">
+                                    <span class="text-indigo-400">Multi-Tier Rotation:</span> 12 holder steps matched
+                                    against level requirements.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 9: Security, Roadmap & ROI Analysis -->
+                    <div id="slide-9" class="slide w-full flex-col space-y-8">
+                        <div class="text-center max-w-2xl mx-auto space-y-3">
+                            <span class="text-indigo-400 text-xs font-semibold uppercase tracking-wider">Roadmap &
+                                Safety</span>
+                            <h2 class="text-3xl lg:text-4xl font-extrabold text-white">Operational Roadmap & Risk
+                                Control</h2>
+                            <p class="text-gray-400 text-sm">Sustainable growth backed by real BNB reserves and strict
+                                protocol defense walls.</p>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="bg-dark-800 border border-dark-700 p-6 rounded-2xl space-y-3">
+                                <div class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Phase 1</div>
+                                <h3 class="text-lg font-bold text-white">Infrastructure</h3>
+                                <p class="text-gray-400 text-sm">Deploy core smart contracts, initialize PancakeSwap
+                                    liquidity pool, and bootstrap early genesis nodes.</p>
+                            </div>
+                            <div class="bg-dark-800 border border-dark-700 p-6 rounded-2xl space-y-3">
+                                <div class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Phase 2</div>
+                                <h3 class="text-lg font-bold text-white">Ecosystem Expansion</h3>
+                                <p class="text-gray-400 text-sm">Launch referral matrix bidding & holder tier rights,
+                                    driving community self-governance and global consensus.</p>
+                            </div>
+                            <div class="bg-dark-800 border border-dark-700 p-6 rounded-2xl space-y-3">
+                                <div class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Phase 3</div>
+                                <h3 class="text-lg font-bold text-white">Deep Integration</h3>
+                                <p class="text-gray-400 text-sm">Implement ecosystem utility applications, continuous
+                                    buybacks, and permanent deflationary scaling.</p>
+                            </div>
+                        </div>
+                        <div class="text-center pt-4">
+                            <p class="text-xs text-gray-500 max-w-3xl mx-auto leading-relaxed">
+                                <strong>Disclaimer:</strong> This whitepaper is for technical architecture and community
+                                ecosystem discussion purposes only and does not constitute investment advice or a
+                                financial product offering. Blockchain asset investments carry high volatility; please
+                                evaluate risks prudently.
+                            </p>
+                        </div>
+                    </div>
+
+                </main>
+
+                <!-- Footer Controls -->
+                <footer
+                    class="w-full border-t border-dark-700 bg-dark-800/80 px-6 py-4 flex items-center justify-between text-xs text-gray-400">
+                    <div>NAXI Protocol © 2026. All Rights Reserved.</div>
+                    <div class="flex items-center space-x-4">
+                        <span>Use Arrow Keys or Buttons to Navigate</span>
+                    </div>
+                </footer>
+
+                <!-- Presentation Controller Script -->
+                <script>
+                    let currentSlide = 1;
+                    const totalSlides = 9;
+
+                    function showSlide(n) {
+                        if (n > totalSlides) currentSlide = totalSlides;
+                        else if (n < 1) currentSlide = 1;
+                        else currentSlide = n;
+
+                        for (let i = 1; i <= totalSlides; i++) {
+                            const slide = document.getElementById(`slide-${i}`);
+                            if (slide) {
+                                slide.classList.remove('active');
+                            }
+                        }
+
+                        const targetSlide = document.getElementById(`slide-${currentSlide}`);
+                        if (targetSlide) {
+                            targetSlide.classList.add('active');
+                        }
+
+                        const indicator = document.getElementById('slideIndicator');
+                        if (indicator) {
+                            indicator.innerText = `Slide ${currentSlide} / ${totalSlides}`;
+                        }
+                    }
+
+                    function nextSlide() {
+                        showSlide(currentSlide + 1);
+                    }
+
+                    function prevSlide() {
+                        showSlide(currentSlide - 1);
+                    }
+
+                    // Keyboard navigation support
+                    document.addEventListener('keydown', (e) => {
+                        if (e.key === 'ArrowRight' || e.key === 'Space') {
+                            nextSlide();
+                        } else if (e.key === 'ArrowLeft') {
+                            prevSlide();
+                        }
+                    });
+                </script>
+            </body>
+
+            </html>
+        </div>
+
+    </div>
+
+
+
+    </div>
+
+    <!-- QR Code Scanner Modal Dialog -->
+    <div id="qr-reader-modal">
+        <div class="qr-modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <span style="font-weight: 700; font-size: 16px;">Scan Wallet Address QR</span>
+                <i class="fa-solid fa-xmark" style="font-size: 18px; cursor: pointer; color: var(--muted);"
+                    onclick="closeQRScanner()"></i>
+            </div>
+            <div id="reader"></div>
+            <p style="font-size: 12px; color: var(--muted); margin-bottom: 15px;">Align the QR code within the frame to
+                scan automatically.</p>
+            <button class="action-btn" style="background: var(--panel-3); border: 1px solid var(--card-border);"
+                onclick="closeQRScanner()">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        let provider, signer;
+        let connectedAddress = "";
+        let contractOwnerAddress = "";
+        let isSwapDirectionBNBtoNAXI = true;
+        let currentBnbPrice = 570;
+        let currentRateVal = 13680;
+        let rawBnbBalance = "0";
+        let rawNaxiBalance = "0";
+        const contractAddressDefault = "0x8151501C333e017D938FF892fb74067f8A162C26";
+        let html5QrCode = null;
+
+        const fullAbi = [
+            "function name() view returns (string)",
+            "function symbol() view returns (string)",
+            "function owner() view returns (address)",
+            "function balanceOf(address account) view returns (uint256)",
+            "function DEFAULT_RATE() view returns (uint256)",
+            "function INCENTIVE_PERCENTAGE() view returns (uint256)",
+            "function lastTradeTime() view returns (uint256)",
+            "function TRADE_COOLDOWN() view returns (uint256)",
+            "function getMyReferral() view returns (address)",
+            "function getMyShareClaimed() view returns (uint256)",
+            "function checkMyLevel() view returns (uint32)",
+            "function transfer(address to, uint256 amount) returns (bool)",
+            "function SwapNAXI() payable",
+            "function swapBNB(uint256 nexAmount)",
+            "function bindNextOrphan()",
+            "function bidReferralRights(uint256 relativeDay, uint256 bidAmount)",
+            "function setPublicIsSwap(bool _status)",
+            "function setPublicOnlySwapOut(bool _status)",
+            "function setTRADE_COOLDOWN(uint256 _minutes)",
+            "function setDefaultRate(uint256 rate)",
+            "function setMark_up(uint256 _mark_up)",
+            "function setINCENTIVE_PERCENTAGE(uint256 _percent)",
+            "function setBindOrphanFee(uint256 _fee)",
+            "function transferOwnership(address newOwner)",
+            "function withdrawBNB()",
+            "function emergencyWithdraw()"
+        ];
+        function switchMainView(viewName, btnElement) {
+            // 移除所有頂層按鈕的 active
+            const topTabs = document.querySelectorAll('.top-tab');
+            topTabs.forEach(t => t.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            // 取得兩個主要頁面區塊
+            const dashboardView = document.getElementById("mainView-Dashboard");
+            const whitepaperView = document.getElementById("mainView-Whitepaper");
+
+            // 預設全部隱藏
+            dashboardView.classList.add("hidden");
+            whitepaperView.classList.add("hidden");
+
+            // 顯示被點擊的頁面
+            if (viewName === 'Dashboard') {
+                dashboardView.classList.remove("hidden");
+            } else if (viewName === 'Whitepaper') {
+                whitepaperView.classList.remove("hidden");
+            }
+        }
+        async function initWallet() {
+            if (typeof window.ethereum === 'undefined') {
+                document.getElementById("connectionStatus").innerText = "Disconnected..";
+                return;
+            }
+            try {
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send("eth_requestAccounts", []);
+                signer = provider.getSigner();
+                connectedAddress = await signer.getAddress();
+
+                document.getElementById("connectionStatus").innerHTML = `${connectedAddress.substring(0, 6)}...${connectedAddress.substring(38)}`;
+
+                await checkOwnerAndToggleSetTab();
+                loadUserData();
+                startPriceTicker();
+                updateExplorerLink();
+            } catch (err) {
+                console.error(err);
+                document.getElementById("connectionStatus").innerText = "Wallet connection failed.";
+            }
+        }
+
+        async function getContract(needsSigner = false) {
+            const addr = document.getElementById("contractAddress") ? document.getElementById("contractAddress").value.trim() : contractAddressDefault;
+            if (!provider) await initWallet();
+            return new ethers.Contract(addr, fullAbi, needsSigner ? signer : provider);
+        }
+
+        async function checkOwnerAndToggleSetTab() {
+            try {
+                const contract = await getContract(false);
+                contractOwnerAddress = await contract.owner();
+                const setTabBtn = document.getElementById("tabSetBtn");
+
+                if (connectedAddress && contractOwnerAddress && connectedAddress.toLowerCase() === contractOwnerAddress.toLowerCase()) {
+                    setTabBtn.classList.remove("hidden");
+                } else {
+                    setTabBtn.classList.add("hidden");
+                }
+            } catch (err) {
+                console.warn("Could not fetch contract owner", err);
+            }
+        }
+
+        async function loadUserData() {
+            try {
+                const contract = await getContract(false);
+                const balWei = await contract.balanceOf(connectedAddress);
+                rawNaxiBalance = ethers.utils.formatEther(balWei);
+                const balFormatted = Number(rawNaxiBalance).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 4});
+                document.getElementById("tokenBalance").innerText = balFormatted;
+
+                document.getElementById("transferBalanceText").innerText = `${balFormatted} NAXI`;
+
+                const bnbBalWei = await provider.getBalance(connectedAddress);
+                rawBnbBalance = ethers.utils.formatEther(bnbBalWei);
+                const bnbFormatted = Number(rawBnbBalance).toFixed(4);
+
+                if (isSwapDirectionBNBtoNAXI) {
+                    document.getElementById("swapPayBalance").innerText = `Balance: ${bnbFormatted} BNB`;
+                    document.getElementById("swapReceiveBalance").innerText = `Balance: ${balFormatted} NAXI`;
+                } else {
+                    document.getElementById("swapPayBalance").innerText = `Balance: ${balFormatted} NAXI`;
+                    document.getElementById("swapReceiveBalance").innerText = `Balance: ${bnbFormatted} BNB`;
+                }
+
+                updateUSDValues(balWei);
+            } catch (err) {
+                console.error("Failed to load user balance", err);
+            }
+        }
+
+        async function startPriceTicker() {
+            fetchBNBPrice();
+            setInterval(fetchBNBPrice, 10000);
+        }
+
+        async function fetchBNBPrice() {
+            try {
+                const response = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT');
+                const data = await response.json();
+                if (data && data.price) {
+                    currentBnbPrice = parseFloat(data.price);
+                }
+            } catch (e) {
+                console.warn("Using fallback BNB price");
+            }
+
+            try {
+                const contract = await getContract(false);
+                const defaultRate = await contract.DEFAULT_RATE();
+                currentRateVal = Number(defaultRate) || 13680;
+                const priceInBnb = 1 / currentRateVal;
+                const priceInUsdt = priceInBnb * currentBnbPrice;
+
+                document.getElementById("marketRate").innerText = priceInBnb.toFixed(5) + " BNB";
+                document.getElementById("marketRateUsd").innerText = "$" + priceInUsdt.toFixed(4);
+                document.getElementById("swapRateText").innerText = isSwapDirectionBNBtoNAXI ? `1 BNB ≈ ${currentRateVal.toLocaleString()} NAXI` : `1 NAXI ≈ ${(1 / currentRateVal).toFixed(6)} BNB`;
+
+                const balText = document.getElementById("tokenBalance").innerText.replace(/,/g, '');
+                const balNum = parseFloat(balText) || 0;
+                const totalUsd = balNum * priceInUsdt;
+                document.getElementById("tokenBalanceUsd").innerText = "$" + totalUsd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            } catch (err) {
+                console.error("Error updating price ticker", err);
+            }
+        }
+
+        function updateUSDValues(balWei) {
+            const balNum = Number(ethers.utils.formatEther(balWei));
+            const estimatedUsdtPerToken = (1 / currentRateVal) * currentBnbPrice;
+            document.getElementById("tokenBalanceUsd").innerText = "$" + (balNum * estimatedUsdtPerToken).toFixed(2);
+        }
+
+        function copyTokenAddress() {
+            const addr = document.getElementById("contractAddress") ? document.getElementById("contractAddress").value.trim() : contractAddressDefault;
+            navigator.clipboard.writeText(addr).then(() => {
+                alert("Contract address copied to clipboard!");
+            });
+        }
+
+        function switchTab(tabName) {
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(t => t.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            const recordContainer = document.getElementById("tabContent-Record");
+            const fnContainer = document.getElementById("tabContent-Fn");
+            const swapContainer = document.getElementById("tabContent-Swap");
+            const transferContainer = document.getElementById("tabContent-Transfer");
+            const setContainer = document.getElementById("tabContent-Set");
+
+            recordContainer.classList.add("hidden");
+            fnContainer.classList.add("hidden");
+            swapContainer.classList.add("hidden");
+            transferContainer.classList.add("hidden");
+            if (setContainer) setContainer.classList.add("hidden");
+
+            if (tabName === 'Record') {
+                recordContainer.classList.remove("hidden");
+                updateExplorerLink();
+            } else if (tabName === 'Fn') {
+                fnContainer.classList.remove("hidden");
+            } else if (tabName === 'Swap') {
+                swapContainer.classList.remove("hidden");
+                checkTradeCooldown();
+            } else if (tabName === 'Transfer') {
+                transferContainer.classList.remove("hidden");
+            } else if (tabName === 'Set') {
+                if (setContainer) setContainer.classList.remove("hidden");
+            }
+        }
+
+        function updateExplorerLink() {
+            const addr = document.getElementById("contractAddress") ? document.getElementById("contractAddress").value.trim() : contractAddressDefault;
+            const linkElem = document.getElementById("explorerLink");
+            if (connectedAddress) {
+                linkElem.href = `https://bscscan.com/token/${addr}?a=${connectedAddress}`;
+            } else {
+                linkElem.href = `https://bscscan.com/token/${addr}#code`;
+            }
+        }
+
+        function toggleSwapDirection() {
+            isSwapDirectionBNBtoNAXI = !isSwapDirectionBNBtoNAXI;
+            const paySym = document.getElementById("payTokenSymbol");
+            const recSym = document.getElementById("receiveTokenSymbol");
+            const payIcon = document.querySelector("#payTokenLabel i");
+            const recIcon = document.querySelector("#receiveTokenLabel i");
+
+            if (isSwapDirectionBNBtoNAXI) {
+                paySym.innerText = "BNB";
+                recSym.innerText = "NAXI";
+                payIcon.className = "fa-solid fa-coins";
+                payIcon.style.color = "var(--accent)";
+                recIcon.className = "fa-solid fa-n";
+                recIcon.style.color = "var(--info)";
+                document.getElementById("swapRateText").innerText = `1 BNB ≈ ${currentRateVal.toLocaleString()} NAXI`;
+            } else {
+                paySym.innerText = "NAXI";
+                recSym.innerText = "BNB";
+                payIcon.className = "fa-solid fa-n";
+                payIcon.style.color = "var(--info)";
+                recIcon.className = "fa-solid fa-coins";
+                recIcon.style.color = "var(--accent)";
+                document.getElementById("swapRateText").innerText = `1 NAXI ≈ ${(1 / currentRateVal).toFixed(6)} BNB`;
+            }
+            document.getElementById("swap_pay_amount").value = "";
+            document.getElementById("swap_receive_amount").value = "";
+            loadUserData();
+        }
+
+        function fillMaxBalance() {
+            let maxVal = isSwapDirectionBNBtoNAXI ? rawBnbBalance : rawNaxiBalance;
+            if (isSwapDirectionBNBtoNAXI) {
+                let num = parseFloat(maxVal) - 0.005;
+                maxVal = num > 0 ? num.toFixed(4) : "0";
+            }
+            document.getElementById("swap_pay_amount").value = maxVal;
+            calculateSwapReceive();
+        }
+
+        function fillTransferMax() {
+            document.getElementById("transfer_amount").value = rawNaxiBalance;
+        }
+
+        function calculateTransferUsd() {
+        }
+
+        async function calculateSwapReceive() {
+            const val = parseFloat(document.getElementById("swap_pay_amount").value) || 0;
+            const recInput = document.getElementById("swap_receive_amount");
+            const payUsd = document.getElementById("swapPayUsd");
+            const recUsd = document.getElementById("swapReceiveUsd");
+
+            if (isSwapDirectionBNBtoNAXI) {
+                // 正向：BNB 換 NAXI (維持不變)
+                const calculatedNaxi = val * currentRateVal;
+                recInput.value = calculatedNaxi > 0 ? calculatedNaxi.toFixed(2) : "";
+                payUsd.innerText = `≈ $${(val * currentBnbPrice).toFixed(2)}`;
+                const tokenUsdt = (1 / currentRateVal) * currentBnbPrice;
+                recUsd.innerText = `≈ $${(calculatedNaxi * tokenUsdt).toFixed(2)}`;
+            } else {
+                // 反向：NAXI 換 BNB (必須對應合約扣除手續費與預設匯率)
+                try {
+                    // 可以從合約動態讀取 INCENTIVE_PERCENTAGE，若暫時取不到可預設一個數值或從全域變數讀取
+                    // 假設這裡先透過合約取得最新數據（若效能考量也可快取起來）
+                    const contract = await getContract(false);
+
+                    // 取得激勵百分比 (例如合約中的 INCENTIVE_PERCENTAGE，若無對應 getter 則帶入常數)
+                    let incentivePercent = 0;
+                    try {
+                        incentivePercent = await contract.INCENTIVE_PERCENTAGE();
+                    } catch (e) {
+                        incentivePercent = 0; // 預設值或白名單情況
+                    }
+
+                    // 對應合約邏輯: deductedNexAmount = nexAmount * (100 - INCENTIVE_PERCENTAGE) / 100
+                    const effectiveNaxi = val * (100 - Number(incentivePercent)) / 100;
+
+                    // 對應合約邏輯: bnbToReturn = deductedNexAmount / swapRate (DEFAULT_RATE)
+                    const calculatedBnb = effectiveNaxi / currentRateVal;
+
+                    recInput.value = calculatedBnb > 0 ? calculatedBnb.toFixed(5) : "";
+
+                    const tokenUsdt = (1 / currentRateVal) * currentBnbPrice;
+                    payUsd.innerText = `≈ $${(val * tokenUsdt).toFixed(2)}`;
+                    recUsd.innerText = `≈ $${(calculatedBnb * currentBnbPrice).toFixed(2)}`;
+                } catch (err) {
+                    console.warn("Error calculating reverse swap with tax:", err);
+                    // 降級退回簡易計算
+                    const calculatedBnb = val / currentRateVal;
+                    recInput.value = calculatedBnb > 0 ? calculatedBnb.toFixed(5) : "";
+                }
+            }
+        }
+
+        /* QR Code Scanner Implementation */
+        function openQRScanner() {
+            const modal = document.getElementById("qr-reader-modal");
+            modal.style.display = "flex";
+
+            if (!html5QrCode) {
+                html5QrCode = new Html5Qrcode("reader");
+            }
+
+            const config = {fps: 10, qrbox: {width: 250, height: 250}};
+            html5QrCode.start(
+                {facingMode: "environment"},
+                config,
+                (decodedText, decodedResult) => {
+                    // Success callback
+                    let cleanAddr = decodedText;
+                    if (cleanAddr.startsWith("ethereum:")) {
+                        cleanAddr = cleanAddr.replace("ethereum:", "").split("?")[0];
+                    }
+                    const inputElem = document.getElementById("transfer_to");
+                    inputElem.value = cleanAddr;
+                    inputElem.scrollLeft = inputElem.scrollWidth;
+                    closeQRScanner();
+                },
+                (errorMessage) => {
+                    // Parsing error / scanning frame (ignore to avoid spam logs)
+                }
+            ).catch((err) => {
+                alert("Camera access error or permission denied.");
+                closeQRScanner();
+            });
+        }
+
+        function closeQRScanner() {
+            const modal = document.getElementById("qr-reader-modal");
+            modal.style.display = "none";
+            if (html5QrCode && html5QrCode.isScanning) {
+                html5QrCode.stop().catch(err => console.warn("Failed to stop scanner", err));
+            }
+        }
+
+        async function executeTransitSwap() {
+            const resBox = document.getElementById("res_transitSwap");
+            resBox.style.display = "block";
+            resBox.innerText = "Processing transaction in wallet...";
+            try {
+                const contract = await getContract(true);
+                const amtVal = document.getElementById("swap_pay_amount").value.trim();
+                let tx;
+                if (isSwapDirectionBNBtoNAXI) {
+                    tx = await contract.SwapNAXI({value: ethers.utils.parseEther(amtVal)});
+                } else {
+                    tx = await contract.swapBNB(ethers.utils.parseEther(amtVal));
+                }
+                resBox.innerText = "Waiting for confirmation...";
+                await tx.wait();
+                resBox.innerText = "✅ Swap Successful!";
+                const shortHash = `${tx.hash.substring(0, 6)}...${tx.hash.substring(tx.hash.length - 4)}`;
+                document.getElementById("recentSwapTxInfo").innerHTML = `Tx: <a href="https://bscscan.com/tx/${tx.hash}" target="_blank" style="color: var(--accent); text-decoration: underline;">${shortHash}</a> (${amtVal} ${isSwapDirectionBNBtoNAXI ? 'BNB' : 'NAXI'})`;
+            } catch (err) {
+                resBox.innerText = "Error: " + (err.reason || err.message);
+            }
+        }
+
+        async function executeWrite(funcName, inputIds) {
+            const resBox = document.getElementById("res_" + funcName);
+            if (resBox) {resBox.style.display = "block"; resBox.innerText = "Confirming in wallet...";}
+            try {
+                const contract = await getContract(true);
+                let args = inputIds.map(id => document.getElementById(id).value.trim());
+                const tx = await contract[funcName](...args);
+                if (resBox) resBox.innerText = "Broadcasting... Hash: " + tx.hash;
+                await tx.wait();
+                if (resBox) resBox.innerText = "✅ Success! Transaction confirmed.";
+                loadUserData();
+            } catch (err) {
+                if (resBox) resBox.innerText = "Error: " + (err.reason || err.message);
+            }
+        }
+
+        async function executeBoolWrite(funcName, checkboxId) {
+            const resBox = document.getElementById("res_publicSwapToggles");
+            if (resBox) {resBox.style.display = "block"; resBox.innerText = "Confirming in wallet...";}
+            try {
+                const contract = await getContract(true);
+                const isChecked = document.getElementById(checkboxId).checked;
+                const tx = await contract[funcName](isChecked);
+                if (resBox) resBox.innerText = "Broadcasting... Hash: " + tx.hash;
+                await tx.wait();
+                if (resBox) resBox.innerText = "✅ Success! Transaction confirmed.";
+            } catch (err) {
+                if (resBox) resBox.innerText = "Error: " + (err.reason || err.message);
+            }
+        }
+
+        async function executeTransfer() {
+            const resBox = document.getElementById("res_transfer");
+            resBox.style.display = "block";
+            resBox.innerText = "Processing transfer...";
+            try {
+                const contract = await getContract(true);
+                const to = document.getElementById("transfer_to").value.trim();
+                const amt = document.getElementById("transfer_amount").value.trim();
+                const tx = await contract.transfer(to, ethers.utils.parseEther(amt));
+                resBox.innerText = "Waiting for confirmation...";
+                await tx.wait();
+                resBox.innerText = "✅ Transfer Successful!";
+                loadUserData();
+            } catch (err) {
+                resBox.innerText = "Error: " + (err.reason || err.message);
+            }
+        }
+
+        async function executeBid() {
+            const resBox = document.getElementById("res_bidReferralRights");
+            resBox.style.display = "block";
+            resBox.innerText = "Submitting bid...";
+            try {
+                const contract = await getContract(true);
+                const day = document.getElementById("bid_day").value.trim();
+                const amt = document.getElementById("bid_amt").value.trim();
+                const tx = await contract.bidReferralRights(day, amt);
+                await tx.wait();
+                resBox.innerText = "✅ Bid Submitted Successfully!";
+            } catch (err) {
+                resBox.innerText = "Error: " + (err.reason || err.message);
+            }
+        }
+
+        async function runAccountQuery(funcName) {
+            const resBox = document.getElementById("res_stats");
+            resBox.style.display = "block";
+            resBox.innerText = "Querying account stats...";
+            try {
+                if (!connectedAddress) await initWallet();
+                const contract = await getContract(false);
+                const result = await contract[funcName]();
+
+                if (funcName === 'getMyShareClaimed') {
+                    resBox.innerText = "Claimed Incentives: " + ethers.utils.formatEther(result) + " NAXI";
+                } else if (funcName === 'checkMyLevel') {
+                    resBox.innerText = "Holder Level Tier: Level " + result.toString();
+                } else if (funcName === 'getMyReferral') {
+                    resBox.innerText = "My Referrer Address: " + result.toString();
+                }
+            } catch (err) {
+                resBox.innerText = "Error: " + (err.reason || err.message);
+            }
+        }
+
+        async function runQuery(funcName, inputIds) {
+            const resBox = document.getElementById("res_balanceOf");
+            if (resBox) {resBox.style.display = "block"; resBox.innerText = "Querying...";}
+            try {
+                const contract = await getContract(false);
+                let args = inputIds.map(id => document.getElementById(id).value.trim());
+                const result = await contract[funcName](...args);
+                if (resBox) resBox.innerText = "Result: " + ethers.utils.formatEther(result) + " NAXI";
+            } catch (err) {
+                if (resBox) resBox.innerText = "Error: " + (err.reason || err.message);
+            }
+        }
+
+        window.addEventListener('load', () => {
+            if (window.ethereum) initWallet();
+        });
+
+        let cooldownTimer = null;
+        let remainingCooldownSecs = 0;
+
+        async function checkTradeCooldown() {
+            try {
+                const contract = await getContract(false);
+                const lastTradeTime = await contract.lastTradeTime();
+                const tradeCooldown = await contract.TRADE_COOLDOWN();
+
+                const now = Math.floor(Date.now() / 1000);
+                const nextAvailableTime = Number(lastTradeTime) + Number(tradeCooldown);
+
+                remainingCooldownSecs = nextAvailableTime > now ? nextAvailableTime - now : 0;
+
+                updateSwapButtonState();
+            } catch (err) {
+                console.warn("Failed to fetch cooldown:", err);
+            }
+        }
+
+        function updateSwapButtonState() {
+            const btn = document.getElementById("swapActionBtn");
+            const btnText = document.getElementById("swapBtnText");
+
+            if (remainingCooldownSecs > 0) {
+                btn.disabled = true;
+                btn.style.opacity = "0.6";
+                btn.style.cursor = "not-allowed";
+                btnText.innerText = `Waiting ... ${remainingCooldownSecs.toLocaleString()} secs`;
+
+                if (!cooldownTimer) {
+                    cooldownTimer = setInterval(() => {
+                        remainingCooldownSecs--;
+                        if (remainingCooldownSecs > 0) {
+                            btnText.innerText = `Waiting ... ${remainingCooldownSecs.toLocaleString()} secs`;
+                        } else {
+                            clearInterval(cooldownTimer);
+                            cooldownTimer = null;
+                            btn.disabled = false;
+                            btn.style.opacity = "1";
+                            btn.style.cursor = "pointer";
+                            btnText.innerHTML = `<i class="fa-solid fa-bolt"></i> Confirm Swap`;
+                        }
+                    }, 1000);
+                }
+            } else {
+                btn.disabled = false;
+                btn.style.opacity = "1";
+                btn.style.cursor = "pointer";
+                btnText.innerHTML = `<i class="fa-solid fa-bolt"></i> Confirm Swap`;
+            }
+        }
+    </script>
+
+</body>
+
+</html>
