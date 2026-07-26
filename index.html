@@ -2237,8 +2237,8 @@
             }
         }
 
-        window.addEventListener('load', () => {
-            if (window.ethereum) initWallet();
+        window.addEventListener('DOMContentLoaded', () => {
+            initWallet();
         });
 
         let cooldownTimer = null;
