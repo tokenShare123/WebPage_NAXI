@@ -5,27 +5,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>NAXI Token WEB</title>
-    <!--  SEO Meta  -->
-    <meta name="description"
-        content="NAXI Protocol is a next-generation experimental smart contract ecosystem integrating automated AMM mechanics, deflationary tokenomics, and a multi-tier holder matrix." />
-    <meta name="keywords" content="NAXI Token, Web3, DeFi, BSC, Smart Contract, AMM, Crypto" />
-
-    <!-- Open Graph / Facebook / Line / Discord -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://tokenshare123.github.io/WebPage_NAXI/" /> 
-    <meta property="og:title" content="NAXI Token WEB - Decentralized Ecosystem & Protocol" />
-    <meta property="og:description"
-        content="Explore NAXI Protocol: Automated AMM swaps, deflationary tokenomics, multi-tier holder rights, and secure on-chain governance on Binance Smart Chain." />
-    <meta property="og:image" content="https://raw.githubusercontent.com/tokenShare123/WebPage_NAXI/main/PROTOTYPE.png" />
-    
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://tokenshare123.github.io/WebPage_NAXI/" />
-    <meta name="twitter:title" content="NAXI Token WEB - Decentralized Ecosystem & Protocol" />
-    <meta name="twitter:description"
-        content="Explore NAXI Protocol: Automated AMM swaps, deflationary tokenomics, multi-tier holder rights, and secure on-chain governance on Binance Smart Chain." />
-    <meta name="twitter:image" content="https://raw.githubusercontent.com/tokenShare123/WebPage_NAXI/main/PROTOTYPE.png" /> 
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
@@ -154,7 +133,7 @@
             font-weight: 800;
             font-size: 19px;
             color: #fff;
-            
+
         }
 
         .token-name-wrap {
@@ -289,6 +268,29 @@
             font-size: 16px;
             width: 24px;
             text-align: center;
+        }
+
+        /* 1. 調整輸入框間距與 Placeholder 字體大小 */
+        .panel-card input {
+            margin-bottom: 12px;
+            /* 為輸入框之間與下方按鈕增加垂直間距 */
+            font-size: 14px;
+            /* 輸入框內容字體大小 */
+            padding: 10px 10px 10px 12px;
+        }
+
+        /* 2. 專門縮小 Placeholder 的字體 */
+        .panel-card input::placeholder {
+            font-size: 12px;
+            /* 將 Placeholder 字體調小 */
+            color: var(--muted);
+            /* 保持提示文字顏色一致 */
+            opacity: 0.8;
+        }
+
+        /* 3. 若按鈕與上方輸入框依然太近，可顯式指定按鈕上方間距 */
+        .panel-card .action-btn {
+            margin-top: 4px;
         }
 
         label {
@@ -681,7 +683,7 @@
                 <i class="fa-solid fa-chart-pie" style="margin-right: 6px;"></i>
                 <span id="connectionStatus">Dashboard</span>
             </button>
-            <button id="whitepaperTabBtn" class="top-tab" onclick="switchMainView('Whitepaper', this)">
+            <button class="top-tab" onclick="switchMainView('Whitepaper', this)">
                 <i class="fa-solid fa-book-open" style="margin-right: 6px;"></i>Whitepaper
             </button>
         </div>
@@ -767,9 +769,26 @@
                             class="fa-solid fa-medal"></i> Check Holder Level</button>
                     <button class="action-btn" onclick="runAccountQuery('getMyReferral')" style="margin-bottom:10px;"><i
                             class="fa-solid fa-user-shield"></i> Check My Referrer</button>
-                    <button class="action-btn" onclick="runAccountQuery('getMyShareClaimed')"><i
-                            class="fa-solid fa-gift"></i> Check Claimed Incentives</button>
+                    <button class="action-btn" onclick="runAccountQuery('getMyBoughtFromPancake')"
+                        style="margin-bottom:10px;"><i class="fa-solid fa-cart-shopping"></i> Check Aailable Incentive
+                    </button>
+                    <button class="action-btn" onclick="runAccountQuery('getMyShareClaimed')"
+                        style="margin-bottom:10px;"><i class="fa-solid fa-gift"></i> Check Claimed Incentives</button>
+                    <button class="action-btn" onclick="runAccountQuery('getMyRemainingLimit')"
+                        style="margin-bottom:10px;"><i class="fa-solid fa-gauge-high"></i> Check Remaining
+                        Limit</button>
+                    <button class="action-btn" onclick="runAccountQuery('holdersCount')"><i
+                            class="fa-solid fa-users"></i> Check Holders Count</button>
+
                     <div id="res_stats" class="result-msg"></div>
+                </div>
+                <!-- 在 Bid 面板增加查詢競標資訊 -->
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-magnifying-glass-dollar"></i> Query Bid Info</div>
+                    <input type="text" id="query_bid_day" placeholder="Relative Day (1-10)">
+                    <button class="action-btn" onclick="runQueryBidInfo()"><i class="fa-solid fa-search"></i> Query Bid
+                        Info</button>
+                    <div id="res_bidInfo" class="result-msg"></div>
                 </div>
             </div>
 
@@ -1071,7 +1090,7 @@
             </div>
         </div>
 
-        <!-- MAIN VIEW 2: WHITEPAPER -->
+        <!-- MAIN VIEW 2: WHITEPAPER (精美英文白皮書內容) -->
         <div id="mainView-Whitepaper" class="hidden">
             <!DOCTYPE html>
             <html lang="en">
@@ -1318,14 +1337,16 @@
                                 <div class="flex items-start space-x-3">
                                     <div
                                         class="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-xs mt-1 shrink-0">
-                                        <i class="fa-solid fa-check"></i></div>
+                                        <i class="fa-solid fa-check"></i>
+                                    </div>
                                     <p class="text-gray-300 text-sm"><strong>Dynamic Matrix Incentives:</strong> Merging
                                         traditional AMM liquidity pools with on-chain referral and tier governance.</p>
                                 </div>
                                 <div class="flex items-start space-x-3">
                                     <div
                                         class="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-xs mt-1 shrink-0">
-                                        <i class="fa-solid fa-check"></i></div>
+                                        <i class="fa-solid fa-check"></i>
+                                    </div>
                                     <p class="text-gray-300 text-sm"><strong>Self-Healing Ecosystem:</strong> Autonomous
                                         value support and high-efficiency ROI optimization for global participants.</p>
                                 </div>
@@ -1433,7 +1454,7 @@
                                 <div
                                     class="bg-dark-800 border border-dark-700 p-4 rounded-xl flex items-center justify-between">
                                     <span class="text-gray-300 text-sm">Sell Tax Rate</span>
-                                    <span class="font-bold text-indigo-400 text-base">10% (Whitelist Exempt)</span>
+                                    <span class="font-bold text-indigo-400 text-base">15% (Whitelist Exempt)</span>
                                 </div>
                             </div>
                         </div>
@@ -1461,12 +1482,12 @@
                         </div>
                     </div>
 
-                    <!-- SLIDE 6: Multi-Grade Holder System (Part 1) -->
+                    <!-- SLIDE 6: Multi-Tier Holder System (Part 1) -->
                     <div id="slide-6" class="slide w-full flex-col space-y-6">
                         <div class="text-center max-w-2xl mx-auto space-y-2">
                             <span class="text-indigo-400 text-xs font-semibold uppercase tracking-wider">Holder
                                 System</span>
-                            <h2 class="text-3xl font-extrabold text-white">10-Grade Holder Rights Matrix (Levels 1–5)
+                            <h2 class="text-3xl font-extrabold text-white">10-Tier Holder Rights Matrix (Levels 1–5)
                             </h2>
                             <p class="text-gray-400 text-sm">Higher holding tiers unlock greater voting weights and
                                 global matrix incentive distributions.</p>
@@ -1520,12 +1541,12 @@
                         </div>
                     </div>
 
-                    <!-- SLIDE 7: Multi-Grade Holder System (Part 2) -->
+                    <!-- SLIDE 7: Multi-Tier Holder System (Part 2) -->
                     <div id="slide-7" class="slide w-full flex-col space-y-6">
                         <div class="text-center max-w-2xl mx-auto space-y-2">
                             <span class="text-indigo-400 text-xs font-semibold uppercase tracking-wider">Holder
                                 System</span>
-                            <h2 class="text-3xl font-extrabold text-white">10-Grade Holder Rights Matrix (Levels 6–10)
+                            <h2 class="text-3xl font-extrabold text-white">10-Tier Holder Rights Matrix (Levels 6–10)
                             </h2>
                             <p class="text-gray-400 text-sm">Elite tiers with maximum weight and prioritized global pool
                                 distribution.</p>
@@ -1618,11 +1639,12 @@
                                     realizedIncentives
                                 </div>
                                 <div class="p-3 bg-dark-900 rounded-lg border border-dark-700">
-                                    <span class="text-indigo-400">directReward</span> = baseQty * 1.66% (Max cap
+                                    <span class="text-indigo-400">directReward</span> = baseQty * 2.5% (Max cap
                                     enforced)
                                 </div>
                                 <div class="p-3 bg-dark-900 rounded-lg border border-dark-700">
-                                    <span class="text-indigo-400">Multiple holders take turns receiving airdrops:</span> Share the fruits of the ecosystem's growth according to their ten levels of eligibility.
+                                    <span class="text-indigo-400">Multi-Tier Rotation:</span> 12 holder steps matched
+                                    against level requirements.
                                 </div>
                             </div>
                         </div>
@@ -1767,18 +1789,22 @@
             "function name() view returns (string)",
             "function symbol() view returns (string)",
             "function owner() view returns (address)",
+            "function holdersCount() view returns (address)",
             "function balanceOf(address account) view returns (uint256)",
             "function DEFAULT_RATE() view returns (uint256)",
             "function INCENTIVE_PERCENTAGE() view returns (uint256)",
             "function lastTradeTime() view returns (uint256)",
             "function TRADE_COOLDOWN() view returns (uint256)",
             "function getMyReferral() view returns (address)",
+            "function getMyBoughtFromPancake() view returns (uint256)",
             "function getMyShareClaimed() view returns (uint256)",
+            "function getMyRemainingLimit() view returns (uint256)",
             "function checkMyLevel() view returns (uint32)",
             "function transfer(address to, uint256 amount) returns (bool)",
             "function SwapNAXI() payable",
             "function swapBNB(uint256 nexAmount)",
             "function bindNextOrphan()",
+            "function getBidInfo(uint256 relativeDay) view returns (BidResult(string winnerShort, uint256 bidAmount))",
             "function bidReferralRights(uint256 relativeDay, uint256 bidAmount)",
             "function setPublicIsSwap(bool _status)",
             "function setPublicOnlySwapOut(bool _status)",
@@ -1792,20 +1818,20 @@
             "function emergencyWithdraw()"
         ];
         function switchMainView(viewName, btnElement) {
-            // 
+            // 移除所有頂層按鈕的 active
             const topTabs = document.querySelectorAll('.top-tab');
             topTabs.forEach(t => t.classList.remove('active'));
             btnElement.classList.add('active');
 
-            // 
+            // 取得兩個主要頁面區塊
             const dashboardView = document.getElementById("mainView-Dashboard");
             const whitepaperView = document.getElementById("mainView-Whitepaper");
 
-            // 
+            // 預設全部隱藏
             dashboardView.classList.add("hidden");
             whitepaperView.classList.add("hidden");
 
-            // 
+            // 顯示被點擊的頁面
             if (viewName === 'Dashboard') {
                 dashboardView.classList.remove("hidden");
             } else if (viewName === 'Whitepaper') {
@@ -1815,9 +1841,6 @@
         async function initWallet() {
             if (typeof window.ethereum === 'undefined') {
                 document.getElementById("connectionStatus").innerText = "Disconnected..";
-                const whitepaperBtn = document.getElementById('whitepaperTabBtn');       
-                switchMainView('Whitepaper', whitepaperBtn);
-                
                 return;
             }
             try {
@@ -2032,31 +2055,31 @@
             const recUsd = document.getElementById("swapReceiveUsd");
 
             if (isSwapDirectionBNBtoNAXI) {
-                // 
+                // 正向：BNB 換 NAXI (維持不變)
                 const calculatedNaxi = val * currentRateVal;
                 recInput.value = calculatedNaxi > 0 ? calculatedNaxi.toFixed(2) : "";
                 payUsd.innerText = `≈ $${(val * currentBnbPrice).toFixed(2)}`;
                 const tokenUsdt = (1 / currentRateVal) * currentBnbPrice;
                 recUsd.innerText = `≈ $${(calculatedNaxi * tokenUsdt).toFixed(2)}`;
             } else {
-                // 
+                // 反向：NAXI 換 BNB (必須對應合約扣除手續費與預設匯率)
                 try {
-                    // 
-                    // 
+                    // 可以從合約動態讀取 INCENTIVE_PERCENTAGE，若暫時取不到可預設一個數值或從全域變數讀取
+                    // 假設這裡先透過合約取得最新數據（若效能考量也可快取起來）
                     const contract = await getContract(false);
 
-                    // 
+                    // 取得激勵百分比 (例如合約中的 INCENTIVE_PERCENTAGE，若無對應 getter 則帶入常數)
                     let incentivePercent = 0;
                     try {
                         incentivePercent = await contract.INCENTIVE_PERCENTAGE();
                     } catch (e) {
-                        incentivePercent = 0; // 
+                        incentivePercent = 0; // 預設值或白名單情況
                     }
 
-                    // 
+                    // 對應合約邏輯: deductedNexAmount = nexAmount * (100 - INCENTIVE_PERCENTAGE) / 100
                     const effectiveNaxi = val * (100 - Number(incentivePercent)) / 100;
 
-                    // 
+                    // 對應合約邏輯: bnbToReturn = deductedNexAmount / swapRate (DEFAULT_RATE)
                     const calculatedBnb = effectiveNaxi / currentRateVal;
 
                     recInput.value = calculatedBnb > 0 ? calculatedBnb.toFixed(5) : "";
@@ -2066,7 +2089,7 @@
                     recUsd.innerText = `≈ $${(calculatedBnb * currentBnbPrice).toFixed(2)}`;
                 } catch (err) {
                     console.warn("Error calculating reverse swap with tax:", err);
-                    // 
+                    // 降級退回簡易計算
                     const calculatedBnb = val / currentRateVal;
                     recInput.value = calculatedBnb > 0 ? calculatedBnb.toFixed(5) : "";
                 }
@@ -2202,24 +2225,77 @@
             }
         }
 
+        // 1. 擴充原本的帳號統計查詢函式
         async function runAccountQuery(funcName) {
             const resBox = document.getElementById("res_stats");
             resBox.style.display = "block";
             resBox.innerText = "Querying account stats...";
+
             try {
                 if (!connectedAddress) await initWallet();
                 const contract = await getContract(false);
-                const result = await contract[funcName]();
+
+                // 帶入 { from: connectedAddress } 確保 msg.sender 正確[cite: 10]
+                const result = await contract[funcName]({from: connectedAddress});
 
                 if (funcName === 'getMyShareClaimed') {
                     resBox.innerText = "Claimed Incentives: " + ethers.utils.formatEther(result) + " NAXI";
+
                 } else if (funcName === 'checkMyLevel') {
                     resBox.innerText = "Holder Level Tier: Level " + result.toString();
+
                 } else if (funcName === 'getMyReferral') {
-                    resBox.innerText = "My Referrer Address: " + result.toString();
+                    if (!result || result === "0x0000000000000000000000000000000000000000") {
+                        resBox.innerText = "My Referrer Address: None (Not Bound)";
+                    } else {
+                        resBox.innerText = "My Referrer Address: " + result;
+                    }
+
+                    // --- 新增的判斷邏輯 ---
+                } else if (funcName === 'getMyBoughtFromPancake') {
+                    resBox.innerText = "Bought From Pancake: " + ethers.utils.formatEther(result) + " NAXI";
+
+                } else if (funcName === 'getMyRemainingLimit') {
+                    resBox.innerText = "Remaining Claim Limit: " + ethers.utils.formatEther(result) + " NAXI";
+
+                } else if (funcName === 'holdersCount') {
+                    // 使用 BigNumber 的 10 進位轉碼方式
+                    const count = ethers.BigNumber.from(result).toString(10);
+                    resBox.innerText = "Total Holders Count: " + count;
                 }
+
             } catch (err) {
-                resBox.innerText = "Error: " + (err.reason || err.message);
+                console.error(err);
+                resBox.innerText = "Error: " + (err.reason || err.message || "Query failed");
+            }
+        }
+
+        // 2. 新增：專門查詢 getBidInfo 的函式 (帶有 relativeDay 參數與 struct 回傳值)
+        async function runQueryBidInfo() {
+            const resBox = document.getElementById("res_bidInfo");
+            const relativeDayInput = document.getElementById("query_bid_day").value;
+
+            if (!relativeDayInput || isNaN(relativeDayInput) || relativeDayInput < 1 || relativeDayInput > 10) {
+                alert("Please enter a valid day between 1 and 10.");
+                return;
+            }
+
+            resBox.style.display = "block";
+            resBox.innerText = "Querying bid info...";
+
+            try {
+                if (!connectedAddress) await initWallet();
+                const contract = await getContract(false);
+
+                // 呼叫 getBidInfo(relativeDay)
+                const info = await contract.getBidInfo(relativeDayInput);
+
+                // info 會是一個物件 / 陣列：{ winnerShort, bidAmount }
+                resBox.innerText = `Day +${relativeDayInput} Winner: ${info.winnerShort} | High Bid: ${info.bidAmount.toString()} NAXI`;
+
+            } catch (err) {
+                console.error(err);
+                resBox.innerText = "Error: " + (err.reason || err.message || "Query failed");
             }
         }
 
@@ -2236,8 +2312,8 @@
             }
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            initWallet();
+        window.addEventListener('load', () => {
+            if (window.ethereum) initWallet();
         });
 
         let cooldownTimer = null;
