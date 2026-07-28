@@ -1883,8 +1883,14 @@
                                 <a href="https://bscscan.com/address/0x8151501C333e017D938FF892fb74067f8A162C26"
                                     target="_blank" rel="noopener noreferrer"
                                     class="inline-flex items-center space-x-2 bg-dark-700 hover:bg-dark-600 border border-indigo-500/40 text-indigo-300 font-mono text-xs md:text-sm px-4 py-2.5 rounded-xl transition-all duration-200 group">
-                                    <span>0x8151501C333e017D938FF892fb74067f8A162C26</span>
-                                    <svg class="w-4 h-4 text-indigo-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+
+                                    <!-- 手機豎屏 (預設顯示前八後六) -->
+                                    <span class="inline md:hidden">0x815150...162C26</span>
+
+                                    <!-- 平板/桌機大螢幕 (md 以上顯示完整地址) -->
+                                    <span class="hidden md:inline">0x8151501C333e017D938FF892fb74067f8A162C26</span>
+
+                                    <svg class="w-4 h-4 text-indigo-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0"
                                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14">
