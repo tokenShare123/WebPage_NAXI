@@ -12,12 +12,13 @@
 
     <!-- Open Graph / Facebook / Line / Discord -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://tokenshare123.github.io/WebPage_NAXI/" /> 
+    <meta property="og:url" content="https://tokenshare123.github.io/WebPage_NAXI/" />
     <meta property="og:title" content="NAXI Token WEB - Decentralized Ecosystem & Protocol" />
     <meta property="og:description"
         content="Explore NAXI Protocol: Automated AMM swaps, deflationary tokenomics, multi-tier holder rights, and secure on-chain governance on Binance Smart Chain." />
-    <meta property="og:image" content="https://raw.githubusercontent.com/tokenShare123/WebPage_NAXI/main/IMG_3740.jpg" />
-    
+    <meta property="og:image"
+        content="https://raw.githubusercontent.com/tokenShare123/WebPage_NAXI/main/IMG_3740.jpg" />
+
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -25,7 +26,8 @@
     <meta name="twitter:title" content="NAXI Token WEB - Decentralized Ecosystem & Protocol" />
     <meta name="twitter:description"
         content="Explore NAXI Protocol: Automated AMM swaps, deflationary tokenomics, multi-tier holder rights, and secure on-chain governance on Binance Smart Chain." />
-    <meta name="twitter:image" content="https://raw.githubusercontent.com/tokenShare123/WebPage_NAXI/main/IMG_3740.jpg" /> 
+    <meta name="twitter:image"
+        content="https://raw.githubusercontent.com/tokenShare123/WebPage_NAXI/main/IMG_3740.jpg" />
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
@@ -145,7 +147,7 @@
 
         .token-icon {
             width: 44px;
-            height: 44px; 
+            height: 44px;
             background: var(--success);
             border-radius: 50%;
             display: flex;
@@ -1218,8 +1220,13 @@
                     <div class="flex items-center space-x-4">
                         <span id="slideIndicator"
                             class="text-[11px] font-semibold px-2.5 py-0.5 bg-dark-700 text-indigo-400 rounded-full border border-dark-600 tracking-wider">
-                            1 / 10
+                            1 / 11
                         </span>
+                        <button onclick="shareCurrentSlide()"
+                            class="w-9 h-9 rounded-lg bg-dark-700 hover:bg-dark-600 border border-dark-600 flex items-center justify-center transition text-gray-300 hover:text-white"
+                            title="Share Slide">
+                            <i class="fa-solid fa-share-nodes text-sm"></i>
+                        </button>
                         <div class="flex space-x-2">
                             <button onclick="prevSlide()"
                                 class="w-9 h-9 rounded-lg bg-dark-700 hover:bg-dark-600 border border-dark-600 flex items-center justify-center transition text-gray-300 hover:text-white">
@@ -1805,6 +1812,95 @@
                             </p>
                         </div>
                     </div>
+                    <!-- SLIDE 11: Call to Action & AI Ecosystem Vision -->
+                    <div id="slide-11" class="slide w-full flex-col space-y-8">
+                        <!-- Header Section -->
+                        <div class="text-center max-w-2xl mx-auto space-y-3">
+                            <span class="text-indigo-400 text-xs font-semibold uppercase tracking-wider">Vision &
+                                Action</span>
+                            <h2 class="text-3xl lg:text-4xl font-extrabold text-white">Ask Yourself 3 Simple Questions
+                            </h2>
+                            <p class="text-gray-400 text-sm">Positioning yourself at the frontier of AI and Web3
+                                integration.</p>
+                        </div>
+
+                        <!-- 3 Questions Grid -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <!-- Question 1 -->
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-6 rounded-2xl space-y-3 flex flex-col justify-between">
+                                <div class="space-y-3">
+                                    <div class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Question 01
+                                    </div>
+                                    <h3 class="text-lg font-bold text-white">Do you want to build wealth?</h3>
+                                    <p class="text-gray-400 text-sm">Capitalizing on early-stage paradigm shifts has
+                                        always been the primary catalyst for exponential value growth.</p>
+                                </div>
+                                <div class="pt-2 text-indigo-400/50 text-xs font-mono">01 / WEALTH</div>
+                            </div>
+
+                            <!-- Question 2 -->
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-6 rounded-2xl space-y-3 flex flex-col justify-between">
+                                <div class="space-y-3">
+                                    <div class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Question 02
+                                    </div>
+                                    <h3 class="text-lg font-bold text-white">Is the AI sector's future bright?</h3>
+                                    <p class="text-gray-400 text-sm">Despite short-term market cycles, AI remains an
+                                        unrivaled mega-trend worth investing in and developing long-term.</p>
+                                </div>
+                                <div class="pt-2 text-indigo-400/50 text-xs font-mono">02 / AI SECTOR</div>
+                            </div>
+
+                            <!-- Question 3 -->
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-6 rounded-2xl space-y-3 flex flex-col justify-between">
+                                <div class="space-y-3">
+                                    <div class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Question 03
+                                    </div>
+                                    <h3 class="text-lg font-bold text-white">Ready for 80% returns at 10% cost?</h3>
+                                    <p class="text-gray-400 text-sm">Are you willing to participate and witness the next
+                                        AI-driven ecosystem, capturing 80% upside at 10% entry cost?</p>
+                                </div>
+                                <div class="pt-2 text-indigo-400/50 text-xs font-mono">03 / OPPORTUNITY</div>
+                            </div>
+                        </div>
+
+                        <!-- Contract Address Callout Box with BSCScan Link -->
+                        <div
+                            class="bg-dark-800 border border-indigo-500/30 p-6 rounded-2xl text-center space-y-3 relative overflow-hidden">
+                            <div class="flex items-center justify-center space-x-2">
+                                <div class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></div>
+                                <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Official Smart
+                                    Contract</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-white">Track & Follow NAXI Token</h3>
+                            <p class="text-gray-400 text-sm max-w-xl mx-auto">
+                                Verify protocol transparency, liquidity pools, and tokenomics directly on-chain via
+                                BSCScan.
+                            </p>
+                            <div class="pt-2">
+                                <a href="https://bscscan.com/address/0x8151501C333e017D938FF892fb74067f8A162C26"
+                                    target="_blank" rel="noopener noreferrer"
+                                    class="inline-flex items-center space-x-2 bg-dark-700 hover:bg-dark-600 border border-indigo-500/40 text-indigo-300 font-mono text-xs md:text-sm px-4 py-2.5 rounded-xl transition-all duration-200 group">
+                                    <span>0x8151501C333e017D938FF892fb74067f8A162C26</span>
+                                    <svg class="w-4 h-4 text-indigo-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14">
+                                        </path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Bottom Slogan -->
+                        <div class="text-center pt-2">
+                            <p class="text-xs text-gray-500 tracking-wide uppercase font-semibold">
+                                Join the NAXI Community Today — Secure Your Early Position in the AI Ecosystem.
+                            </p>
+                        </div>
+                    </div>
                 </main>
 
                 <!-- Footer Controls -->
@@ -1819,11 +1915,11 @@
                 <!-- Presentation Controller Script -->
                 <script>
                     let currentSlide = 1;
-                    const totalSlides = 10;
+                    const totalSlides = 11;
 
                     function showSlide(n) {
-                        if (n > totalSlides) currentSlide = totalSlides;
-                        else if (n < 1) currentSlide = 1;
+                        if (n > totalSlides) currentSlide = 1;
+                        else if (n < 1) currentSlide = totalSlides;
                         else currentSlide = n;
 
                         for (let i = 1; i <= totalSlides; i++) {
@@ -1842,6 +1938,10 @@
                         if (indicator) {
                             indicator.innerText = `${currentSlide} / ${totalSlides}`;
                         }
+
+                        // 無刷新更新網址列參數 (例如: ?slide=3)
+                        const newUrl = `${window.location.pathname}?slide=${currentSlide}`;
+                        window.history.replaceState({slide: currentSlide}, '', newUrl);
                     }
 
                     function nextSlide() {
@@ -1851,13 +1951,47 @@
                     function prevSlide() {
                         showSlide(currentSlide - 1);
                     }
+                    // 2. create & copy share link
+                    function shareSlide(slideNum = currentSlide) {
+                        const shareUrl = `${window.location.origin}${window.location.pathname}?slide=${slideNum}`;
 
+                        navigator.clipboard.writeText(shareUrl).then(() => {
+                            alert(`✅ Slide ${slideNum} share link：\n${shareUrl}`);
+                        }).catch(err => {
+                            console.error('Copy failed:', err);
+                            alert('❌ Link copying failed. Please copy the URL manually.');
+                        });
+                    }
+
+                    function shareCurrentSlide() {
+                        shareSlide(currentSlide);
+                    }
                     // Keyboard navigation support
                     document.addEventListener('keydown', (e) => {
                         if (e.key === 'ArrowRight' || e.key === 'Space') {
                             nextSlide();
                         } else if (e.key === 'ArrowLeft') {
                             prevSlide();
+                        }
+                    });
+
+                    //
+                    window.addEventListener('DOMContentLoaded', () => {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const slideParam = urlParams.get('slide');
+
+                        if (slideParam) {
+                            const slideNum = parseInt(slideParam, 10);
+                            if (!isNaN(slideNum) && slideNum >= 1 && slideNum <= totalSlides) {
+                                // Switch to Whitepaper 
+                                const topTabs = document.querySelectorAll('.top-tab');
+                                const whitepaperBtn = topTabs[1]; // Whitepaper 
+                                if (whitepaperBtn) {
+                                    switchMainView('Whitepaper', whitepaperBtn);
+                                }
+                                // show the specified slide
+                                showSlide(slideNum);
+                            }
                         }
                     });
                 </script>
@@ -1940,34 +2074,34 @@
                     try {
                         // 將錢包地址寫入剪貼簿
                         await navigator.clipboard.writeText(connectedAddress);
-                        alert("✅ 已複製錢包地址: " + connectedAddress);
+                        alert("✅ Wallet address copied: " + connectedAddress);
                     } catch (err) {
-                        console.error("複製失敗:", err);
-                        alert("❌ 複製失敗，請手動複製。");
+                        console.error("Copy failed:", err);
+                        alert("❌ Copy failed，try to copy manually.");
                     }
                 } else {
-                    alert("⚠️ 尚未連線錢包，無法複製地址！");
+                    alert("⚠️ Not yet connected to wallet，copy failed！");
                 }
             } else {
-                // 如果原本不是 active，才執行切換頁籤
+                // 
                 switchMainView('Dashboard', btnElement);
             }
         }
         function switchMainView(viewName, btnElement) {
-            // 移除所有頂層按鈕的 active
+            // remove active
             const topTabs = document.querySelectorAll('.top-tab');
             topTabs.forEach(t => t.classList.remove('active'));
             btnElement.classList.add('active');
 
-            // 取得兩個主要頁面區塊
+            // 
             const dashboardView = document.getElementById("mainView-Dashboard");
             const whitepaperView = document.getElementById("mainView-Whitepaper");
 
-            // 預設全部隱藏
+            // 
             dashboardView.classList.add("hidden");
             whitepaperView.classList.add("hidden");
 
-            // 顯示被點擊的頁面
+            // 
             if (viewName === 'Dashboard') {
                 dashboardView.classList.remove("hidden");
             } else if (viewName === 'Whitepaper') {
@@ -2305,7 +2439,7 @@
                 const contract = await getContract(true);
                 let args = inputIds.map(id => document.getElementById(id).value.trim());
 
-                // 防呆 1：檢查輸入框是否為空
+                //
                 for (let i = 0; i < args.length; i++) {
                     if (args[i] === "") {
                         alert("Please fill in all input fields!");
