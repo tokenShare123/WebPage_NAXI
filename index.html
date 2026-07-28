@@ -124,8 +124,8 @@
 
         .token-icon {
             width: 44px;
-            height: 44px;
-            background: #00ea91;
+            height: 44px; 
+            background: var(--success);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -679,7 +679,7 @@
 
         <!-- 頂層大頁籤 (Dashboard / Whitepaper) -->
         <div class="top-level-tabs">
-            <button class="top-tab active" onclick="switchMainView('Dashboard', this)">
+            <button class="top-tab active" onclick="handleDashboardClick(this)">
                 <i class="fa-solid fa-chart-pie" style="margin-right: 6px;"></i>
                 <span id="connectionStatus">Dashboard</span>
             </button>
@@ -701,7 +701,7 @@
                         </div>
                     </div>
                     <div class="token-right">
-                        <div class="token-balance" id="tokenBalance">0.0000</div>
+                        <div class="token-balance" id="tokenBalance">0.00</div>
                         <div class="token-balance-usd" id="tokenBalanceUsd">$0.00</div>
                     </div>
                 </div>
@@ -773,13 +773,17 @@
                         style="margin-bottom:10px;"><i class="fa-solid fa-cart-shopping"></i> Check Aailable Incentive
                     </button>
                     <button class="action-btn" onclick="runAccountQuery('getMyShareClaimed')"
-                        style="margin-bottom:10px;"><i class="fa-solid fa-gift"></i> Check Claimed Incentives</button>
+                        style="margin-bottom:10px;"><i class="fa-solid fa-gift"></i> Check Claimed Incentives
+                    </button>
                     <button class="action-btn" onclick="runAccountQuery('getMyRemainingLimit')"
-                        style="margin-bottom:10px;"><i class="fa-solid fa-gauge-high"></i> Check Remaining
-                        Limit</button>
+                        style="margin-bottom:10px;"><i class="fa-solid fa-gauge-high"></i> Check Remaining Limit
+                    </button>
                     <button class="action-btn" onclick="runAccountQuery('holdersCount')"><i
-                            class="fa-solid fa-users"></i> Check Holders Count</button>
-
+                            class="fa-solid fa-users"></i> Check Holders Count
+                    </button>
+                    <button class="action-btn" onclick="runAccountQuery('DEFAULT_RATE')"><i
+                            class="fa-solid fa-users"></i> Check DEFAULT_RATE
+                    </button>
                     <div id="res_stats" class="result-msg"></div>
                 </div>
                 <!-- 在 Bid 面板增加查詢競標資訊 -->
@@ -1030,9 +1034,9 @@
                 <div class="panel-card">
                     <div class="panel-title"><i class="fa-solid fa-coins"></i> Update Default Rate</div>
                     <input type="text" id="new_default_rate" placeholder="New Rate (e.g. 13680)">
-                    <button class="action-btn" onclick="executeWrite('setDefaultRate', ['new_default_rate'])"><i
+                    <button class="action-btn" onclick="executeWrite('setDEFAULT_RATE', ['new_default_rate'])"><i
                             class="fa-solid fa-pen-to-square"></i> Set Default Rate</button>
-                    <div id="res_setDefaultRate" class="result-msg"></div>
+                    <div id="res_setDEFAULT_RATE" class="result-msg"></div>
                 </div>
 
                 <div class="panel-card">
@@ -1086,6 +1090,18 @@
                     <button class="action-btn" onclick="runQuery('balanceOf', ['bal_account'])"><i
                             class="fa-solid fa-search"></i> Check Balance</button>
                     <div id="res_balanceOf" class="result-msg"></div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-triangle-exclamation"></i> Rescue：Decreasingly Reset
+                    </div>
+                    <p style="font-size: 13px; color: #666;">Reset DEFAULT_RATE 14450</p>
+
+                    <button class="action-btn" style="background-color: #e74c3c; color: white;"
+                        onclick="autoResetDefaultRateTarget(14450)">
+                        <i class="fa-solid fa-rotate-left"></i> One Click to Reset </button>
+
+                    <div id="res_autoResetRate" class="result-msg" style="margin-top: 10px; font-size: 13px;"></div>
                 </div>
             </div>
         </div>
@@ -1180,8 +1196,9 @@
                     </div>
                     <div class="flex items-center space-x-4">
                         <span id="slideIndicator"
-                            class="text-xs font-semibold px-3 py-1 bg-dark-700 text-indigo-400 rounded-full border border-dark-600">Slide
-                            1 / 9</span>
+                            class="text-[11px] font-semibold px-2.5 py-0.5 bg-dark-700 text-indigo-400 rounded-full border border-dark-600 tracking-wider">
+                            1 / 10
+                        </span>
                         <div class="flex space-x-2">
                             <button onclick="prevSlide()"
                                 class="w-9 h-9 rounded-lg bg-dark-700 hover:bg-dark-600 border border-dark-600 flex items-center justify-center transition text-gray-300 hover:text-white">
@@ -1689,7 +1706,84 @@
                             </p>
                         </div>
                     </div>
+                    <!-- SLIDE 10: Ecosystem Participation & Growth -->
+                    <div id="slide-10" class="slide w-full flex-col space-y-8">
+                        <!-- Header Section -->
+                        <div class="text-center max-w-2xl mx-auto space-y-3">
+                            <span class="text-indigo-400 text-xs font-semibold uppercase tracking-wider">Ecosystem &
+                                Participation</span>
+                            <h2 class="text-3xl lg:text-4xl font-extrabold text-white">Why & How to Join NAXI</h2>
+                            <p class="text-gray-400 text-sm">Empowerment, incentivized community growth, and active
+                                ecosystem expansion.</p>
+                        </div>
 
+                        <!-- Top Highlight Card: Why Join -->
+                        <div
+                            class="bg-dark-800 border border-dark-700 p-6 lg:p-8 rounded-2xl space-y-3 relative overflow-hidden">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></div>
+                                <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Core Value
+                                    Proposition</span>
+                            </div>
+                            <h3 class="text-xl lg:text-2xl font-bold text-white">Why Participate in the NAXI Ecosystem?
+                            </h3>
+                            <p class="text-gray-300 text-sm lg:text-base leading-relaxed">
+                                The world's first protocol designed to recognize and incentivize community members to
+                                spontaneously engage in
+                                <strong class="text-white">education, liquidity provision, market making, and real-world
+                                    applications</strong>—driving continuous progress and complete ecosystem governance.
+                            </p>
+                        </div>
+
+                        <!-- Bottom Step Cards: How to Join -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <!-- Step 1 -->
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-6 rounded-2xl space-y-3 flex flex-col justify-between">
+                                <div class="space-y-3">
+                                    <div class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Step 01
+                                    </div>
+                                    <h3 class="text-lg font-bold text-white">Acquire NAXI Tokens</h3>
+                                    <p class="text-gray-400 text-sm">Get NAXI tokens through liquidity bootstrap or
+                                        market exchanges to secure your entry node.</p>
+                                </div>
+                                <div class="pt-2 text-indigo-400/50 text-xs font-mono">01 / ACQUIRE</div>
+                            </div>
+
+                            <!-- Step 2 -->
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-6 rounded-2xl space-y-3 flex flex-col justify-between">
+                                <div class="space-y-3">
+                                    <div class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Step 02
+                                    </div>
+                                    <h3 class="text-lg font-bold text-white">Share & Invite</h3>
+                                    <p class="text-gray-400 text-sm">Share the vision, expand the matrix network, and
+                                        unlock referral incentives and tier rights.</p>
+                                </div>
+                                <div class="pt-2 text-indigo-400/50 text-xs font-mono">02 / SHARE</div>
+                            </div>
+
+                            <!-- Step 3 -->
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-6 rounded-2xl space-y-3 flex flex-col justify-between">
+                                <div class="space-y-3">
+                                    <div class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Step 03
+                                    </div>
+                                    <h3 class="text-lg font-bold text-white">Build & Govern</h3>
+                                    <p class="text-gray-400 text-sm">Participate in community building, market
+                                        liquidity, and drive ecosystem growth together.</p>
+                                </div>
+                                <div class="pt-2 text-indigo-400/50 text-xs font-mono">03 / GOVERN</div>
+                            </div>
+                        </div>
+
+                        <!-- Bottom Slogan -->
+                        <div class="text-center pt-2">
+                            <p class="text-xs text-gray-500 tracking-wide uppercase font-semibold">
+                                Join the decentralized movement — Shape the future of autonomous ecosystem expansion.
+                            </p>
+                        </div>
+                    </div>
                 </main>
 
                 <!-- Footer Controls -->
@@ -1704,7 +1798,7 @@
                 <!-- Presentation Controller Script -->
                 <script>
                     let currentSlide = 1;
-                    const totalSlides = 9;
+                    const totalSlides = 10;
 
                     function showSlide(n) {
                         if (n > totalSlides) currentSlide = totalSlides;
@@ -1725,7 +1819,7 @@
 
                         const indicator = document.getElementById('slideIndicator');
                         if (indicator) {
-                            indicator.innerText = `Slide ${currentSlide} / ${totalSlides}`;
+                            indicator.innerText = `${currentSlide} / ${totalSlides}`;
                         }
                     }
 
@@ -1809,7 +1903,7 @@
             "function setPublicIsSwap(bool _status)",
             "function setPublicOnlySwapOut(bool _status)",
             "function setTRADE_COOLDOWN(uint256 _minutes)",
-            "function setDefaultRate(uint256 rate)",
+            "function setDEFAULT_RATE(uint256 rate)",
             "function setMark_up(uint256 _mark_up)",
             "function setINCENTIVE_PERCENTAGE(uint256 _percent)",
             "function setBindOrphanFee(uint256 _fee)",
@@ -1817,6 +1911,27 @@
             "function withdrawBNB()",
             "function emergencyWithdraw()"
         ];
+        async function handleDashboardClick(btnElement) {
+            // 檢查點擊時，該按鈕是否已經是 active 狀態
+            if (btnElement.classList.contains("active")) {
+                // 確保有已連線的錢包地址
+                if (typeof connectedAddress !== "undefined" && connectedAddress) {
+                    try {
+                        // 將錢包地址寫入剪貼簿
+                        await navigator.clipboard.writeText(connectedAddress);
+                        alert("✅ 已複製錢包地址: " + connectedAddress);
+                    } catch (err) {
+                        console.error("複製失敗:", err);
+                        alert("❌ 複製失敗，請手動複製。");
+                    }
+                } else {
+                    alert("⚠️ 尚未連線錢包，無法複製地址！");
+                }
+            } else {
+                // 如果原本不是 active，才執行切換頁籤
+                switchMainView('Dashboard', btnElement);
+            }
+        }
         function switchMainView(viewName, btnElement) {
             // 移除所有頂層按鈕的 active
             const topTabs = document.querySelectorAll('.top-tab');
@@ -1888,7 +2003,7 @@
                 const contract = await getContract(false);
                 const balWei = await contract.balanceOf(connectedAddress);
                 rawNaxiBalance = ethers.utils.formatEther(balWei);
-                const balFormatted = Number(rawNaxiBalance).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 4});
+                const balFormatted = Number(rawNaxiBalance).toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2});
                 document.getElementById("tokenBalance").innerText = balFormatted;
 
                 document.getElementById("transferBalanceText").innerText = `${balFormatted} NAXI`;
@@ -2160,22 +2275,114 @@
             }
         }
 
+
         async function executeWrite(funcName, inputIds) {
             const resBox = document.getElementById("res_" + funcName);
             if (resBox) {resBox.style.display = "block"; resBox.innerText = "Confirming in wallet...";}
+
             try {
                 const contract = await getContract(true);
                 let args = inputIds.map(id => document.getElementById(id).value.trim());
+
+                // 防呆 1：檢查輸入框是否為空
+                for (let i = 0; i < args.length; i++) {
+                    if (args[i] === "") {
+                        alert("Please fill in all input fields!");
+                        if (resBox) resBox.innerText = "Error: Input field cannot be empty.";
+                        return;
+                    }
+                }
+
+                // 
+                if (funcName === "setDEFAULT_RATE") {
+                    if (isNaN(args[0])) {
+                        alert("Please enter a valid numeric value!");
+                        if (resBox) resBox.innerText = "Error: Invalid number.";
+                        return;
+                    }
+
+                    args[0] = ethers.BigNumber.from(args[0]).toString();
+
+                }
+
                 const tx = await contract[funcName](...args);
                 if (resBox) resBox.innerText = "Broadcasting... Hash: " + tx.hash;
                 await tx.wait();
                 if (resBox) resBox.innerText = "✅ Success! Transaction confirmed.";
-                loadUserData();
+
+                if (typeof loadUserData === "function") loadUserData();
+
             } catch (err) {
+                console.error(err);
                 if (resBox) resBox.innerText = "Error: " + (err.reason || err.message);
             }
         }
+        async function autoResetDefaultRateTarget(targetRate = 13680) {
+            const resBox = document.getElementById("res_autoResetRate");
+            if (resBox) {
+                resBox.style.display = "block";
+                resBox.innerText = "⏳ 正在初始化救援流程...";
+            }
 
+            try {
+                if (typeof connectedAddress === "undefined" || !connectedAddress) {
+                    await initWallet();
+                }
+
+                // 取得帶有 Signer 的合約實例
+                const contract = await getContract(true);
+
+                let currentRate = await contract.DEFAULT_RATE();
+                console.log("🚀 開始執行遞減恢復，目前 Rate:", currentRate.toString());
+
+                const targetBN = ethers.BigNumber.from(targetRate);
+
+                if (currentRate.lte(targetBN)) {
+                    alert(`當前 Rate (${currentRate.toString()}) 已經小於或等於目標值 (${targetRate})，無需恢復！`);
+                    if (resBox) resBox.innerText = "ℹ️ 當前 Rate 已低於或等於目標值，不需要執行。";
+                    return;
+                }
+
+                let step = 1;
+                while (currentRate.gt(targetBN)) {
+                    // 計算 >80% 的下限 (乘以 8005 除以 10000)
+                    let nextRate = currentRate.mul(8005).div(10000);
+
+                    // 如果下一階段低於目標值，直接鎖定為 13680
+                    if (nextRate.lte(targetBN)) {
+                        nextRate = targetBN;
+                    }
+
+                    const statusMsg = `[第 ${step} 步] 正在將 Rate 從 ${currentRate.toString()} 降至 ${nextRate.toString()}... 請在錢包確認交易`;
+                    console.log(statusMsg);
+                    if (resBox) resBox.innerText = statusMsg;
+
+                    // 發送交易
+                    const tx = await contract.setDEFAULT_RATE(nextRate);
+                    if (resBox) resBox.innerText = `[第 ${step} 步] 交易已廣播... Hash: ${tx.hash.substring(0, 10)}... 等待鏈上確認`;
+
+                    await tx.wait();
+
+                    // 更新鏈上當前最新值
+                    currentRate = await contract.DEFAULT_RATE();
+                    console.log(`✅ [第 ${step} 步] 成功！當前 Rate: ${currentRate.toString()}`);
+                    step++;
+                }
+
+                if (currentRate.eq(targetBN)) {
+                    const successMsg = `🎉 救援成功！DEFAULT_RATE 已成功恢復為：${currentRate.toString()}`;
+                    console.log(successMsg);
+                    if (resBox) resBox.innerText = successMsg;
+                    alert(successMsg);
+
+                    if (typeof loadUserData === "function") loadUserData();
+                }
+
+            } catch (err) {
+                console.error("救援流程中途失敗:", err);
+                if (resBox) resBox.innerText = "❌ 救援中斷: " + (err.reason || err.message);
+            }
+        }
         async function executeBoolWrite(funcName, checkboxId) {
             const resBox = document.getElementById("res_publicSwapToggles");
             if (resBox) {resBox.style.display = "block"; resBox.innerText = "Confirming in wallet...";}
@@ -2262,6 +2469,10 @@
                     // 使用 BigNumber 的 10 進位轉碼方式
                     const count = ethers.BigNumber.from(result).toString(10);
                     resBox.innerText = "Total Holders Count: " + count;
+                } else if (funcName === 'DEFAULT_RATE') {
+                    // 使用 BigNumber 的 10 進位轉碼方式
+                    const count = ethers.BigNumber.from(result).toString(10);
+                    resBox.innerText = "DEFAULT_RATE: " + count;
                 }
 
             } catch (err) {
