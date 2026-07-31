@@ -1,0 +1,961 @@
+<!doctype html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MATRIX Token Protocol</title>
+    <meta name="description" content="MATRIX Protocol is a fully decentralized 24H dynamic rate vault ecosystem built on BNB Chain." />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+
+    <style>
+        :root {
+            --bg: #060608;
+            --panel: #0e1013;
+            --panel-2: #14171a;
+            --panel-3: #1c2128;
+            --muted: #8b949e;
+            --text: #F0F6FC;
+            --accent: #10B981;
+            --accent-hover: #059669;
+            --accent-glow: rgba(16, 185, 129, 0.25);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --card-border-hover: rgba(16, 185, 129, 0.4);
+            --success: #00ea91;
+            --danger: #ff4a5a;
+            --info: #00bfff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 24px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .top-level-tabs {
+            display: flex;
+            background: var(--panel);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 4px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .top-tab {
+            flex: 1;
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 700;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .top-tab:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .top-tab.active {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .wallet-header-card {
+            background: var(--panel);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 22px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .token-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .token-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .token-icon {
+            width: 44px;
+            height: 44px;
+            filter: drop-shadow(0px 2px 8px rgba(16, 185, 129, 0.3));
+        }
+
+        .token-name-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .token-right {
+            text-align: right;
+        }
+
+        .token-balance {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .token-balance-usd {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 2px;
+            font-weight: 500;
+        }
+
+        .market-price-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .market-left {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--muted);
+        }
+
+        .market-right {
+            text-align: right;
+        }
+
+        .market-rate {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: space-between;
+            background: var(--panel);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 6px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-tab {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 10px 12px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+            flex: 1;
+        }
+
+        .nav-tab i {
+            font-size: 15px;
+        }
+
+        .nav-tab:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .nav-tab.active {
+            color: #fff;
+            background: var(--accent);
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        .panel-card {
+            background: var(--panel);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: border-color 0.2s;
+        }
+
+        .panel-card:hover {
+            border-color: var(--card-border-hover);
+        }
+
+        .panel-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text);
+        }
+
+        .panel-title i {
+            color: var(--accent);
+            font-size: 16px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .panel-card input {
+            margin-bottom: 12px;
+            font-size: 14px;
+            padding: 10px 12px;
+            width: 100%;
+            background: var(--panel-2);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            color: var(--text);
+        }
+
+        .panel-card input::placeholder {
+            font-size: 12px;
+            color: var(--muted);
+            opacity: 0.8;
+        }
+
+        button.action-btn {
+            width: 100%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px var(--accent-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        button.action-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .result-msg {
+            font-size: 12px;
+            margin-top: 10px;
+            word-break: break-all;
+            display: none;
+            padding: 10px;
+            background: var(--panel-2);
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            line-height: 1.4;
+        }
+
+        .transit-box {
+            background: var(--panel-2);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 10px;
+        }
+
+        .transit-row-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .transit-label {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .transit-bal-info {
+            font-size: 12px;
+            color: var(--info);
+            cursor: pointer;
+        }
+
+        .transit-row-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .token-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--panel-3);
+            border: 1px solid var(--card-border);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .transit-input {
+            background: transparent;
+            border: none !important;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text);
+            text-align: right;
+            width: 55%;
+            margin-bottom: 0 !important;
+            padding: 0 !important;
+        }
+
+        .transit-input:focus {
+            outline: none;
+        }
+
+        .transit-switch-icon {
+            text-align: center;
+            margin: -6px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .transit-switch-btn {
+            background: var(--panel-3);
+            border: 1px solid var(--card-border);
+            color: var(--accent);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .transit-switch-btn:hover {
+            transform: rotate(180deg);
+        }
+
+        .transit-details {
+            background: var(--panel-2);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin: 16px 0;
+            font-size: 13px;
+        }
+
+        .transit-detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            color: var(--muted);
+        }
+
+        .explorer-banner {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(0, 191, 255, 0.08) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 16px;
+            padding: 28px 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .explorer-banner i.main-icon {
+            font-size: 36px;
+            color: var(--accent);
+            margin-bottom: 14px;
+        }
+
+        .explore-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent);
+            color: white;
+            border-radius: 10px;
+            padding: 12px 26px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        #qr-reader-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .qr-modal-content {
+            background: var(--panel);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #reader {
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="top-level-tabs">
+        <button class="top-tab active" onclick="switchMainView('Dashboard', this)">
+            <i class="fa-solid fa-chart-pie" style="margin-right: 6px;"></i>
+            <span id="connectionStatus">Dashboard</span>
+        </button>
+        <button class="top-tab" onclick="switchMainView('Whitepaper', this)">
+            <i class="fa-solid fa-book-open" style="margin-right: 6px;"></i>Whitepaper
+        </button>
+    </div>
+
+    <div class="container">
+        <!-- MAIN VIEW 1: DASHBOARD -->
+        <div id="mainView-Dashboard">
+            <div class="wallet-header-card">
+                <div class="token-row">
+                    <div class="token-left">
+                        <div class="token-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+                                <circle cx="50" cy="50" r="46" fill="#10B981" />
+                                <text x="50%" y="55%" font-size="32" font-weight="bold" fill="#ffffff" text-anchor="middle" dominant-baseline="middle">M</text>
+                            </svg>
+                        </div>
+                        <div class="token-name-wrap" onclick="copyTokenAddress()" title="Copy Contract Address">
+                            <span id="tokenSymbol">MATRIX</span> <i class="fa-regular fa-copy"></i>
+                        </div>
+                    </div>
+                    <div class="token-right">
+                        <div class="token-balance" id="tokenBalance">0.00</div>
+                        <div class="token-balance-usd" id="bnbBalance">BNB: 0.0000</div>
+                    </div>
+                </div>
+
+                <div class="market-price-card">
+                    <div class="market-left">Dynamic Rate (24H)</div>
+                    <div class="market-right">
+                        <div class="market-rate" id="marketRate">1 BNB = 10,000 MATRIX</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4-Tab Navigation Bar -->
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="switchTab('Swap')">
+                    <i class="fa-solid fa-right-left"></i>Swap
+                </button>
+                <button class="nav-tab" onclick="switchTab('Fn')">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>Fn()
+                </button>
+                <button class="nav-tab" onclick="switchTab('Transfer')">
+                    <i class="fa-solid fa-paper-plane"></i>Transfer
+                </button>
+                <button class="nav-tab" onclick="switchTab('Record')">
+                    <i class="fa-solid fa-clock-rotate-left"></i>Record
+                </button>
+            </div>
+
+            <!-- TAB CONTENT: SWAP -->
+            <div id="tabContent-Swap">
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-right-left"></i> Native Vault Dynamic Swap</div>
+
+                    <!-- Pay Box -->
+                    <div class="transit-box">
+                        <div class="transit-row-top">
+                            <span class="transit-label">You Pay</span>
+                            <span class="transit-bal-info" id="swapPayBalance" onclick="fillMaxBalance()">Balance: 0.00</span>
+                        </div>
+                        <div class="transit-row-bottom">
+                            <div class="token-pill">
+                                <i class="fa-solid fa-coins" style="color:var(--accent);"></i>
+                                <span id="payTokenSymbol">BNB</span>
+                            </div>
+                            <input type="text" id="swap_pay_amount" class="transit-input" placeholder="0.0" oninput="calculateSwapReceive()">
+                        </div>
+                    </div>
+
+                    <!-- Switch Direction Button -->
+                    <div class="transit-switch-icon">
+                        <button class="transit-switch-btn" onclick="toggleSwapDirection()" title="Switch Direction">
+                            <i class="fa-solid fa-right-left fa-rotate-90"></i>
+                        </button>
+                    </div>
+
+                    <!-- Receive Box -->
+                    <div class="transit-box" style="margin-top: 0;">
+                        <div class="transit-row-top">
+                            <span class="transit-label">You Receive (Estimated)</span>
+                            <span class="transit-bal-info" id="swapReceiveBalance" style="cursor: default; color: var(--muted);">Balance: 0.00</span>
+                        </div>
+                        <div class="transit-row-bottom">
+                            <div class="token-pill">
+                                <i class="fa-solid fa-m" style="color:var(--info);"></i>
+                                <span id="receiveTokenSymbol">MATRIX</span>
+                            </div>
+                            <input type="text" id="swap_receive_amount" class="transit-input" placeholder="0.0" readonly style="color: var(--muted);">
+                        </div>
+                    </div>
+
+                    <!-- Detailed Metrics -->
+                    <div class="transit-details">
+                        <div class="transit-detail-row">
+                            <span>Dynamic Rate</span>
+                            <span id="swapRateText">1 BNB = 10,000 MATRIX</span>
+                        </div>
+                        <div class="transit-detail-row">
+                            <span>Incentive Fee</span>
+                            <span>10% (Auto Allocation)</span>
+                        </div>
+                    </div>
+
+                    <button class="action-btn" id="swapActionBtn" onclick="executeTransitSwap()">
+                        <span id="swapBtnText"><i class="fa-solid fa-bolt"></i> Confirm Swap</span>
+                    </button>
+                    <div id="res_transitSwap" class="result-msg"></div>
+                </div>
+            </div>
+
+            <!-- TAB CONTENT: Fn() -->
+            <div id="tabContent-Fn" class="hidden">
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-gavel"></i> Bid Parent Rights (1-14 Days)</div>
+                    <input type="text" id="bid_day" placeholder="Relative Day Index (1 - 14)">
+                    <input type="text" id="bid_amt" placeholder="Bid Amount (MATRIX)">
+                    <button class="action-btn" onclick="executeBid()"><i class="fa-solid fa-check"></i> Submit Bid</button>
+                    <div id="res_bidReferralRights" class="result-msg"></div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-magnifying-glass-dollar"></i> Query Bid Info</div>
+                    <input type="text" id="query_bid_day" placeholder="Relative Day Index (1 - 14)">
+                    <button class="action-btn" onclick="runQueryBidInfo()"><i class="fa-solid fa-search"></i> Query Bid Info</button>
+                    <div id="res_bidInfo" class="result-msg"></div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-link"></i> Bind Matrix Orphan</div>
+                    <p style="font-size: 12px; color: var(--muted); margin-bottom: 12px;">Fee: 200 MATRIX (Auto Burned)</p>
+                    <button class="action-btn" onclick="executeBindOrphan()"><i class="fa-solid fa-link-slash"></i> Bind Orphan Node</button>
+                    <div id="res_bindNextOrphan" class="result-msg"></div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-chart-line"></i> Account Dashboard Stats</div>
+                    <button class="action-btn" onclick="runAccountQuery('checkMyLevel')" style="margin-bottom:8px;"><i class="fa-solid fa-medal"></i> Check Holder Tier (0-10)</button>
+                    <button class="action-btn" onclick="runAccountQuery('getMyParent')" style="margin-bottom:8px;"><i class="fa-solid fa-user-shield"></i> Check Parent Address</button>
+                    <button class="action-btn" onclick="runAccountQuery('getIncentiveUnClaimed')" style="margin-bottom:8px;"><i class="fa-solid fa-gift"></i> Unclaimed Incentives</button>
+                    <button class="action-btn" onclick="runAccountQuery('holdersCount')"><i class="fa-solid fa-users"></i> Total Holders Count</button>
+                    <div id="res_stats" class="result-msg"></div>
+                </div>
+            </div>
+
+            <!-- TAB CONTENT: TRANSFER -->
+            <div id="tabContent-Transfer" class="hidden">
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-paper-plane"></i> Direct Transfer</div>
+                    <div style="margin-bottom: 12px;">
+                        <label>Recipient Address</label>
+                        <div style="display:flex; gap:8px;">
+                            <input type="text" id="transfer_to" placeholder="0x..." style="margin-bottom:0;">
+                            <button class="action-btn" style="width: auto; padding: 0 14px;" onclick="openQRScanner()"><i class="fa-solid fa-qrcode"></i></button>
+                        </div>
+                    </div>
+                    <div>
+                        <label>Transfer Amount (MATRIX)</label>
+                        <input type="text" id="transfer_amount" placeholder="0.0">
+                    </div>
+                    <button class="action-btn" onclick="executeTransfer()"><i class="fa-solid fa-check"></i> Send Tokens</button>
+                    <div id="res_transfer" class="result-msg"></div>
+                </div>
+            </div>
+
+            <!-- TAB CONTENT: RECORD -->
+            <div id="tabContent-Record" class="hidden">
+                <div class="explorer-banner">
+                    <i class="main-icon fa-solid fa-compass"></i>
+                    <h3>Complete Transaction History</h3>
+                    <p>View all interactions safely on BscScan Explorer.</p>
+                    <a id="explorerLink" href="#" target="_blank" class="explore-btn">
+                        Open in BscScan <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN VIEW 2: WHITEPAPER -->
+        <div id="mainView-Whitepaper" class="hidden">
+            <div class="panel-card" style="line-height: 1.6;">
+                <h2 style="color: var(--accent); margin-bottom: 12px;">MATRIX Protocol Whitepaper</h2>
+                <p style="font-size: 13px; color: var(--muted); margin-bottom: 16px;">Fully Decentralized Vault Edition with 24H Dynamic Rate</p>
+                <h3 style="font-size: 15px; margin: 12px 0 6px;">1. Zero Owner Protocol</h3>
+                <p style="font-size: 13px; color: var(--text);">The contract deploys with 0x0 owner address. Completely automated with no administrative backdoors.</p>
+                <h3 style="font-size: 15px; margin: 12px 0 6px;">2. Dynamic Exchange Rate Engine</h3>
+                <p style="font-size: 13px; color: var(--text);">Exchange rate automatically updates every 24 hours based on contract BNB collateral versus Total Supply, capped at 1:10,000 MAX_EXCHANGE_RATE.</p>
+                <h3 style="font-size: 15px; margin: 12px 0 6px;">3. Circular Matrix Incentives</h3>
+                <p style="font-size: 13px; color: var(--text);">10% of new token generation is directed into multi-level holder matrix algorithms across 10 qualification tiers.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR Reader Modal -->
+    <div id="qr-reader-modal">
+        <div class="qr-modal-content">
+            <div id="reader"></div>
+            <button class="action-btn" onclick="closeQRScanner()" style="background: var(--danger);">Close Scanner</button>
+        </div>
+    </div>
+
+    <script>
+        const MATRIX_ABI = [
+            "function name() view returns (string)",
+            "function symbol() view returns (string)",
+            "function decimals() view returns (uint8)",
+            "function totalSupply() view returns (uint256)",
+            "function balanceOf(address) view returns (uint256)",
+            "function transfer(address to, uint256 amount) returns (bool)",
+            "function EXCHANGE_RATE() view returns (uint256)",
+            "function TRADE_COOLDOWN() view returns (uint256)",
+            "function lastTradeTime(address) view returns (uint256)",
+            "function swapMatrix() payable",
+            "function swapBNB(uint256 matrixAmount)",
+            "function bindMatrixtOrphan()",
+            "function bidParentRights(uint256 relativeDay, uint256 bidAmount)",
+            "function getBidInfo(uint256 relativeDay) view returns (tuple(string winnerShort, uint256 bidAmount))",
+            "function checkMyLevel() view returns (uint32)",
+            "function getMyParent() view returns (address)",
+            "function getIncentiveUnClaimed() view returns (uint256)",
+            "function holdersCount() view returns (uint256)"
+        ];
+
+        let provider, signer, contract;
+        let userAddress = "";
+        let contractAddress = "0x0000000000000000000000000000000000000000"; // 請填入您部署的 MATRIX 智能合約地址
+        let exchangeRate = 10000;
+        let isBuyDirection = true; // true = BNB->MATRIX, false = MATRIX->BNB
+        let html5QrcodeScanner = null;
+
+        async function init() {
+            if (window.ethereum) {
+                try {
+                    provider = new ethers.providers.Web3Provider(window.ethereum);
+                    await provider.send("eth_requestAccounts", []);
+                    signer = provider.getSigner();
+                    userAddress = await signer.getAddress();
+                    
+                    document.getElementById("connectionStatus").innerText = userAddress.substring(0, 6) + "..." + userAddress.substring(38);
+                    document.getElementById("explorerLink").href = `https://bscscan.com/address/${userAddress}`;
+                    
+                    if (contractAddress !== "0x0000000000000000000000000000000000000000") {
+                        contract = new ethers.Contract(contractAddress, MATRIX_ABI, signer);
+                        await refreshBalances();
+                    }
+                } catch (e) {
+                    console.error("Wallet connection failed", e);
+                }
+            }
+        }
+
+        async function refreshBalances() {
+            if (!contract || !userAddress) return;
+            try {
+                const bal = await contract.balanceOf(userAddress);
+                const bnbBal = await provider.getBalance(userAddress);
+                const rate = await contract.EXCHANGE_RATE();
+                
+                exchangeRate = rate.toNumber();
+
+                document.getElementById("tokenBalance").innerText = parseFloat(ethers.utils.formatEther(bal)).toFixed(2);
+                document.getElementById("bnbBalance").innerText = "BNB: " + parseFloat(ethers.utils.formatEther(bnbBal)).toFixed(4);
+                document.getElementById("marketRate").innerText = `1 BNB = ${exchangeRate.toLocaleString()} MATRIX`;
+                document.getElementById("swapRateText").innerText = `1 BNB ≈ ${exchangeRate.toLocaleString()} MATRIX`;
+                
+                updateSwapUI();
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function switchMainView(view, btn) {
+            document.querySelectorAll('.top-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            
+            if (view === 'Dashboard') {
+                document.getElementById('mainView-Dashboard').classList.remove('hidden');
+                document.getElementById('mainView-Whitepaper').classList.add('hidden');
+            } else {
+                document.getElementById('mainView-Dashboard').classList.add('hidden');
+                document.getElementById('mainView-Whitepaper').classList.remove('hidden');
+            }
+        }
+
+        function switchTab(tabName) {
+            const tabs = ['Swap', 'Fn', 'Transfer', 'Record'];
+            tabs.forEach(t => {
+                const el = document.getElementById(`tabContent-${t}`);
+                if (el) el.classList.add('hidden');
+            });
+            
+            document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            
+            const target = document.getElementById(`tabContent-${tabName}`);
+            if (target) target.classList.remove('hidden');
+        }
+
+        function toggleSwapDirection() {
+            isBuyDirection = !isBuyDirection;
+            document.getElementById("payTokenSymbol").innerText = isBuyDirection ? "BNB" : "MATRIX";
+            document.getElementById("receiveTokenSymbol").innerText = isBuyDirection ? "MATRIX" : "BNB";
+            document.getElementById("swap_pay_amount").value = "";
+            document.getElementById("swap_receive_amount").value = "";
+            updateSwapUI();
+        }
+
+        async function updateSwapUI() {
+            if (!contract || !userAddress) return;
+            const bnbBal = await provider.getBalance(userAddress);
+            const tokenBal = await contract.balanceOf(userAddress);
+            
+            if (isBuyDirection) {
+                document.getElementById("swapPayBalance").innerText = "Balance: " + parseFloat(ethers.utils.formatEther(bnbBal)).toFixed(4);
+                document.getElementById("swapReceiveBalance").innerText = "Balance: " + parseFloat(ethers.utils.formatEther(tokenBal)).toFixed(2);
+            } else {
+                document.getElementById("swapPayBalance").innerText = "Balance: " + parseFloat(ethers.utils.formatEther(tokenBal)).toFixed(2);
+                document.getElementById("swapReceiveBalance").innerText = "Balance: " + parseFloat(ethers.utils.formatEther(bnbBal)).toFixed(4);
+            }
+        }
+
+        function calculateSwapReceive() {
+            const val = parseFloat(document.getElementById("swap_pay_amount").value) || 0;
+            if (isBuyDirection) {
+                document.getElementById("swap_receive_amount").value = (val * exchangeRate).toFixed(2);
+            } else {
+                const matrixDeducted = val * 0.9; // 10% Incentive
+                document.getElementById("swap_receive_amount").value = (matrixDeducted / exchangeRate).toFixed(6);
+            }
+        }
+
+        async function fillMaxBalance() {
+            if (!contract || !userAddress) return;
+            if (isBuyDirection) {
+                const bnbBal = await provider.getBalance(userAddress);
+                const maxVal = Math.max(0, parseFloat(ethers.utils.formatEther(bnbBal)) - 0.005); // Reserve gas
+                document.getElementById("swap_pay_amount").value = maxVal.toFixed(4);
+            } else {
+                const tokenBal = await contract.balanceOf(userAddress);
+                document.getElementById("swap_pay_amount").value = ethers.utils.formatEther(tokenBal);
+            }
+            calculateSwapReceive();
+        }
+
+        async function executeTransitSwap() {
+            const resBox = document.getElementById("res_transitSwap");
+            resBox.style.display = "block";
+            resBox.innerText = "Processing Transaction...";
+            
+            try {
+                const payVal = document.getElementById("swap_pay_amount").value;
+                if (!payVal || parseFloat(payVal) <= 0) throw new Error("Enter valid amount");
+
+                // Cooldown check
+                const lastTime = await contract.lastTradeTime(userAddress);
+                const cooldown = await contract.TRADE_COOLDOWN();
+                const now = Math.floor(Date.now() / 1000);
+                if (now < lastTime.toNumber() + cooldown.toNumber()) {
+                    const waitMin = Math.ceil((lastTime.toNumber() + cooldown.toNumber() - now) / 60);
+                    throw new Error(`Cooldown active: Please wait ${waitMin} minutes.`);
+                }
+
+                let tx;
+                if (isBuyDirection) {
+                    tx = await contract.swapMatrix({ value: ethers.utils.parseEther(payVal) });
+                } else {
+                    tx = await contract.swapBNB(ethers.utils.parseEther(payVal));
+                }
+                
+                resBox.innerText = "Tx Submitted: " + tx.hash;
+                await tx.wait();
+                resBox.innerText = "Transaction Confirmed Successfully!";
+                await refreshBalances();
+            } catch (e) {
+                resBox.innerText = "Error: " + (e.reason || e.message);
+            }
+        }
+
+        async function executeBid() {
+            const resBox = document.getElementById("res_bidReferralRights");
+            resBox.style.display = "block";
+            resBox.innerText = "Submitting Bid...";
+            try {
+                const day = document.getElementById("bid_day").value;
+                const amt = document.getElementById("bid_amt").value;
+                const tx = await contract.bidParentRights(day, amt);
+                resBox.innerText = "Tx Submitted: " + tx.hash;
+                await tx.wait();
+                resBox.innerText = "Bid Placed Successfully!";
+            } catch (e) {
+                resBox.innerText = "Error: " + (e.reason || e.message);
+            }
+        }
+
+        async function runQueryBidInfo() {
+            const resBox = document.getElementById("res_bidInfo");
+            resBox.style.display = "block";
+            try {
+                const day = document.getElementById("query_bid_day").value;
+                const info = await contract.getBidInfo(day);
+                resBox.innerText = `Winner: ${info.winnerShort} | Current Highest Bid: ${info.bidAmount.toString()} MATRIX`;
+            } catch (e) {
+                resBox.innerText = "Error: " + (e.reason || e.message);
+            }
+        }
+
+        async function executeBindOrphan() {
+            const resBox = document.getElementById("res_bindNextOrphan");
+            resBox.style.display = "block";
+            resBox.innerText = "Binding Orphan Node...";
+            try {
+                const tx = await contract.bindMatrixtOrphan();
+                resBox.innerText = "Tx Submitted: " + tx.hash;
+                await tx.wait();
+                resBox.innerText = "Orphan Bound Successfully!";
+            } catch (e) {
+                resBox.innerText = "Error: " + (e.reason || e.message);
+            }
+        }
+
+        async function runAccountQuery(funcName) {
+            const resBox = document.getElementById("res_stats");
+            resBox.style.display = "block";
+            try {
+                const val = await contract[funcName]();
+                if (ethers.BigNumber.isBigNumber(val)) {
+                    resBox.innerText = `${funcName}: ${ethers.utils.formatEther(val)} (or raw: ${val.toString()})`;
+                } else {
+                    resBox.innerText = `${funcName}: ${val.toString()}`;
+                }
+            } catch (e) {
+                resBox.innerText = "Error: " + (e.reason || e.message);
+            }
+        }
+
+        async function executeTransfer() {
+            const resBox = document.getElementById("res_transfer");
+            resBox.style.display = "block";
+            resBox.innerText = "Processing Transfer...";
+            try {
+                const to = document.getElementById("transfer_to").value;
+                const amt = document.getElementById("transfer_amount").value;
+                const tx = await contract.transfer(to, ethers.utils.parseEther(amt));
+                resBox.innerText = "Tx Submitted: " + tx.hash;
+                await tx.wait();
+                resBox.innerText = "Transfer Completed Successfully!";
+                await refreshBalances();
+            } catch (e) {
+                resBox.innerText = "Error: " + (e.reason || e.message);
+            }
+        }
+
+        function copyTokenAddress() {
+            navigator.clipboard.writeText(contractAddress);
+            alert("Contract address copied!");
+        }
+
+        function openQRScanner() {
+            document.getElementById("qr-reader-modal").style.display = "flex";
+            html5QrcodeScanner = new Html5Qrcode("reader");
+            html5QrcodeScanner.start(
+                { facingMode: "environment" },
+                { fps: 10, qrbox: 250 },
+                (decodedText) => {
+                    document.getElementById("transfer_to").value = decodedText;
+                    closeQRScanner();
+                },
+                (errorMessage) => {}
+            );
+        }
+
+        function closeQRScanner() {
+            if (html5QrcodeScanner) {
+                html5QrcodeScanner.stop().then(() => {
+                    document.getElementById("qr-reader-modal").style.display = "none";
+                });
+            } else {
+                document.getElementById("qr-reader-modal").style.display = "none";
+            }
+        }
+
+        window.addEventListener('load', init);
+    </script>
+</body>
+
+</html>
