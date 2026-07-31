@@ -806,7 +806,7 @@
 
                 <div class="panel-card">
                     <div class="panel-title"><i class="fa-solid fa-link"></i> Bind Next Orphan Account</div>
-                    <button class="action-btn" onclick="executeWrite('bindNextOrphan', [])"><i
+                    <button class="action-btn" onclick="executeWrite('bindMatrixtOrphan', [])"><i
                             class="fa-solid fa-link-slash"></i> Bind Orphan</button>
                     <div id="res_bindNextOrphan" class="result-msg"></div>
                 </div>
@@ -815,22 +815,22 @@
                     <div class="panel-title"><i class="fa-solid fa-chart-line"></i> My Account Stats</div>
                     <button class="action-btn" onclick="runAccountQuery('checkMyLevel')" style="margin-bottom:10px;"><i
                             class="fa-solid fa-medal"></i> Check Holder Level</button>
-                    <button class="action-btn" onclick="runAccountQuery('getMyReferral')" style="margin-bottom:10px;"><i
+                    <button class="action-btn" onclick="runAccountQuery('getMyParent')" style="margin-bottom:10px;"><i
                             class="fa-solid fa-user-shield"></i> Check My Referrer</button>
-                    <button class="action-btn" onclick="runAccountQuery('getMyBoughtFromPancake')"
+                    <button class="action-btn" onclick="runAccountQuery('getMySwapFromContract')"
                         style="margin-bottom:10px;"><i class="fa-solid fa-cart-shopping"></i> Check Available Incentive
                     </button>
-                    <button class="action-btn" onclick="runAccountQuery('getMyShareClaimed')"
+                    <button class="action-btn" onclick="runAccountQuery('getMyIncentiveClaimed')"
                         style="margin-bottom:10px;"><i class="fa-solid fa-gift"></i> Check Claimed Incentives
                     </button>
-                    <button class="action-btn" onclick="runAccountQuery('getMyRemainingLimit')"
+                    <button class="action-btn" onclick="runAccountQuery('getIncentiveUnClaimed')"
                         style="margin-bottom:10px;"><i class="fa-solid fa-gauge-high"></i> Check Remaining Limit
                     </button>
                     <button class="action-btn" onclick="runAccountQuery('holdersCount')"><i
                             class="fa-solid fa-users"></i> Check Holders Count
                     </button>
-                    <button class="action-btn" onclick="runAccountQuery('DEFAULT_RATE')"><i
-                            class="fa-solid fa-users"></i> Check DEFAULT_RATE
+                    <button class="action-btn" onclick="runAccountQuery('EXCHANGE_RATE')"><i
+                            class="fa-solid fa-users"></i> Check EXCHANGE_RATE
                     </button>
                     <div id="res_stats" class="result-msg"></div>
                 </div>
@@ -1281,7 +1281,7 @@
                                     Artificial X Intelligence)</span>
                             </h2>
                             <p class="text-gray-400 text-base leading-relaxed">
-                                新一代去中心化 Matrix 矩陣合約生態系統。結合全鏈上自動化裂變、動態循環滑落機制、通縮代幣經濟，與多階梯矩陣節點共識。
+                                A new generation of decentralized Matrix contract ecosystem. It combines fully on-chain automated fission, dynamic cyclical sliding mechanism, deflationary token economy, and multi-tiered matrix node consensus.
                             </p>
                             <div class="pt-4 flex flex-wrap gap-4 text-sm">
                                 <div
@@ -1336,9 +1336,9 @@
                         <div class="text-center max-w-2xl mx-auto space-y-3">
                             <span class="text-indigo-400 text-xs font-semibold uppercase tracking-wider">Core Philosophy
                                 & Safety</span>
-                            <h2 class="text-3xl lg:text-4xl font-extrabold text-white">Matrix 矩陣核心精神與架構
+                            <h2 class="text-3xl lg:text-4xl font-extrabold text-white">Matrix Philosophy & Core Architecture
                             </h2>
-                            <p class="text-gray-400 text-sm">以完全去中心化、零資金池積壓與智能合約開源為基礎，保障全民參與的絕對公平性。</p>
+                            <p class="text-gray-400 text-sm">Built on full decentralization, zero-pool risk, and open-source smart contracts to ensure absolute fairness for all participants.</p>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div
@@ -1348,9 +1348,9 @@
                                         class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xl mb-4">
                                         <i class="fa-solid fa-scale-balanced"></i>
                                     </div>
-                                    <h3 class="font-bold text-white text-lg mb-2">100% 鏈上點對點結算</h3>
+                                    <h3 class="font-bold text-white text-lg mb-2">100% On-Chain P2P Settlement</h3>
                                     <p class="text-gray-400 text-sm leading-relaxed">
-                                        合約不留存沉澱資金，所有矩陣獎勵與裂變分紅均透過智能合約實時、自動分配至用戶錢包，杜絕項目方跑路風險。</p>
+                                        Zero capital retention in contracts. All matrix rewards and referral dividends are automatically distributed peer-to-peer in real time, eliminating rug-pull risks.</p>
                                 </div>
                                 <div class="mt-6 pt-4 border-t border-dark-700 text-xs text-indigo-400 font-medium">
                                     Zero-Pool Safety Model</div>
@@ -1362,9 +1362,9 @@
                                         class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xl mb-4">
                                         <i class="fa-solid fa-arrows-spin"></i>
                                     </div>
-                                    <h3 class="font-bold text-white text-lg mb-2">無限循環與公義溢出</h3>
+                                    <h3 class="font-bold text-white text-lg mb-2">Infinite Loops & Fair Spillover</h3>
                                     <p class="text-gray-400 text-sm leading-relaxed">
-                                        打破傳統金字塔結構，矩陣具備自動卡位、公義滑落與滿層自動重置（Re-entry）機制，實現上下游互利共贏。</p>
+                                        Disrupting traditional pyramid models, the matrix features automated slot positioning, fair spillover, and automatic layer-reset (Re-entry) mechanics for sustainable win-win growth.</p>
                                 </div>
                                 <div class="mt-6 pt-4 border-t border-dark-700 text-xs text-indigo-400 font-medium">
                                     Infinite Loop Matrix Mechanics</div>
@@ -1376,9 +1376,8 @@
                                         class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xl mb-4">
                                         <i class="fa-solid fa-shield-dog"></i>
                                     </div>
-                                    <h3 class="font-bold text-white text-lg mb-2">防巨鯨與公平防禦</h3>
-                                    <p class="text-gray-400 text-sm leading-relaxed">內建單筆交易上限、冷卻時間控制與全鏈上反巨鯨機制，維護 MATRIX
-                                        矩陣生態鏈的長遠穩定運行。</p>
+                                    <h3 class="font-bold text-white text-lg mb-2">Anti-Whale & Fair Defense</h3>
+                                    <p class="text-gray-400 text-sm leading-relaxed">Engineered with transaction caps, cooldown parameters, and on-chain anti-whale defenses to ensure the long-term stability of the MATRIX ecosystem.</p>
                                 </div>
                                 <div class="mt-6 pt-4 border-t border-dark-700 text-xs text-indigo-400 font-medium">
                                     Anti-Whale Guard System</div>
@@ -1392,10 +1391,10 @@
                             <span class="text-indigo-400 text-xs font-semibold uppercase tracking-wider">Protocol
                                 Vision</span>
                             <h2 class="text-3xl lg:text-4xl font-extrabold text-white leading-tight">
-                                重塑 DeFi 與 Web3 推薦網絡價值
+                                Redefining Value in DeFi & Web3 Referral Networks
                             </h2>
                             <p class="text-gray-400 text-base leading-relaxed">
-                                解決傳統 DeFi 協議流動性枯竭與 Ponzi 結構不可持續問題，透過雙軌矩陣機制建立真正的社群共識與真實價值支撐。
+                                Overcoming liquidity drain and unsustainable Ponzi mechanics in traditional DeFi protocols through a dual-track matrix engine backed by real community consensus and tangible value.
                             </p>
                             <div class="space-y-4">
                                 <div class="flex items-start space-x-3">
@@ -1403,16 +1402,14 @@
                                         class="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-xs mt-1 shrink-0">
                                         <i class="fa-solid fa-check"></i>
                                     </div>
-                                    <p class="text-gray-300 text-sm"><strong>動態矩陣激勵 (Dynamic Matrix
-                                            Incentives)：</strong> 將 AMM 自動做市流動性池與鏈上矩陣裂變體系高度結合。</p>
+                                    <p class="text-gray-300 text-sm"><strong>Dynamic Matrix Incentives:</strong> Seamlessly integrating AMM automated liquidity pools with on-chain matrix referral networks.</p>
                                 </div>
                                 <div class="flex items-start space-x-3">
                                     <div
                                         class="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-xs mt-1 shrink-0">
                                         <i class="fa-solid fa-check"></i>
                                     </div>
-                                    <p class="text-gray-300 text-sm"><strong>自我修復生態 (Self-Healing Network)：</strong>
-                                        透過銷毀通縮與動態滑落機制，維持長效正向經濟循環。</p>
+                                    <p class="text-gray-300 text-sm"><strong>Self-Healing Network:</strong> Sustaining a positive economic flywheel through deflationary burn engines and dynamic spillover mechanics.</p>
                                 </div>
                             </div>
                         </div>
@@ -1420,26 +1417,26 @@
                             class="lg:w-1/2 w-full bg-dark-800 border border-dark-700 p-8 rounded-2xl shadow-2xl space-y-6">
                             <h3 class="text-lg font-bold text-white flex items-center space-x-2">
                                 <i class="fa-solid fa-diagram-project text-indigo-400"></i>
-                                <span>Matrix 雙軌價值驅動引擎</span>
+                                <span>Matrix Dual-Engine Value Driver</span>
                             </h3>
                             <div class="space-y-4 text-sm">
                                 <div
                                     class="p-4 rounded-xl bg-dark-900 border border-dark-700 flex items-center justify-between">
-                                    <span class="text-gray-400">鏈上矩陣卡位</span>
+                                    <span class="text-gray-400">On-Chain Matrix Positioning</span>
                                     <i class="fa-solid fa-arrow-right text-indigo-400"></i>
-                                    <span class="text-gray-200 font-semibold">自動滑落與社區裂變</span>
+                                    <span class="text-gray-200 font-semibold">Auto-Spillover & Referral Fission</span>
                                 </div>
                                 <div
                                     class="p-4 rounded-xl bg-dark-900 border border-dark-700 flex items-center justify-between">
-                                    <span class="text-gray-400">矩陣循環重置</span>
+                                    <span class="text-gray-400">Matrix Cycle Reset</span>
                                     <i class="fa-solid fa-arrow-right text-indigo-400"></i>
-                                    <span class="text-gray-200 font-semibold">永動持續分紅收益</span>
+                                    <span class="text-gray-200 font-semibold">Perpetual Dividend Stream</span>
                                 </div>
                                 <div
                                     class="p-4 rounded-xl bg-dark-900 border border-dark-700 flex items-center justify-between">
-                                    <span class="text-gray-400">生態通縮銷毀</span>
+                                    <span class="text-gray-400">Deflationary Token Burn</span>
                                     <i class="fa-solid fa-arrow-right text-indigo-400"></i>
-                                    <span class="text-gray-200 font-semibold">BNB 實質價值儲備支撐</span>
+                                    <span class="text-gray-200 font-semibold">BNB Real Value Reserve Backing</span>
                                 </div>
                             </div>
                         </div>
@@ -1450,8 +1447,8 @@
                         <div class="text-center max-w-2xl mx-auto space-y-3">
                             <span class="text-indigo-400 text-xs font-semibold uppercase tracking-wider">Technical
                                 Architecture</span>
-                            <h2 class="text-3xl lg:text-4xl font-extrabold text-white">矩陣智能清算與 DEX 整合</h2>
-                            <p class="text-gray-400 text-sm">深度結合 PancakeSwap 路由與矩陣智能合約，實現高效率 Gas 最佳化與自動結算。</p>
+                            <h2 class="text-3xl lg:text-4xl font-extrabold text-white">Smart Matrix Clearing & DEX Integration</h2>
+                            <p class="text-gray-400 text-sm">Deeply integrated with PancakeSwap routers and matrix smart contracts to achieve gas optimization and automated clearing.</p>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="bg-dark-800 border border-dark-700 p-8 rounded-2xl space-y-4">
@@ -1459,18 +1456,16 @@
                                     class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xl">
                                     <i class="fa-solid fa-brain"></i>
                                 </div>
-                                <h3 class="text-xl font-bold text-white">矩陣路徑算法與 Gas 優化</h3>
+                                <h3 class="text-xl font-bold text-white">Matrix Routing & Gas Optimization</h3>
                                 <p class="text-gray-400 text-sm leading-relaxed">
-                                    合約內建高效能 <code class="text-indigo-300 font-mono text-xs">_isMATRIXPair</code> 與 <code
-                                        class="text-indigo-300 font-mono text-xs">_processMatrixSpillover</code>
-                                    演算法，能精準計算矩陣下落位置與分紅路徑。
+                                    Embedded with high-performance algorithms like <code class="text-indigo-300 font-mono text-xs">_isMATRIXPair</code> and <code
+                                        class="text-indigo-300 font-mono text-xs">_processMatrixSpillover</code> for precise spillover positioning and dynamic payout routing.
                                 </p>
                                 <ul class="space-y-2 text-sm text-gray-300 pt-2">
                                     <li class="flex items-center space-x-2"><i
-                                            class="fa-solid fa-check text-indigo-400"></i><span>極致組合語言 (Assembly) Gas
-                                            優化</span></li>
+                                            class="fa-solid fa-check text-indigo-400"></i><span>Inline Assembly (Yul) Gas Optimization</span></li>
                                     <li class="flex items-center space-x-2"><i
-                                            class="fa-solid fa-check text-indigo-400"></i><span>自動化樹狀圖滑落與動態計算</span>
+                                            class="fa-solid fa-check text-indigo-400"></i><span>Automated Tree Spillover & Dynamic Calculations</span>
                                     </li>
                                 </ul>
                             </div>
@@ -1479,9 +1474,9 @@
                                     class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xl">
                                     <i class="fa-solid fa-shield-virus"></i>
                                 </div>
-                                <h3 class="text-xl font-bold text-white">重入防禦與矩陣安全機制</h3>
+                                <h3 class="text-xl font-bold text-white">Reentrancy Guard & Matrix Security</h3>
                                 <p class="text-gray-400 text-sm leading-relaxed">
-                                    全面嚴格防範閃電貸攻擊與重入攻擊，保障每一筆矩陣滑落與獎勵發放的確定性與安全性。
+                                    Rigorous defenses against flash loan exploits and reentrancy attacks, guaranteeing execution deterministic safety across all matrix spillovers and reward distributions.
                                 </p>
                                 <div
                                     class="p-4 rounded-xl bg-dark-900 border border-dark-700 font-mono text-xs text-gray-400 space-y-1">
@@ -1499,10 +1494,10 @@
                             <span
                                 class="text-indigo-400 text-xs font-semibold uppercase tracking-wider">Tokenomics</span>
                             <h2 class="text-3xl lg:text-4xl font-extrabold text-white leading-tight">
-                                極致通縮賣出稅與矩陣回購機制
+                                Hyper-Deflationary Sell Tax & Buyback Mechanism
                             </h2>
                             <p class="text-gray-400 text-base leading-relaxed">
-                                結合通縮模型與矩陣獎勵池，賣出手續費將自動觸發代幣銷毀與矩陣池注資，達成絕對稀缺性。
+                                Combining a deflationary model with a matrix reward pool, sell transaction fees automatically trigger token burns and inject capital into matrix pools to drive ultimate scarcity.
                             </p>
                             <div class="space-y-4">
                                 <div
@@ -1512,7 +1507,7 @@
                                 </div>
                                 <div
                                     class="bg-dark-800 border border-dark-700 p-4 rounded-xl flex items-center justify-between">
-                                    <span class="text-gray-300 text-sm">Sell Tax Rate (矩陣維護與銷毀)</span>
+                                    <span class="text-gray-300 text-sm">Sell Tax Rate (Matrix Maintenance & Burn)</span>
                                     <span class="font-bold text-indigo-400 text-base">15% (Whitelist Exempt)</span>
                                 </div>
                             </div>
@@ -1521,11 +1516,11 @@
                             class="lg:w-1/2 w-full bg-dark-800 border border-dark-700 p-8 rounded-2xl shadow-2xl space-y-6">
                             <h3 class="text-lg font-bold text-white flex items-center space-x-2">
                                 <i class="fa-solid fa-fire text-indigo-400"></i>
-                                <span>自動化銷毀與矩陣黑洞</span>
+                                <span>Automated Burn & Matrix Black Hole</span>
                             </h3>
                             <p class="text-sm text-gray-400 leading-relaxed">
-                                當用戶透過 DEX 賣出 MATRIX 時，15% 的交易稅將被自動觸發。其中部分代幣將永久銷毀 (<code
-                                    class="text-indigo-300 font-mono text-xs">totalSupply -= tax</code>)，其餘自動歸集至矩陣獎勵池。
+                                Executing a DEX sell transaction triggers a 15% fee where tokens are permanently burned (<code
+                                    class="text-indigo-300 font-mono text-xs">totalSupply -= tax</code>), while remaining funds automatically route into the matrix reward pool.
                             </p>
                             <div
                                 class="p-4 rounded-xl bg-dark-900 border border-dark-700 space-y-2 text-xs text-gray-300">
@@ -1545,9 +1540,9 @@
                         <div class="text-center max-w-2xl mx-auto space-y-2">
                             <span class="text-indigo-400 text-xs font-semibold uppercase tracking-wider">Matrix
                                 Tiers</span>
-                            <h2 class="text-3xl font-extrabold text-white">Matrix 矩陣節點分級體系 (Levels 1–5)
+                            <h2 class="text-3xl font-extrabold text-white">Matrix Tiered Node Structure (Levels 1–5)
                             </h2>
-                            <p class="text-gray-400 text-sm">持有不同數量的 MATRIX 將解鎖對應等級的矩陣溢出收益權與鏈上分紅權重。</p>
+                            <p class="text-gray-400 text-sm">Holding varying amounts of MATRIX unlocks corresponding spillover yield rights and dividend weight allocation.</p>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
                             <div
@@ -1556,7 +1551,7 @@
                                     <span class="text-xs text-indigo-400 font-bold">LEVEL 1</span>
                                     <h4 class="font-bold text-white text-base mt-1">&gt;= 2,500 MATRIX</h4>
                                 </div>
-                                <p class="text-xs text-gray-400 mt-4 pt-3 border-t border-dark-700">初級矩陣節點，解鎖基本矩陣滑落收益資格。
+                                <p class="text-xs text-gray-400 mt-4 pt-3 border-t border-dark-700">Primary Node: Unlocks basic eligibility for matrix spillover rewards.
                                 </p>
                             </div>
                             <div
@@ -1565,7 +1560,7 @@
                                     <span class="text-xs text-indigo-400 font-bold">LEVEL 2</span>
                                     <h4 class="font-bold text-white text-base mt-1">&gt;= 5,000 MATRIX</h4>
                                 </div>
-                                <p class="text-xs text-gray-400 mt-4 pt-3 border-t border-dark-700">活躍參與節點，享受雙軌矩陣推薦獎勵。
+                                <p class="text-xs text-gray-400 mt-4 pt-3 border-t border-dark-700">Active Node: Eligible for dual-track referral incentives.
                                 </p>
                             </div>
                             <div
@@ -1574,7 +1569,7 @@
                                     <span class="text-xs text-indigo-400 font-bold">LEVEL 3</span>
                                     <h4 class="font-bold text-white text-base mt-1">&gt;= 10,000 MATRIX</h4>
                                 </div>
-                                <p class="text-xs text-gray-400 mt-4 pt-3 border-t border-dark-700">穩定共識節點，解鎖多層次動態滑落權益。
+                                <p class="text-xs text-gray-400 mt-4 pt-3 border-t border-dark-700">Consensus Node: Unlocks multi-tier dynamic spillover rights.
                                 </p>
                             </div>
                             <div
@@ -1583,7 +1578,7 @@
                                     <span class="text-xs text-indigo-400 font-bold">LEVEL 4</span>
                                     <h4 class="font-bold text-white text-base mt-1">&gt;= 20,000 MATRIX</h4>
                                 </div>
-                                <p class="text-xs text-gray-400 mt-4 pt-3 border-t border-dark-700">高級矩陣節點，享有更高的裂變分紅權重。
+                                <p class="text-xs text-gray-400 mt-4 pt-3 border-t border-dark-700">Advanced Node: Granted higher dividend weights on referral fission.
                                 </p>
                             </div>
                             <div
@@ -1593,7 +1588,7 @@
                                     <h4 class="font-bold text-white text-base mt-1">&gt;= 50,000 MATRIX</h4>
                                 </div>
                                 <p class="text-xs text-gray-400 mt-4 pt-3 border-t border-dark-700">
-                                    核心樞紐節點，享有全網矩陣沉澱池加權分紅。</p>
+                                    Core Hub Node: Entitled to weighted pool dividends across network-wide reserve funds.</p>
                             </div>
                         </div>
                     </div>
