@@ -1,0 +1,2657 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MATRIX Token Protocol</title>
+    <!--  SEO Meta  -->
+    <meta name="description"
+        content="MATRIX Protocol is a fully decentralized dynamic rate ecosystem integrating automated vault mechanics, circular matrix incentives, and multi-tier holder rights." />
+    <meta name="keywords" content="MATRIX Token, Web3, DeFi, BSC, Smart Contract, Dynamic Rate, Crypto" />
+
+    <!-- Open Graph / Facebook / Line / Discord -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://tokenshare123.github.io/WebPage_MATRIX/" />
+    <meta property="og:title" content="MATRIX Token Protocol - Decentralized Dynamic Rate Vault Ecosystem" />
+    <meta property="og:description"
+        content="Explore MATRIX Protocol: 24H dynamic rate vault swaps, circular matrix incentives, multi-tier holder rights, and zero-owner governance on BNB Chain." />
+    <meta property="og:image"
+        content="https://raw.githubusercontent.com/tokenShare123/WebPage_MATRIX/main/IMG_3740.jpg" />
+
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://tokenshare123.github.io/WebPage_MATRIX/" />
+    <meta name="twitter:title" content="MATRIX Token Protocol - Decentralized Dynamic Rate Vault Ecosystem" />
+    <meta name="twitter:description"
+        content="Explore MATRIX Protocol: 24H dynamic rate vault swaps, circular matrix incentives, multi-tier holder rights, and zero-owner governance on BNB Chain." />
+    <meta name="twitter:image"
+        content="https://raw.githubusercontent.com/tokenShare123/WebPage_MATRIX/main/IMG_3740.jpg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+    <!-- Include html5-qrcode for actual barcode/QR code scanning support -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+
+    <style>
+        :root {
+            --bg: #060608;
+            --panel: #0e1013;
+            --panel-2: #14171a;
+            --panel-3: #1c2128;
+            --muted: #8b949e;
+            --text: #F0F6FC;
+            --accent: #6f5af8;
+            --accent-hover: #5a45d0;
+            --accent-glow: rgba(111, 90, 248, 0.25);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --card-border-hover: rgba(111, 90, 248, 0.4);
+            --success: #00ea91;
+            --danger: #ff4a5a;
+            --info: #00bfff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 24px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Top Level Main View Switcher Tabs */
+        .top-level-tabs {
+            display: flex;
+            background: var(--panel);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 4px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .top-tab {
+            flex: 1;
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 700;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .top-tab:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .top-tab.active {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .connection-status {
+            text-align: center;
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        /* Top Header Wallet Info Card */
+        .wallet-header-card {
+            background: var(--panel);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 22px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .token-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .token-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .token-icon {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* 移除原本的 background 與 font 屬性，交由 SVG 自行繪製 */
+            filter: drop-shadow(0px 2px 8px rgba(16, 185, 129, 0.3));
+            /* 可選：加強發光感 */
+        }
+
+        .token-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .token-name-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .token-right {
+            text-align: right;
+        }
+
+        .token-balance {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .token-balance-usd {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 2px;
+            font-weight: 500;
+        }
+
+        /* Market Price Box */
+        .market-price-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .market-left {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--muted);
+        }
+
+        .market-right {
+            text-align: right;
+        }
+
+        .market-rate {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .market-rate-usd {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* Refined 5-Tab Navigation Bar */
+        .nav-tabs {
+            display: flex;
+            justify-content: space-between;
+            background: var(--panel);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 6px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-tab {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 10px 12px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+            flex: 1;
+        }
+
+        .nav-tab i {
+            font-size: 15px;
+        }
+
+        .nav-tab:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .nav-tab.active {
+            color: #fff;
+            background: var(--accent);
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        /* Panel Cards & Forms */
+        .panel-card {
+            background: var(--panel);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: border-color 0.2s;
+        }
+
+        .panel-card:hover {
+            border-color: var(--card-border-hover);
+        }
+
+        .panel-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text);
+        }
+
+        .panel-title i {
+            color: var(--accent);
+            font-size: 16px;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* 1. 調整輸入框間距與 Placeholder 字體大小 */
+        .panel-card input {
+            margin-bottom: 12px;
+            /* 為輸入框之間與下方按鈕增加垂直間距 */
+            font-size: 14px;
+            /* 輸入框內容字體大小 */
+            padding: 10px 10px 10px 12px;
+        }
+
+        /* 2. 專門縮小 Placeholder 的字體 */
+        .panel-card input::placeholder {
+            font-size: 12px;
+            /* 將 Placeholder 字體調小 */
+            color: var(--muted);
+            /* 保持提示文字顏色一致 */
+            opacity: 0.8;
+        }
+
+        /* 3. 若按鈕與上方輸入框依然太近，可顯式指定按鈕上方間距 */
+        .panel-card .action-btn {
+            margin-top: 4px;
+        }
+
+        label {
+            font-size: 11px;
+            color: var(--muted);
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            background: var(--panel-2);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            color: var(--text);
+            padding: 12px;
+            font-size: 14px;
+            margin-bottom: 14px;
+            transition: all 0.2s;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        button.action-btn {
+            width: 100%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px var(--accent-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        button.action-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .result-msg {
+            font-size: 12px;
+            margin-top: 10px;
+            word-break: break-all;
+            display: none;
+            padding: 10px;
+            background: var(--panel-2);
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            line-height: 1.4;
+        }
+
+        /* Transit Swap Specific UI Styles */
+        .transit-box {
+            background: var(--panel-2);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .transit-row-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .transit-label {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .transit-bal-info {
+            font-size: 12px;
+            color: var(--info);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .transit-bal-info:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+
+        .transit-row-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .token-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--panel-3);
+            border: 1px solid var(--card-border);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .transit-input {
+            background: transparent;
+            border: none;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text);
+            text-align: right;
+            width: 55%;
+            margin-bottom: 0;
+            padding: 0;
+        }
+
+        .transit-input:focus {
+            box-shadow: none;
+            border: none;
+        }
+
+        .transit-usd-sub {
+            font-size: 12px;
+            color: var(--muted);
+            text-align: right;
+            margin-top: 4px;
+        }
+
+        .transit-switch-icon {
+            text-align: center;
+            margin: -6px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .transit-switch-btn {
+            background: var(--panel-3);
+            border: 1px solid var(--card-border);
+            color: var(--accent);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .transit-switch-btn:hover {
+            transform: rotate(180deg);
+        }
+
+        .transit-details {
+            background: var(--panel-2);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin: 16px 0;
+            font-size: 13px;
+        }
+
+        .transit-detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            color: var(--muted);
+        }
+
+        .transit-detail-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .transit-detail-val {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .transit-recent-card {
+            background: var(--panel-2);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-top: 20px;
+        }
+
+        /* Explorer Banner for Record Tab */
+        .explorer-banner {
+            background: linear-gradient(135deg, rgba(111, 90, 248, 0.12) 0%, rgba(0, 191, 255, 0.08) 100%);
+            border: 1px solid rgba(111, 90, 248, 0.3);
+            border-radius: 16px;
+            padding: 28px 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .explorer-banner i.main-icon {
+            font-size: 36px;
+            color: var(--accent);
+            margin-bottom: 14px;
+        }
+
+        .explorer-banner h3 {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .explorer-banner p {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 18px;
+            line-height: 1.5;
+        }
+
+        .explore-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 26px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        /* Transfer Specific Styles */
+        .transfer-card {
+            background: var(--panel);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .transfer-input-box {
+            background: var(--panel-2);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-bottom: 14px;
+        }
+
+        .transfer-input-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--muted);
+        }
+
+        .transfer-input-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .transfer-text-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-size: 15px;
+            padding: 4px 0;
+            margin-bottom: 0;
+
+            text-align: left !important;
+            direction: ltr;
+            text-overflow: clip;
+            white-space: nowrap;
+            overflow-x: auto;
+        }
+
+        .transfer-text-input:focus {
+            box-shadow: none;
+            border: none;
+        }
+
+        .max-btn {
+            background: rgba(111, 90, 248, 0.15);
+            color: var(--accent);
+            border: 1px solid rgba(111, 90, 248, 0.3);
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .max-btn:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .gas-fee-box {
+            background: var(--panel-2);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+
+        .gas-fee-detail {
+            background: var(--panel-3);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 10px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* QR Scanner Modal Container Style */
+        #qr-reader-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .qr-modal-content {
+            background: var(--panel);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #reader {
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--card-border);
+            margin-bottom: 15px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+
+        <!-- 頂層大頁籤 (Dashboard / Whitepaper) -->
+        <div class="top-level-tabs">
+            <button class="top-tab active" onclick="handleDashboardClick(this)">
+                <i class="fa-solid fa-chart-pie" style="margin-right: 6px;"></i>
+                <span id="connectionStatus">Dashboard</span>
+            </button>
+            <button class="top-tab" onclick="switchMainView('Whitepaper', this)">
+                <i class="fa-solid fa-book-open" style="margin-right: 6px;"></i>Whitepaper
+            </button>
+        </div>
+
+        <!-- MAIN VIEW 1: DASHBOARD (包含原本所有完整功能) -->
+        <div id="mainView-Dashboard">
+            <!-- Top Header Layout -->
+            <!-- Top Header Layout -->
+            <div class="wallet-header-card">
+                <div class="token-row">
+                    <div class="token-left">
+                        <div class="token-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+                                <defs>
+                                    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#10B981" />
+                                        <stop offset="100%" stop-color="#047857" />
+                                    </linearGradient>
+                                    <linearGradient id="textGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" stop-color="#FFFFFF" />
+                                        <stop offset="100%" stop-color="#E2E8F0" />
+                                    </linearGradient>
+                                    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                                        <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.3" />
+                                    </filter>
+                                </defs>
+                                <circle cx="50" cy="50" r="46" fill="url(#bgGrad)" filter="url(#glow)" />
+                                <circle cx="50" cy="50" r="41" fill="none" stroke="#FFFFFF" stroke-opacity="0.25"
+                                    stroke-width="2" stroke-dasharray="6 3" />
+                                <circle cx="50" cy="50" r="36" fill="none" stroke="#FFFFFF" stroke-opacity="0.15"
+                                    stroke-width="1.5" />
+                                <path d="M 33,67 V 33 L 42,33 L 58,55 V 33 H 67 V 67 L 58,67 L 42,45 V 67 Z"
+                                    fill="url(#textGrad)" />
+                            </svg>
+                        </div>
+                        <div class="token-name-wrap" onclick="copyTokenAddress()" title="Copy Contract Address">
+                            <span id="tokenSymbol">MATRIX</span> <i class="fa-regular fa-copy"></i>
+                        </div>
+                    </div>
+                    <div class="token-right">
+                        <div class="token-balance" id="tokenBalance">0.00</div>
+                        <div class="token-balance-usd" id="tokenBalanceUsd">$0.00</div>
+                    </div>
+                </div>
+
+                <div class="market-price-card">
+                    <div class="market-left">Market Price</div>
+                    <div class="market-right">
+                        <div class="market-rate" id="marketRate">0.0000 BNB</div>
+                        <div class="market-rate-usd" id="marketRateUsd">$0.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Refined 5-Tab Navigation Bar -->
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="switchTab('Record')">
+                    <i class="fa-solid fa-clock-rotate-left"></i>Record
+                </button>
+                <button class="nav-tab" onclick="switchTab('Fn')">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>Fn()
+                </button>
+                <button class="nav-tab" onclick="switchTab('Swap')">
+                    <i class="fa-solid fa-right-left"></i>Swap
+                </button>
+                <button class="nav-tab" onclick="switchTab('Transfer')">
+                    <i class="fa-solid fa-paper-plane"></i>Transfer
+                </button>
+                <button class="nav-tab hidden" id="tabSetBtn" onclick="switchTab('Set')">
+                    <i class="fa-solid fa-gear"></i>Set
+                </button>
+            </div>
+
+            <!-- TAB CONTENT: RECORD -->
+            <div id="tabContent-Record" class="explorer-banner">
+                <i class="main-icon fa-solid fa-compass"></i>
+                <h3>Complete Transaction History</h3>
+                <p>View all your incoming, outgoing, and historical interaction logs securely and instantly on BscScan.
+                </p>
+                <a id="explorerLink" href="#" target="_blank" class="explore-btn">
+                    Open in BscScan <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:12px;"></i>
+                </a>
+            </div>
+
+            <!-- TAB CONTENT: Fn() -->
+            <div id="tabContent-Fn" class="hidden">
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-gavel"></i> Bid for Matrix Referral Rights</div>
+                    <input type="text" id="bid_day" placeholder="Relative Day (1-10)">
+                    <input type="text" id="bid_amt" placeholder="Bid Amount (MATRIX)">
+                    <button class="action-btn" onclick="executeBid()"><i class="fa-solid fa-check"></i> Submit
+                        Bid</button>
+                    <div id="res_bidReferralRights" class="result-msg"></div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-link"></i> Bind Next Orphan Account</div>
+                    <button class="action-btn" onclick="executeWrite('bindNextOrphan', [])"><i
+                            class="fa-solid fa-link-slash"></i> Bind Orphan</button>
+                    <div id="res_bindNextOrphan" class="result-msg"></div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-chart-line"></i> My Account Stats</div>
+                    <button class="action-btn" onclick="runAccountQuery('checkMyLevel')" style="margin-bottom:10px;"><i
+                            class="fa-solid fa-medal"></i> Check Holder Level</button>
+                    <button class="action-btn" onclick="runAccountQuery('getMyReferral')" style="margin-bottom:10px;"><i
+                            class="fa-solid fa-user-shield"></i> Check My Referrer</button>
+                    <button class="action-btn" onclick="runAccountQuery('getMyBoughtFromPancake')"
+                        style="margin-bottom:10px;"><i class="fa-solid fa-cart-shopping"></i> Check Available Incentive
+                    </button>
+                    <button class="action-btn" onclick="runAccountQuery('getMyShareClaimed')"
+                        style="margin-bottom:10px;"><i class="fa-solid fa-gift"></i> Check Claimed Incentives
+                    </button>
+                    <button class="action-btn" onclick="runAccountQuery('getMyRemainingLimit')"
+                        style="margin-bottom:10px;"><i class="fa-solid fa-gauge-high"></i> Check Remaining Limit
+                    </button>
+                    <button class="action-btn" onclick="runAccountQuery('holdersCount')"><i
+                            class="fa-solid fa-users"></i> Check Holders Count
+                    </button>
+                    <button class="action-btn" onclick="runAccountQuery('DEFAULT_RATE')"><i
+                            class="fa-solid fa-users"></i> Check DEFAULT_RATE
+                    </button>
+                    <div id="res_stats" class="result-msg"></div>
+                </div>
+                <!-- 在 Bid 面板增加查詢競標資訊 -->
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-magnifying-glass-dollar"></i> Query Bid Info</div>
+                    <input type="text" id="query_bid_day" placeholder="Relative Day (1-10)">
+                    <button class="action-btn" onclick="runQueryBidInfo()"><i class="fa-solid fa-search"></i> Query Bid
+                        Info</button>
+                    <div id="res_bidInfo" class="result-msg"></div>
+                </div>
+            </div>
+
+            <!-- TAB CONTENT: SWAP -->
+            <div id="tabContent-Swap" class="hidden">
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-right-left"></i> BNB / MATRIX Vault Swap</div>
+
+                    <!-- Pay Box -->
+                    <div class="transit-box">
+                        <div class="transit-row-top">
+                            <span class="transit-label">Pay (Send)</span>
+                            <span class="transit-bal-info" id="swapPayBalance" onclick="fillMaxBalance()"
+                                title="Click to max balance">Balance: 0.00</span>
+                        </div>
+                        <div class="transit-row-bottom">
+                            <div class="token-pill" id="payTokenLabel">
+                                <i class="fa-solid fa-coins" style="color:var(--accent);"></i> <span
+                                    id="payTokenSymbol">BNB</span>
+                            </div>
+                            <input type="text" id="swap_pay_amount" class="transit-input" placeholder="0.0"
+                                oninput="calculateSwapReceive()">
+                        </div>
+                        <div class="transit-usd-sub" id="swapPayUsd">≈ $0.00</div>
+                    </div>
+
+                    <!-- Switch Direction Button -->
+                    <div class="transit-switch-icon">
+                        <button class="transit-switch-btn" onclick="toggleSwapDirection()" title="Switch Direction">
+                            <i class="fa-solid fa-right-left fa-rotate-90"></i>
+                        </button>
+                    </div>
+
+                    <!-- Receive Box -->
+                    <div class="transit-box" style="margin-top: 0;">
+                        <div class="transit-row-top">
+                            <span class="transit-label">Receive (Estimated)</span>
+                            <span class="transit-bal-info" id="swapReceiveBalance"
+                                style="cursor: default; color: var(--muted);">Balance: 0.00</span>
+                        </div>
+                        <div class="transit-row-bottom">
+                            <div class="token-pill" id="receiveTokenLabel">
+                                <i class="fa-solid fa-m" style="color:var(--info);"></i> <span
+                                    id="receiveTokenSymbol">MATRIX</span>
+                            </div>
+                            <input type="text" id="swap_receive_amount" class="transit-input" placeholder="0.0" readonly
+                                style="color: var(--muted);">
+                        </div>
+                        <div class="transit-usd-sub" id="swapReceiveUsd">≈ $0.00</div>
+                    </div>
+
+                    <!-- Detailed Metrics -->
+                    <div class="transit-details">
+                        <div class="transit-detail-row">
+                            <span>Exchange Rate</span>
+                            <span class="transit-detail-val" id="swapRateText">1 BNB ≈ Dynamic MATRIX</span>
+                        </div>
+                        <div class="transit-detail-row">
+                            <span>Slippage Tolerance</span>
+                            <span class="transit-detail-val" style="color: var(--success);">0.5% <i
+                                    class="fa-solid fa-shield-halved"></i></span>
+                        </div>
+                        <div class="transit-detail-row">
+                            <span>Service Fee</span>
+                            <span class="transit-detail-val">0.3%</span>
+                        </div>
+                    </div>
+
+                    <button class="action-btn" id="swapActionBtn" onclick="executeTransitSwap()"
+                        style="padding: 14px; font-size: 15px;">
+                        <span id="swapBtnText">
+                            <i class="fa-solid fa-bolt"></i> Confirm Swap
+                        </span>
+                    </button>
+                    <div id="res_transitSwap" class="result-msg"></div>
+
+                    <!-- Recent Record Widget -->
+                    <div class="transit-recent-card">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 6px;">
+                            <span style="color: var(--muted); font-weight: 600;">Recent Transaction</span>
+                            <span style="color: var(--success); font-weight: 700;"><i
+                                    class="fa-solid fa-circle-check"></i>
+                                Success</span>
+                        </div>
+                        <div style="font-size: 13px; font-weight: 600;" id="recentSwapTxInfo">No recent swap in session
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB CONTENT: TRANSFER (All English) -->
+            <div id="tabContent-Transfer" class="hidden">
+                <div class="transfer-card">
+                    <div class="panel-title" style="justify-content: space-between; margin-bottom: 20px;">
+                        <span><i class="fa-solid fa-arrow-right-arrow-left"></i> Transfer</span>
+                        <span style="font-size: 13px; color: var(--accent); cursor: pointer; font-weight: 600;">
+                            Select Wallet <i class="fa-solid fa-chevron-right" style="font-size:10px;"></i></span>
+                    </div>
+
+                    <!-- Recipient Address -->
+                    <div class="transfer-input-box">
+                        <div class="transfer-input-header">
+                            <span>Recipient Address</span>
+                        </div>
+                        <div class="transfer-input-row">
+                            <input type="text" id="transfer_to" class="transfer-text-input"
+                                placeholder="Enter or paste wallet address">
+                            <i class="fa-solid fa-qrcode"
+                                style="font-size: 18px; color: var(--accent); cursor: pointer;"
+                                onclick="openQRScanner()" title="Scan QR Code"></i>
+                        </div>
+                    </div>
+
+                    <!-- Transfer Amount -->
+                    <div class="transfer-input-box">
+                        <div class="transfer-input-header">
+                            <span>Transfer Amount</span>
+                            <span style="color: var(--text); font-weight: 700; cursor: pointer;">
+                                MATRIX <i class="fa-solid fa-chevron-right" style="font-size:10px;"></i></span>
+                        </div>
+                        <div class="transfer-input-row" style="margin-bottom: 10px;">
+                            <input type="text" id="transfer_amount" class="transfer-text-input" placeholder="0"
+                                style="font-size: 24px; font-weight: 700;" oninput="calculateTransferUsd()">
+                            <button class="max-btn" onclick="fillTransferMax()">MAX</button>
+                        </div>
+                        <div
+                            style="display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); border-top: 1px solid var(--card-border); padding-top: 8px;">
+                            <span>Balance</span>
+                            <span id="transferBalanceText" style="color: var(--text); font-weight: 600;">0.0000
+                                MATRIX</span>
+                        </div>
+                    </div>
+
+                    <!-- Network Fee Section -->
+                    <div class="gas-fee-box">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <div
+                                style="display: flex; align-items: center; gap: 6px; font-weight: 600; color: var(--muted);">
+                                <span>Network Fee</span> <i class="fa-regular fa-circle-question"
+                                    style="font-size: 12px;"></i>
+                                <span
+                                    style="font-size: 11px; color: var(--success); font-weight: 500; margin-left: 6px;"><i
+                                        class="fa-solid fa-rotate" style="font-size: 10px;"></i> Update in 6s</span>
+                            </div>
+                        </div>
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; background: var(--panel-3); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--card-border);">
+                            <span style="font-size: 12px; font-weight: 600;">Payment Method</span>
+                            <span
+                                style="display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 13px;"><i
+                                    class="fa-solid fa-coins" style="color:var(--accent);"></i> BNB <i
+                                    class="fa-solid fa-chevron-right"
+                                    style="font-size: 10px; color: var(--muted);"></i></span>
+                        </div>
+
+                        <!-- Recommended Fee Option Dropdown Box -->
+                        <div class="gas-fee-detail">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <span
+                                    style="display: flex; align-items: center; gap: 6px; color: var(--text); font-weight: 600;"><i
+                                        class="fa-solid fa-gauge-high" style="color: var(--accent);"></i>
+                                    Recommended</span>
+                                <span style="color: var(--info);">Est. within 15s <i class="fa-solid fa-chevron-right"
+                                        style="font-size: 10px;"></i></span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                <span>Est. Fee</span>
+                                <span style="color: var(--text); font-weight: 600;">$0.002250 &nbsp; 0.000003939
+                                    BNB</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span>Max Fee</span>
+                                <span style="color: var(--text); font-weight: 600;">$0.003342 &nbsp; 0.00000585
+                                    BNB</span>
+                            </div>
+                            <div
+                                style="border-top: 1px solid var(--card-border); padding-top: 6px; font-size: 11px; line-height: 1.4; color: var(--muted);">
+                                Estimated Fee: Normal expected cost under regular conditions<br>
+                                Max Fee: Maximum acceptable cost during network volatility, adjustable
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="action-btn" onclick="executeTransfer()"
+                        style="padding: 14px; font-size: 15px; border-radius: 14px;"><i class="fa-solid fa-check"></i>
+                        Confirm</button>
+                    <div id="res_transfer" class="result-msg"></div>
+                </div>
+            </div>
+
+            <!-- TAB CONTENT: SET -->
+            <div id="tabContent-Set" class="hidden">
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-sliders"></i> Contract Address Setting</div>
+                    <input type="text" id="contractAddress" value="0xaEBB97406BBA4bc448809a85cb0D367A95f7D087">
+                    <button class="action-btn" onclick="initWallet()"><i class="fa-solid fa-rotate"></i> Reconnect &
+                        Refresh</button>
+                </div>
+
+                <!-- Public Swap Status Toggles -->
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-toggle-on"></i> Public Swap Toggles</div>
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; background: var(--panel-2); padding: 12px; border-radius: 10px; border: 1px solid var(--card-border);">
+                            <span style="font-size: 13px; font-weight: 600;">Public Swap Enabled</span>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" id="val-public-is-swap"
+                                    style="width: 18px; height: 18px; accent-color: var(--accent); margin:0;">
+                                <button class="action-btn" style="width: auto; padding: 6px 14px; font-size: 12px;"
+                                    onclick="executeBoolWrite('setPublicIsSwap', 'val-public-is-swap')">Set</button>
+                            </div>
+                        </div>
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; background: var(--panel-2); padding: 12px; border-radius: 10px; border: 1px solid var(--card-border);">
+                            <span style="font-size: 13px; font-weight: 600;">Only Swap Out</span>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" id="val-public-only-out"
+                                    style="width: 18px; height: 18px; accent-color: var(--accent); margin:0;">
+                                <button class="action-btn" style="width: auto; padding: 6px 14px; font-size: 12px;"
+                                    onclick="executeBoolWrite('setPublicOnlySwapOut', 'val-public-only-out')">Set</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="res_publicSwapToggles" class="result-msg"></div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-clock"></i> Trade Cooldown (Minutes)</div>
+                    <input type="text" id="input-cooldown" placeholder="Cooldown in minutes">
+                    <button class="action-btn" onclick="executeWrite('setTRADE_COOLDOWN', ['input-cooldown'])"><i
+                            class="fa-solid fa-pen-to-square"></i> Set Cooldown</button>
+                    <div id="res_setTRADE_COOLDOWN" class="result-msg"></div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-coins"></i> Update Default Rate</div>
+                    <input type="text" id="new_default_rate" placeholder="New Rate (e.g. 13680)">
+                    <button class="action-btn" onclick="executeWrite('setDEFAULT_RATE', ['new_default_rate'])"><i
+                            class="fa-solid fa-pen-to-square"></i> Set Default Rate</button>
+                    <div id="res_setDEFAULT_RATE" class="result-msg"></div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-percent"></i> Mark Up</div>
+                    <input type="text" id="input-markup" placeholder="Mark up value">
+                    <button class="action-btn" onclick="executeWrite('setMark_up', ['input-markup'])"><i
+                            class="fa-solid fa-pen-to-square"></i> Set Mark Up</button>
+                    <div id="res_setMark_up" class="result-msg"></div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-hand-holding-dollar"></i> Incentive Percentage (%)
+                    </div>
+                    <input type="text" id="input-incentive" placeholder="Incentive percentage">
+                    <button class="action-btn" onclick="executeWrite('setINCENTIVE_PERCENTAGE', ['input-incentive'])"><i
+                            class="fa-solid fa-pen-to-square"></i> Set Incentive %</button>
+                    <div id="res_setINCENTIVE_PERCENTAGE" class="result-msg"></div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-file-invoice-dollar"></i> Bind Orphan Fee</div>
+                    <input type="text" id="input-orphan-fee" placeholder="Fee amount">
+                    <button class="action-btn" onclick="executeWrite('setBindOrphanFee', ['input-orphan-fee'])"><i
+                            class="fa-solid fa-pen-to-square"></i> Set Orphan Fee</button>
+                    <div id="res_setBindOrphanFee" class="result-msg"></div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-shield-halved"></i> Transfer Contract Ownership</div>
+                    <input type="text" id="new_owner_addr" placeholder="New Owner Address (0x...)">
+                    <button class="action-btn" style="background: var(--danger);"
+                        onclick="executeWrite('transferOwnership', ['new_owner_addr'])"><i
+                            class="fa-solid fa-triangle-exclamation"></i> Transfer Ownership</button>
+                    <div id="res_transferOwnership" class="result-msg"></div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-vault"></i> Emergency & Fund Withdraw</div>
+                    <button class="action-btn" onclick="executeWrite('withdrawBNB', [])" style="margin-bottom: 10px;"><i
+                            class="fa-solid fa-money-bill-wave"></i> Withdraw Contract BNB</button>
+                    <button class="action-btn" onclick="executeWrite('emergencyWithdraw', [])"><i
+                            class="fa-solid fa-lock"></i> Emergency Withdraw Tokens</button>
+                    <div id="res_withdrawBNB" class="result-msg"></div>
+                    <div id="res_emergencyWithdraw" class="result-msg"></div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-magnifying-glass-dollar"></i> Query Address Balance
+                    </div>
+                    <input type="text" id="bal_account" placeholder="Enter address 0x...">
+                    <button class="action-btn" onclick="runQuery('balanceOf', ['bal_account'])"><i
+                            class="fa-solid fa-search"></i> Check Balance</button>
+                    <div id="res_balanceOf" class="result-msg"></div>
+                </div>
+
+                <div class="panel-card">
+                    <div class="panel-title"><i class="fa-solid fa-triangle-exclamation"></i> Rescue：Decreasingly Reset
+                    </div>
+                    <p style="font-size: 13px; color: #666;">Reset DEFAULT_RATE 14450</p>
+
+                    <button class="action-btn" style="background-color: #e74c3c; color: white;"
+                        onclick="autoResetDefaultRateTarget(10000)">
+                        <i class="fa-solid fa-rotate-left"></i> One Click to Reset </button>
+
+                    <div id="res_autoResetRate" class="result-msg" style="margin-top: 10px; font-size: 13px;"></div>
+                </div>
+            </div>
+        </div>
+        <!-- MAIN VIEW 2: WHITEPAPER (精美英文白皮書內容) -->
+        <div id="mainView-Whitepaper" class="hidden">
+            <!DOCTYPE html>
+            <html lang="en">
+
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>MATRIX Protocol Whitepaper</title>
+                <!-- Tailwind CSS for modern styling and layout -->
+                <script src="https://cdn.tailwindcss.com"></script>
+                <!-- FontAwesome for icons -->
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+                <!-- Google Fonts: Inter -->
+                <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+                    rel="stylesheet">
+                <script>
+                    tailwind.config = {
+                        theme: {
+                            extend: {
+                                colors: {
+                                    dark: {
+                                        900: '#0B0F19',
+                                        800: '#111827',
+                                        700: '#1F2937',
+                                        600: '#374151'
+                                    },
+                                    accent: {
+                                        500: '#6366F1',
+                                        600: '#4F46E5',
+                                        glow: 'rgba(99, 102, 241, 0.4)'
+                                    }
+                                },
+                                fontFamily: {
+                                    sans: ['Inter', 'sans-serif'],
+                                }
+                            }
+                        }
+                    }
+                </script>
+                <style>
+                    .slide {
+                        display: none;
+                        opacity: 0;
+                        transition: opacity 0.5s ease-in-out;
+                    }
+
+                    .slide.active {
+                        display: flex;
+                        opacity: 1;
+                    }
+
+                    /* Custom scrollbar */
+                    ::-webkit-scrollbar {
+                        width: 8px;
+                    }
+
+                    ::-webkit-scrollbar-track {
+                        background: #0B0F19;
+                    }
+
+                    ::-webkit-scrollbar-thumb {
+                        background: #374151;
+                        border-radius: 4px;
+                    }
+
+                    ::-webkit-scrollbar-thumb:hover {
+                        background: #4F46E5;
+                    }
+                </style>
+            </head>
+
+            <body
+                class="bg-dark-900 text-gray-100 font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-accent-500 selection:text-white">
+
+                <!-- Top Navigation / Header Bar -->
+                <header
+                    class="w-full border-b border-dark-700 bg-dark-800/80 backdrop-blur-md sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center shadow-lg shadow-accent-glow">
+                            <i class="fa-solid fa-cube text-white text-lg"></i>
+                        </div>
+                        <div>
+                            <h1 class="font-bold text-lg tracking-wide text-white">MATRIX Protocol</h1>
+                            <p class="text-xs text-gray-400">Next Artificial X Intelligence — Web3 Ecosystem</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span id="slideIndicator"
+                            class="text-[11px] font-semibold px-2.5 py-0.5 bg-dark-700 text-indigo-400 rounded-full border border-dark-600 tracking-wider">
+                            1 / 11
+                        </span>
+                        <button onclick="shareCurrentSlide()"
+                            class="w-9 h-9 rounded-lg bg-dark-700 hover:bg-dark-600 border border-dark-600 flex items-center justify-center transition text-gray-300 hover:text-white"
+                            title="Share Slide">
+                            <i class="fa-solid fa-share-nodes text-sm"></i>
+                        </button>
+                        <div class="flex space-x-2">
+                            <button onclick="prevSlide()"
+                                class="w-9 h-9 rounded-lg bg-dark-700 hover:bg-dark-600 border border-dark-600 flex items-center justify-center transition text-gray-300 hover:text-white">
+                                <i class="fa-solid fa-chevron-left text-sm"></i>
+                            </button>
+                            <button onclick="nextSlide()"
+                                class="w-9 h-9 rounded-lg bg-indigo-600 hover:bg-indigo-500 flex items-center justify-center transition text-white shadow-md shadow-accent-glow">
+                                <i class="fa-solid fa-chevron-right text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Main Presentation Container -->
+                <main class="flex-grow max-w-7xl mx-auto w-full p-6 lg:p-10 flex items-center justify-center">
+
+                    <!-- SLIDE 1: Title & Overview -->
+                    <div id="slide-1" class="slide active w-full flex-col lg:flex-row gap-10 items-center">
+                        <div class="lg:w-1/2 space-y-6">
+                            <div
+                                class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-semibold uppercase tracking-wider">
+                                <i class="fa-solid fa-shield-halved"></i> <span>Matrix Smart Contract Whitepaper
+                                    v2.0</span>
+                            </div>
+                            <h2 class="text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                                MATRIX <span
+                                    class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-400">(Next
+                                    Artificial X Intelligence)</span>
+                            </h2>
+                            <p class="text-gray-400 text-base leading-relaxed">
+                                新一代去中心化 Matrix 矩陣合約生態系統。結合全鏈上自動化裂變、動態循環滑落機制、通縮代幣經濟，與多階梯矩陣節點共識。
+                            </p>
+                            <div class="pt-4 flex flex-wrap gap-4 text-sm">
+                                <div
+                                    class="bg-dark-800 border border-dark-700 px-4 py-3 rounded-xl flex items-center space-x-3">
+                                    <i class="fa-solid fa-network-wired text-indigo-400 text-lg"></i>
+                                    <div>
+                                        <p class="text-xs text-gray-500">Network</p>
+                                        <p class="font-semibold text-gray-200">Binance Smart Chain (BSC)</p>
+                                    </div>
+                                </div>
+                                <div
+                                    class="bg-dark-800 border border-dark-700 px-4 py-3 rounded-xl flex items-center space-x-3">
+                                    <i class="fa-solid fa-coins text-indigo-400 text-lg"></i>
+                                    <div>
+                                        <p class="text-xs text-gray-500">Max Supply</p>
+                                        <p class="font-semibold text-gray-200">10 Billion MATRIX</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="lg:w-1/2 w-full bg-dark-800 border border-dark-700 p-8 rounded-2xl shadow-2xl relative overflow-hidden">
+                            <div
+                                class="absolute -right-10 -bottom-10 w-48 h-48 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none">
+                            </div>
+                            <h3 class="text-lg font-bold text-white mb-6 flex items-center space-x-2">
+                                <i class="fa-solid fa-fingerprint text-indigo-400"></i>
+                                <span>Matrix Smart Contract Verification</span>
+                            </h3>
+                            <div class="space-y-4 text-sm">
+                                <div class="bg-dark-900/60 p-4 rounded-xl border border-dark-700">
+                                    <span class="text-xs text-gray-500 block mb-1">Contract Address (BSC)</span>
+                                    <code
+                                        class="text-indigo-300 font-mono text-xs break-all">0xaEBB97406BBA4bc448809a85cb0D367A95f7D087</code>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="bg-dark-900/60 p-4 rounded-xl border border-dark-700">
+                                        <span class="text-xs text-gray-500 block mb-1">Token Symbol</span>
+                                        <span class="font-bold text-white text-base">MATRIX</span>
+                                    </div>
+                                    <div class="bg-dark-900/60 p-4 rounded-xl border border-dark-700">
+                                        <span class="text-xs text-gray-500 block mb-1">Architecture</span>
+                                        <span class="font-bold text-white text-base">Matrix DAO v2</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 2: Executive Summary & Compliance -->
+                    <div id="slide-2" class="slide w-full flex-col space-y-8">
+                        <div class="text-center max-w-2xl mx-auto space-y-3">
+                            <span class="text-indigo-400 text-xs font-semibold uppercase tracking-wider">Core Philosophy
+                                & Safety</span>
+                            <h2 class="text-3xl lg:text-4xl font-extrabold text-white">Matrix 矩陣核心精神與架構
+                            </h2>
+                            <p class="text-gray-400 text-sm">以完全去中心化、零資金池積壓與智能合約開源為基礎，保障全民參與的絕對公平性。</p>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-6 rounded-2xl flex flex-col justify-between hover:border-indigo-500/50 transition">
+                                <div>
+                                    <div
+                                        class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xl mb-4">
+                                        <i class="fa-solid fa-scale-balanced"></i>
+                                    </div>
+                                    <h3 class="font-bold text-white text-lg mb-2">100% 鏈上點對點結算</h3>
+                                    <p class="text-gray-400 text-sm leading-relaxed">
+                                        合約不留存沉澱資金，所有矩陣獎勵與裂變分紅均透過智能合約實時、自動分配至用戶錢包，杜絕項目方跑路風險。</p>
+                                </div>
+                                <div class="mt-6 pt-4 border-t border-dark-700 text-xs text-indigo-400 font-medium">
+                                    Zero-Pool Safety Model</div>
+                            </div>
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-6 rounded-2xl flex flex-col justify-between hover:border-indigo-500/50 transition">
+                                <div>
+                                    <div
+                                        class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xl mb-4">
+                                        <i class="fa-solid fa-arrows-spin"></i>
+                                    </div>
+                                    <h3 class="font-bold text-white text-lg mb-2">無限循環與公義溢出</h3>
+                                    <p class="text-gray-400 text-sm leading-relaxed">
+                                        打破傳統金字塔結構，矩陣具備自動卡位、公義滑落與滿層自動重置（Re-entry）機制，實現上下游互利共贏。</p>
+                                </div>
+                                <div class="mt-6 pt-4 border-t border-dark-700 text-xs text-indigo-400 font-medium">
+                                    Infinite Loop Matrix Mechanics</div>
+                            </div>
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-6 rounded-2xl flex flex-col justify-between hover:border-indigo-500/50 transition">
+                                <div>
+                                    <div
+                                        class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xl mb-4">
+                                        <i class="fa-solid fa-shield-dog"></i>
+                                    </div>
+                                    <h3 class="font-bold text-white text-lg mb-2">防巨鯨與公平防禦</h3>
+                                    <p class="text-gray-400 text-sm leading-relaxed">內建單筆交易上限、冷卻時間控制與全鏈上反巨鯨機制，維護 MATRIX
+                                        矩陣生態鏈的長遠穩定運行。</p>
+                                </div>
+                                <div class="mt-6 pt-4 border-t border-dark-700 text-xs text-indigo-400 font-medium">
+                                    Anti-Whale Guard System</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 3: Vision & Macro Economic Context -->
+                    <div id="slide-3" class="slide w-full flex-col lg:flex-row gap-10 items-center">
+                        <div class="lg:w-1/2 space-y-6">
+                            <span class="text-indigo-400 text-xs font-semibold uppercase tracking-wider">Protocol
+                                Vision</span>
+                            <h2 class="text-3xl lg:text-4xl font-extrabold text-white leading-tight">
+                                重塑 DeFi 與 Web3 推薦網絡價值
+                            </h2>
+                            <p class="text-gray-400 text-base leading-relaxed">
+                                解決傳統 DeFi 協議流動性枯竭與 Ponzi 結構不可持續問題，透過雙軌矩陣機制建立真正的社群共識與真實價值支撐。
+                            </p>
+                            <div class="space-y-4">
+                                <div class="flex items-start space-x-3">
+                                    <div
+                                        class="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-xs mt-1 shrink-0">
+                                        <i class="fa-solid fa-check"></i>
+                                    </div>
+                                    <p class="text-gray-300 text-sm"><strong>動態矩陣激勵 (Dynamic Matrix
+                                            Incentives)：</strong> 將 AMM 自動做市流動性池與鏈上矩陣裂變體系高度結合。</p>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <div
+                                        class="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-xs mt-1 shrink-0">
+                                        <i class="fa-solid fa-check"></i>
+                                    </div>
+                                    <p class="text-gray-300 text-sm"><strong>自我修復生態 (Self-Healing Network)：</strong>
+                                        透過銷毀通縮與動態滑落機制，維持長效正向經濟循環。</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="lg:w-1/2 w-full bg-dark-800 border border-dark-700 p-8 rounded-2xl shadow-2xl space-y-6">
+                            <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+                                <i class="fa-solid fa-diagram-project text-indigo-400"></i>
+                                <span>Matrix 雙軌價值驅動引擎</span>
+                            </h3>
+                            <div class="space-y-4 text-sm">
+                                <div
+                                    class="p-4 rounded-xl bg-dark-900 border border-dark-700 flex items-center justify-between">
+                                    <span class="text-gray-400">鏈上矩陣卡位</span>
+                                    <i class="fa-solid fa-arrow-right text-indigo-400"></i>
+                                    <span class="text-gray-200 font-semibold">自動滑落與社區裂變</span>
+                                </div>
+                                <div
+                                    class="p-4 rounded-xl bg-dark-900 border border-dark-700 flex items-center justify-between">
+                                    <span class="text-gray-400">矩陣循環重置</span>
+                                    <i class="fa-solid fa-arrow-right text-indigo-400"></i>
+                                    <span class="text-gray-200 font-semibold">永動持續分紅收益</span>
+                                </div>
+                                <div
+                                    class="p-4 rounded-xl bg-dark-900 border border-dark-700 flex items-center justify-between">
+                                    <span class="text-gray-400">生態通縮銷毀</span>
+                                    <i class="fa-solid fa-arrow-right text-indigo-400"></i>
+                                    <span class="text-gray-200 font-semibold">BNB 實質價值儲備支撐</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 4: Core Tech & AMM Integration -->
+                    <div id="slide-4" class="slide w-full flex-col space-y-8">
+                        <div class="text-center max-w-2xl mx-auto space-y-3">
+                            <span class="text-indigo-400 text-xs font-semibold uppercase tracking-wider">Technical
+                                Architecture</span>
+                            <h2 class="text-3xl lg:text-4xl font-extrabold text-white">矩陣智能清算與 DEX 整合</h2>
+                            <p class="text-gray-400 text-sm">深度結合 PancakeSwap 路由與矩陣智能合約，實現高效率 Gas 最佳化與自動結算。</p>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-dark-800 border border-dark-700 p-8 rounded-2xl space-y-4">
+                                <div
+                                    class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xl">
+                                    <i class="fa-solid fa-brain"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-white">矩陣路徑算法與 Gas 優化</h3>
+                                <p class="text-gray-400 text-sm leading-relaxed">
+                                    合約內建高效能 <code class="text-indigo-300 font-mono text-xs">_isMATRIXPair</code> 與 <code
+                                        class="text-indigo-300 font-mono text-xs">_processMatrixSpillover</code>
+                                    演算法，能精準計算矩陣下落位置與分紅路徑。
+                                </p>
+                                <ul class="space-y-2 text-sm text-gray-300 pt-2">
+                                    <li class="flex items-center space-x-2"><i
+                                            class="fa-solid fa-check text-indigo-400"></i><span>極致組合語言 (Assembly) Gas
+                                            優化</span></li>
+                                    <li class="flex items-center space-x-2"><i
+                                            class="fa-solid fa-check text-indigo-400"></i><span>自動化樹狀圖滑落與動態計算</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="bg-dark-800 border border-dark-700 p-8 rounded-2xl space-y-4">
+                                <div
+                                    class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xl">
+                                    <i class="fa-solid fa-shield-virus"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-white">重入防禦與矩陣安全機制</h3>
+                                <p class="text-gray-400 text-sm leading-relaxed">
+                                    全面嚴格防範閃電貸攻擊與重入攻擊，保障每一筆矩陣滑落與獎勵發放的確定性與安全性。
+                                </p>
+                                <div
+                                    class="p-4 rounded-xl bg-dark-900 border border-dark-700 font-mono text-xs text-gray-400 space-y-1">
+                                    <p class="text-indigo-400">// Matrix Route & Security Guard</p>
+                                    <p>require(msg.sender == matrixRouter, "Unauthorized");</p>
+                                    <p>nonReentrant();</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 5: Tokenomics & Deflationary Model -->
+                    <div id="slide-5" class="slide w-full flex-col lg:flex-row gap-10 items-center">
+                        <div class="lg:w-1/2 space-y-6">
+                            <span
+                                class="text-indigo-400 text-xs font-semibold uppercase tracking-wider">Tokenomics</span>
+                            <h2 class="text-3xl lg:text-4xl font-extrabold text-white leading-tight">
+                                極致通縮賣出稅與矩陣回購機制
+                            </h2>
+                            <p class="text-gray-400 text-base leading-relaxed">
+                                結合通縮模型與矩陣獎勵池，賣出手續費將自動觸發代幣銷毀與矩陣池注資，達成絕對稀缺性。
+                            </p>
+                            <div class="space-y-4">
+                                <div
+                                    class="bg-dark-800 border border-dark-700 p-4 rounded-xl flex items-center justify-between">
+                                    <span class="text-gray-300 text-sm">Max Supply Cap</span>
+                                    <span class="font-bold text-white text-base">10,000,000,000 MATRIX</span>
+                                </div>
+                                <div
+                                    class="bg-dark-800 border border-dark-700 p-4 rounded-xl flex items-center justify-between">
+                                    <span class="text-gray-300 text-sm">Sell Tax Rate (矩陣維護與銷毀)</span>
+                                    <span class="font-bold text-indigo-400 text-base">15% (Whitelist Exempt)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="lg:w-1/2 w-full bg-dark-800 border border-dark-700 p-8 rounded-2xl shadow-2xl space-y-6">
+                            <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+                                <i class="fa-solid fa-fire text-indigo-400"></i>
+                                <span>自動化銷毀與矩陣黑洞</span>
+                            </h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">
+                                當用戶透過 DEX 賣出 MATRIX 時，15% 的交易稅將被自動觸發。其中部分代幣將永久銷毀 (<code
+                                    class="text-indigo-300 font-mono text-xs">totalSupply -= tax</code>)，其餘自動歸集至矩陣獎勵池。
+                            </p>
+                            <div
+                                class="p-4 rounded-xl bg-dark-900 border border-dark-700 space-y-2 text-xs text-gray-300">
+                                <div class="flex justify-between"><span>Circulating Supply:</span> <span
+                                        class="text-red-400">Exponential Deflation</span></div>
+                                <div class="w-full bg-dark-700 h-2 rounded-full overflow-hidden">
+                                    <div class="bg-gradient-to-r from-indigo-500 to-violet-500 w-3/4 h-full"></div>
+                                </div>
+                                <div class="flex justify-between text-gray-500 text-[10px]"><span>Matrix Active
+                                        Activity</span><span>Permanent Burn Mechanism</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 6: Multi-Tier Holder System (Part 1) -->
+                    <div id="slide-6" class="slide w-full flex-col space-y-6">
+                        <div class="text-center max-w-2xl mx-auto space-y-2">
+                            <span class="text-indigo-400 text-xs font-semibold uppercase tracking-wider">Matrix
+                                Tiers</span>
+                            <h2 class="text-3xl font-extrabold text-white">Matrix 矩陣節點分級體系 (Levels 1–5)
+                            </h2>
+                            <p class="text-gray-400 text-sm">持有不同數量的 MATRIX 將解鎖對應等級的矩陣溢出收益權與鏈上分紅權重。</p>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-5 rounded-xl flex flex-col justify-between">
+                                <div>
+                                    <span class="text-xs text-indigo-400 font-bold">LEVEL 1</span>
+                                    <h4 class="font-bold text-white text-base mt-1">&gt;= 2,500 MATRIX</h4>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-4 pt-3 border-t border-dark-700">初級矩陣節點，解鎖基本矩陣滑落收益資格。
+                                </p>
+                            </div>
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-5 rounded-xl flex flex-col justify-between">
+                                <div>
+                                    <span class="text-xs text-indigo-400 font-bold">LEVEL 2</span>
+                                    <h4 class="font-bold text-white text-base mt-1">&gt;= 5,000 MATRIX</h4>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-4 pt-3 border-t border-dark-700">活躍參與節點，享受雙軌矩陣推薦獎勵。
+                                </p>
+                            </div>
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-5 rounded-xl flex flex-col justify-between">
+                                <div>
+                                    <span class="text-xs text-indigo-400 font-bold">LEVEL 3</span>
+                                    <h4 class="font-bold text-white text-base mt-1">&gt;= 10,000 MATRIX</h4>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-4 pt-3 border-t border-dark-700">穩定共識節點，解鎖多層次動態滑落權益。
+                                </p>
+                            </div>
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-5 rounded-xl flex flex-col justify-between">
+                                <div>
+                                    <span class="text-xs text-indigo-400 font-bold">LEVEL 4</span>
+                                    <h4 class="font-bold text-white text-base mt-1">&gt;= 20,000 MATRIX</h4>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-4 pt-3 border-t border-dark-700">高級矩陣節點，享有更高的裂變分紅權重。
+                                </p>
+                            </div>
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-5 rounded-xl flex flex-col justify-between">
+                                <div>
+                                    <span class="text-xs text-indigo-400 font-bold">LEVEL 5</span>
+                                    <h4 class="font-bold text-white text-base mt-1">&gt;= 50,000 MATRIX</h4>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-4 pt-3 border-t border-dark-700">
+                                    核心樞紐節點，享有全網矩陣沉澱池加權分紅。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 7: Multi-Tier Holder System (Part 2) -->
+                    <div id="slide-7" class="slide w-full flex-col space-y-6">
+                        <div class="text-center max-w-2xl mx-auto space-y-2">
+                            <span class="text-indigo-400 text-xs font-semibold uppercase tracking-wider">Holder
+                                System</span>
+                            <h2 class="text-3xl font-extrabold text-white">10-Tier Holder Rights Matrix (Levels 6–10)
+                            </h2>
+                            <p class="text-gray-400 text-sm">Elite tiers with maximum weight and prioritized global pool
+                                distribution.</p>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-5 rounded-xl flex flex-col justify-between">
+                                <div>
+                                    <span class="text-xs text-indigo-400 font-bold">LEVEL 6</span>
+                                    <h4 class="font-bold text-white text-base mt-1">&gt;= 100,000 MATRIX</h4>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-4 pt-3 border-t border-dark-700">Core community
+                                    promoter.</p>
+                            </div>
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-5 rounded-xl flex flex-col justify-between">
+                                <div>
+                                    <span class="text-xs text-indigo-400 font-bold">LEVEL 7</span>
+                                    <h4 class="font-bold text-white text-base mt-1">&gt;= 200,000 MATRIX</h4>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-4 pt-3 border-t border-dark-700">High liquidity
+                                    contributor.</p>
+                            </div>
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-5 rounded-xl flex flex-col justify-between">
+                                <div>
+                                    <span class="text-xs text-indigo-400 font-bold">LEVEL 8</span>
+                                    <h4 class="font-bold text-white text-base mt-1">&gt;= 300,000 MATRIX</h4>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-4 pt-3 border-t border-dark-700">Outstanding node.
+                                </p>
+                            </div>
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-5 rounded-xl flex flex-col justify-between">
+                                <div>
+                                    <span class="text-xs text-indigo-400 font-bold">LEVEL 9</span>
+                                    <h4 class="font-bold text-white text-base mt-1">&gt;= 500,000 MATRIX</h4>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-4 pt-3 border-t border-dark-700">Super node status.
+                                </p>
+                            </div>
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-5 rounded-xl flex flex-col justify-between border-indigo-500/50 shadow-lg shadow-accent-glow">
+                                <div>
+                                    <span class="text-xs text-indigo-400 font-bold">LEVEL 10</span>
+                                    <h4 class="font-bold text-white text-base mt-1">&gt;= 1,000,000 MATRIX</h4>
+                                </div>
+                                <p class="text-xs text-gray-300 mt-4 pt-3 border-t border-dark-700">Top VIP privileges,
+                                    maximum distribution weight (12x).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 8: Matrix Incentives & Referral Systems -->
+                    <div id="slide-8" class="slide w-full flex-col lg:flex-row gap-10 items-center">
+                        <div class="lg:w-1/2 space-y-6">
+                            <span class="text-indigo-400 text-xs font-semibold uppercase tracking-wider">Global
+                                Incentives</span>
+                            <h2 class="text-3xl lg:text-4xl font-extrabold text-white leading-tight">
+                                Global Circular Matrix & Referral Bidding
+                            </h2>
+                            <p class="text-gray-400 text-base leading-relaxed">
+                                10% of newly minted tokens from market demand are allocated into the incentive pool for
+                                automated, transparent distribution.
+                            </p>
+                            <div class="space-y-3 text-sm text-gray-300">
+                                <div class="flex items-center space-x-3"><i
+                                        class="fa-solid fa-circle-check text-indigo-400"></i><span><strong>Direct
+                                            Referral Reward:</strong> Automatic 2.5% direct incentive to scale community
+                                        growth.</span></div>
+                                <div class="flex items-center space-x-3"><i
+                                        class="fa-solid fa-circle-check text-indigo-400"></i><span><strong>Orphan
+                                            Binding:</strong> Burn MATRIX tokens to claim unassigned nodes, boosting
+                                        deflation.</span></div>
+                                <div class="flex items-center space-x-3"><i
+                                        class="fa-solid fa-circle-check text-indigo-400"></i><span><strong>7-Day Rolling
+                                            Bidding:</strong> Bid referral rights; 100% of bid tokens are permanently
+                                        burned.</span></div>
+                            </div>
+                        </div>
+                        <div
+                            class="lg:w-1/2 w-full bg-dark-800 border border-dark-700 p-8 rounded-2xl shadow-2xl space-y-4">
+                            <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+                                <i class="fa-solid fa-calculator text-indigo-400"></i>
+                                <span>Matrix Distribution Logic</span>
+                            </h3>
+                            <div class="space-y-3 text-xs font-mono text-gray-300">
+                                <div class="p-3 bg-dark-900 rounded-lg border border-dark-700">
+                                    <span class="text-indigo-400">unrealizedIncentives</span> = totalBuyIncentives -
+                                    realizedIncentives
+                                </div>
+                                <div class="p-3 bg-dark-900 rounded-lg border border-dark-700">
+                                    <span class="text-indigo-400">directReward</span> = baseQty * 2.5% (Max cap
+                                    enforced)
+                                </div>
+                                <div class="p-3 bg-dark-900 rounded-lg border border-dark-700">
+                                    <span class="text-indigo-400">Multi-Tier Rotation:</span> 12 holder steps matched
+                                    against level requirements.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 9: Security, Roadmap & ROI Analysis -->
+                    <div id="slide-9" class="slide w-full flex-col space-y-8">
+                        <div class="text-center max-w-2xl mx-auto space-y-3">
+                            <span class="text-indigo-400 text-xs font-semibold uppercase tracking-wider">Roadmap &
+                                Safety</span>
+                            <h2 class="text-3xl lg:text-4xl font-extrabold text-white">Operational Roadmap & Risk
+                                Control</h2>
+                            <p class="text-gray-400 text-sm">Sustainable growth backed by real BNB reserves and strict
+                                protocol defense walls.</p>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="bg-dark-800 border border-dark-700 p-6 rounded-2xl space-y-3">
+                                <div class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Phase 1</div>
+                                <h3 class="text-lg font-bold text-white">Infrastructure</h3>
+                                <p class="text-gray-400 text-sm">Deploy core smart contracts, initialize PancakeSwap
+                                    liquidity pool, and bootstrap early genesis nodes.</p>
+                            </div>
+                            <div class="bg-dark-800 border border-dark-700 p-6 rounded-2xl space-y-3">
+                                <div class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Phase 2</div>
+                                <h3 class="text-lg font-bold text-white">Ecosystem Expansion</h3>
+                                <p class="text-gray-400 text-sm">Launch referral matrix bidding & holder tier rights,
+                                    driving community self-governance and global consensus.</p>
+                            </div>
+                            <div class="bg-dark-800 border border-dark-700 p-6 rounded-2xl space-y-3">
+                                <div class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Phase 3</div>
+                                <h3 class="text-lg font-bold text-white">Deep Integration</h3>
+                                <p class="text-gray-400 text-sm">Implement ecosystem utility applications, continuous
+                                    buybacks, and permanent deflationary scaling.</p>
+                            </div>
+                        </div>
+                        <div class="text-center pt-4">
+                            <p class="text-xs text-gray-500 max-w-3xl mx-auto leading-relaxed">
+                                <strong>Disclaimer:</strong> This whitepaper is for technical architecture and community
+                                ecosystem discussion purposes only and does not constitute investment advice or a
+                                financial product offering. Blockchain asset investments carry high volatility; please
+                                evaluate risks prudently.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 10: Ecosystem Participation & Growth -->
+                    <div id="slide-10" class="slide w-full flex-col space-y-8">
+                        <div class="text-center max-w-2xl mx-auto space-y-3">
+                            <span class="text-indigo-400 text-xs font-semibold uppercase tracking-wider">Ecosystem &
+                                Participation</span>
+                            <h2 class="text-3xl lg:text-4xl font-extrabold text-white">Why & How to Join MATRIX</h2>
+                            <p class="text-gray-400 text-sm">Empowerment, incentivized community growth, and active
+                                ecosystem expansion.</p>
+                        </div>
+
+                        <!-- Top Highlight Card: Why Join -->
+                        <div
+                            class="bg-dark-800 border border-dark-700 p-6 lg:p-8 rounded-2xl space-y-3 relative overflow-hidden">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></div>
+                                <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Core Value
+                                    Proposition</span>
+                            </div>
+                            <h3 class="text-xl lg:text-2xl font-bold text-white">Why Participate in the MATRIX Ecosystem?
+                            </h3>
+                            <p class="text-gray-300 text-sm lg:text-base leading-relaxed">
+                                The world's first protocol designed to recognize and incentivize community members to
+                                spontaneously engage in <strong class="text-white">education, liquidity provision,
+                                    market making, and real-world applications</strong>—driving continuous progress and
+                                complete ecosystem governance.
+                            </p>
+                        </div>
+
+                        <!-- Bottom Step Cards: How to Join -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-6 rounded-2xl space-y-3 flex flex-col justify-between">
+                                <div class="space-y-3">
+                                    <div class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Step 01
+                                    </div>
+                                    <h3 class="text-lg font-bold text-white">Acquire MATRIX Tokens</h3>
+                                    <p class="text-gray-400 text-sm">Get MATRIX tokens through liquidity bootstrap or
+                                        market exchanges to secure your entry node.</p>
+                                </div>
+                                <div class="pt-2 text-indigo-400/50 text-xs font-mono">01 / ACQUIRE</div>
+                            </div>
+
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-6 rounded-2xl space-y-3 flex flex-col justify-between">
+                                <div class="space-y-3">
+                                    <div class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Step 02
+                                    </div>
+                                    <h3 class="text-lg font-bold text-white">Share & Invite</h3>
+                                    <p class="text-gray-400 text-sm">Share the vision, expand the matrix network, and
+                                        unlock referral incentives and tier rights.</p>
+                                </div>
+                                <div class="pt-2 text-indigo-400/50 text-xs font-mono">02 / SHARE</div>
+                            </div>
+
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-6 rounded-2xl space-y-3 flex flex-col justify-between">
+                                <div class="space-y-3">
+                                    <div class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Step 03
+                                    </div>
+                                    <h3 class="text-lg font-bold text-white">Build & Govern</h3>
+                                    <p class="text-gray-400 text-sm">Participate in community building, market
+                                        liquidity, and drive ecosystem growth together.</p>
+                                </div>
+                                <div class="pt-2 text-indigo-400/50 text-xs font-mono">03 / GOVERN</div>
+                            </div>
+                        </div>
+
+                        <div class="text-center pt-2">
+                            <p class="text-xs text-gray-500 tracking-wide uppercase font-semibold">
+                                Join the decentralized movement — Shape the future of autonomous ecosystem expansion.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 11: Call to Action & AI Ecosystem Vision -->
+                    <div id="slide-11" class="slide w-full flex-col space-y-8">
+                        <div class="text-center max-w-2xl mx-auto space-y-3">
+                            <span class="text-indigo-400 text-xs font-semibold uppercase tracking-wider">Vision &
+                                Action</span>
+                            <h2 class="text-3xl lg:text-4xl font-extrabold text-white">Ask Yourself 3 Simple Questions
+                            </h2>
+                            <p class="text-gray-400 text-sm">Positioning yourself at the frontier of AI and Web3
+                                integration.</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-6 rounded-2xl space-y-3 flex flex-col justify-between">
+                                <div class="space-y-3">
+                                    <div class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Question 01
+                                    </div>
+                                    <h3 class="text-lg font-bold text-white">Do you want to build wealth?</h3>
+                                    <p class="text-gray-400 text-sm">Capitalizing on early-stage paradigm shifts has
+                                        always been the primary catalyst for exponential value growth.</p>
+                                </div>
+                                <div class="pt-2 text-indigo-400/50 text-xs font-mono">01 / WEALTH</div>
+                            </div>
+
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-6 rounded-2xl space-y-3 flex flex-col justify-between">
+                                <div class="space-y-3">
+                                    <div class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Question 02
+                                    </div>
+                                    <h3 class="text-lg font-bold text-white">Is the AI sector's future bright?</h3>
+                                    <p class="text-gray-400 text-sm">Despite short-term market cycles, AI remains an
+                                        unrivaled mega-trend worth investing in and developing long-term.</p>
+                                </div>
+                                <div class="pt-2 text-indigo-400/50 text-xs font-mono">02 / AI SECTOR</div>
+                            </div>
+
+                            <div
+                                class="bg-dark-800 border border-dark-700 p-6 rounded-2xl space-y-3 flex flex-col justify-between">
+                                <div class="space-y-3">
+                                    <div class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Question 03
+                                    </div>
+                                    <h3 class="text-lg font-bold text-white">Ready for 80% returns at 10% cost?</h3>
+                                    <p class="text-gray-400 text-sm">Are you willing to participate and witness the next
+                                        AI-driven ecosystem, capturing 80% upside at 10% entry cost?</p>
+                                </div>
+                                <div class="pt-2 text-indigo-400/50 text-xs font-mono">03 / OPPORTUNITY</div>
+                            </div>
+                        </div>
+
+                        <!-- Contract Address Callout Box with BSCScan Link -->
+                        <div
+                            class="bg-dark-800 border border-indigo-500/30 p-6 rounded-2xl text-center space-y-3 relative overflow-hidden">
+                            <div class="flex items-center justify-center space-x-2">
+                                <div class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></div>
+                                <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Official Smart
+                                    Contract</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-white">Track & Follow MATRIX Token</h3>
+                            <p class="text-gray-400 text-sm max-w-xl mx-auto">
+                                Verify protocol transparency, liquidity pools, and tokenomics directly on-chain via
+                                BSCScan.
+                            </p>
+                            <div class="pt-2">
+                                <a href="https://bscscan.com/address/0xaEBB97406BBA4bc448809a85cb0D367A95f7D087"
+                                    target="_blank" rel="noopener noreferrer"
+                                    class="inline-flex items-center space-x-2 bg-dark-700 hover:bg-dark-600 border border-indigo-500/40 text-indigo-300 font-mono text-xs md:text-sm px-4 py-2.5 rounded-xl transition-all duration-200 group">
+                                    <span class="inline md:hidden">0xaEBB974...f7D087</span>
+                                    <span class="hidden md:inline">0xaEBB97406BBA4bc448809a85cb0D367A95f7D087</span>
+                                    <svg class="w-4 h-4 text-indigo-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14">
+                                        </path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="text-center pt-2">
+                            <p class="text-xs text-gray-500 tracking-wide uppercase font-semibold">
+                                Join the MATRIX Community Today — Secure Your Early Position in the AI Ecosystem.
+                            </p>
+                        </div>
+                    </div>
+                </main>
+
+                <!-- Footer Controls -->
+                <footer
+                    class="w-full border-t border-dark-700 bg-dark-800/80 px-6 py-4 flex items-center justify-between text-xs text-gray-400">
+                    <div>MATRIX Protocol © 2026. All Rights Reserved.</div>
+                    <div class="flex items-center space-x-4">
+                        <span>Use Arrow Keys or Buttons to Navigate</span>
+                    </div>
+                </footer>
+
+                <!-- Presentation Controller Script -->
+                <script>
+                    let currentSlide = 1;
+                    const totalSlides = 11;
+
+                    function showSlide(n) {
+                        if (n > totalSlides) currentSlide = 1;
+                        else if (n < 1) currentSlide = totalSlides;
+                        else currentSlide = n;
+
+                        for (let i = 1; i <= totalSlides; i++) {
+                            const slide = document.getElementById(`slide-${i}`);
+                            if (slide) {
+                                slide.classList.remove('active');
+                            }
+                        }
+
+                        const targetSlide = document.getElementById(`slide-${currentSlide}`);
+                        if (targetSlide) {
+                            targetSlide.classList.add('active');
+                        }
+
+                        const indicator = document.getElementById('slideIndicator');
+                        if (indicator) {
+                            indicator.innerText = `${currentSlide} / ${totalSlides}`;
+                        }
+
+                        // 無刷新更新網址列參數 (例如: ?slide=3)
+                        const newUrl = `${window.location.pathname}?slide=${currentSlide}`;
+                        window.history.replaceState({slide: currentSlide}, '', newUrl);
+                    }
+
+                    function nextSlide() {
+                        showSlide(currentSlide + 1);
+                    }
+
+                    function prevSlide() {
+                        showSlide(currentSlide - 1);
+                    }
+                    // 2. create & copy share link
+                    function shareSlide(slideNum = currentSlide) {
+                        const shareUrl = `${window.location.origin}${window.location.pathname}?slide=${slideNum}`;
+
+                        navigator.clipboard.writeText(shareUrl).then(() => {
+                            alert(`✅ Slide ${slideNum} share link：\n${shareUrl}`);
+                        }).catch(err => {
+                            console.error('Copy failed:', err);
+                            alert('❌ Link copying failed. Please copy the URL manually.');
+                        });
+                    }
+
+                    function shareCurrentSlide() {
+                        shareSlide(currentSlide);
+                    }
+                    // Keyboard navigation support
+                    document.addEventListener('keydown', (e) => {
+                        if (e.key === 'ArrowRight' || e.key === 'Space') {
+                            nextSlide();
+                        } else if (e.key === 'ArrowLeft') {
+                            prevSlide();
+                        }
+                    });
+
+                    //
+                    window.addEventListener('DOMContentLoaded', () => {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const slideParam = urlParams.get('slide');
+
+                        if (slideParam) {
+                            const slideNum = parseInt(slideParam, 10);
+                            if (!isNaN(slideNum) && slideNum >= 1 && slideNum <= totalSlides) {
+                                // Switch to Whitepaper 
+                                const topTabs = document.querySelectorAll('.top-tab');
+                                const whitepaperBtn = topTabs[1]; // Whitepaper 
+                                if (whitepaperBtn) {
+                                    switchMainView('Whitepaper', whitepaperBtn);
+                                }
+                                // show the specified slide
+                                showSlide(slideNum);
+                            }
+                        }
+                    });
+                </script>
+            </body>
+
+            </html>
+        </div>
+
+    </div>
+
+
+
+    </div>
+
+    <!-- QR Code Scanner Modal Dialog -->
+    <div id="qr-reader-modal">
+        <div class="qr-modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <span style="font-weight: 700; font-size: 16px;">Scan Wallet Address QR</span>
+                <i class="fa-solid fa-xmark" style="font-size: 18px; cursor: pointer; color: var(--muted);"
+                    onclick="closeQRScanner()"></i>
+            </div>
+            <div id="reader"></div>
+            <p style="font-size: 12px; color: var(--muted); margin-bottom: 15px;">Align the QR code within the frame to
+                scan automatically.</p>
+            <button class="action-btn" style="background: var(--panel-3); border: 1px solid var(--card-border);"
+                onclick="closeQRScanner()">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        let provider, signer;
+        let connectedAddress = "";
+        let contractOwnerAddress = "0x0000000000000000000000000000000000000000"; // MATRIX 為無 Owner 去中心化架構
+        let isSwapDirectionBNBtoMATRIX = true;
+        let currentBnbPrice = 570;
+        let currentRateVal = 10000; // 對齊 MATRIX 合約預設 EXCHANGE_RATE = 10000
+        let rawBnbBalance = "0";
+        let rawMatrixBalance = "0";
+        const contractAddressDefault = "0xaEBB97406BBA4bc448809a85cb0D367A95f7D087";
+        let html5QrCode = null;
+
+        const fullAbi = [
+            // 標準 ERC-20 & 基本資訊
+            "function name() view returns (string)",
+            "function symbol() view returns (string)",
+            "function decimals() view returns (uint8)",
+            "function totalSupply() view returns (uint256)",
+            "function MAX_SUPPLY() view returns (uint256)",
+            "function owner() view returns (address)",
+            "function devWallet() view returns (address)",
+            "function holdersCount() view returns (uint256)",
+            "function balanceOf(address account) view returns (uint256)",
+            
+            // 系統參數查詢
+            "function EXCHANGE_RATE() view returns (uint256)",
+            "function INCENTIVE_PERCENTAGE() view returns (uint256)",
+            "function TRADE_COOLDOWN() view returns (uint256)",
+            "function lastTradeTime(address account) view returns (uint256)",
+            "function bindOrphanFee() view returns (uint256)",
+            "function bid_Days() view returns (uint256)",
+
+            // 使用者個人狀態查詢
+            "function checkMyLevel() view returns (uint32)",
+            "function getMyParent() view returns (address)",
+            "function getMyIncentiveClaimed() view returns (uint256)",
+            "function getMySwapFromContract() view returns (uint256)",
+            "function getIncentiveUnClaimed() view returns (uint256)",
+
+            // 核心互動功能
+            "function transfer(address to, uint256 amount) returns (bool)",
+            "function swapMatrix() payable",
+            "function swapBNB(uint256 matrixAmount)",
+            "function bindMatrixtOrphan()",
+            "function getBidInfo(uint256 relativeDay) view returns (tuple(string winnerShort, uint256 bidAmount))",
+            "function bidParentRights(uint256 relativeDay, uint256 bidAmount)",
+            
+            // 唯一留存的管理員/開發者功能
+            "function setDevWallet(address newDevWallet)"
+        ];
+
+        async function handleDashboardClick(btnElement) {
+            // 檢查點擊時，該按鈕是否已經是 active 狀態
+            if (btnElement.classList.contains("active")) {
+                // 確保有已連線的錢包地址
+                if (typeof connectedAddress !== "undefined" && connectedAddress) {
+                    try {
+                        // 將錢包地址寫入剪貼簿
+                        await navigator.clipboard.writeText(connectedAddress);
+                        alert("✅ Wallet address copied: " + connectedAddress);
+                    } catch (err) {
+                        console.error("Copy failed:", err);
+                        alert("❌ Copy failed，try to copy manually.");
+                    }
+                } else {
+                    alert("⚠️ Not yet connected to wallet，copy failed！");
+                }
+            } else {
+                // 
+                switchMainView('Dashboard', btnElement);
+            }
+        }
+        function switchMainView(viewName, btnElement) {
+            // remove active
+            const topTabs = document.querySelectorAll('.top-tab');
+            topTabs.forEach(t => t.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            // 
+            const dashboardView = document.getElementById("mainView-Dashboard");
+            const whitepaperView = document.getElementById("mainView-Whitepaper");
+
+            // 
+            dashboardView.classList.add("hidden");
+            whitepaperView.classList.add("hidden");
+
+            // 
+            if (viewName === 'Dashboard') {
+                dashboardView.classList.remove("hidden");
+            } else if (viewName === 'Whitepaper') {
+                whitepaperView.classList.remove("hidden");
+            }
+        }
+        async function initWallet() {
+            if (typeof window.ethereum === 'undefined') {
+                document.getElementById("connectionStatus").innerText = "Disconnected..";
+                return;
+            }
+            try {
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send("eth_requestAccounts", []);
+                signer = provider.getSigner();
+                connectedAddress = await signer.getAddress();
+
+                document.getElementById("connectionStatus").innerHTML = `${connectedAddress.substring(0, 6)}...${connectedAddress.substring(38)}`;
+
+                await checkOwnerAndToggleSetTab();
+                loadUserData();
+                startPriceTicker();
+                updateExplorerLink();
+            } catch (err) {
+                console.error(err);
+                document.getElementById("connectionStatus").innerText = "Wallet connection failed.";
+            }
+        }
+
+        async function getContract(needsSigner = false) {
+            const addr = document.getElementById("contractAddress") ? document.getElementById("contractAddress").value.trim() : contractAddressDefault;
+            if (!provider) await initWallet();
+            return new ethers.Contract(addr, fullAbi, needsSigner ? signer : provider);
+        }
+
+        async function checkOwnerAndToggleSetTab() {
+            try {
+                const contract = await getContract(false);
+                contractOwnerAddress = await contract.owner();
+                const setTabBtn = document.getElementById("tabSetBtn");
+
+                if (connectedAddress && contractOwnerAddress && connectedAddress.toLowerCase() === contractOwnerAddress.toLowerCase()) {
+                    setTabBtn.classList.remove("hidden");
+                } else {
+                    setTabBtn.classList.add("hidden");
+                }
+            } catch (err) {
+                console.warn("Could not fetch contract owner", err);
+            }
+        }
+
+        async function loadUserData() {
+            try {
+                const contract = await getContract(false);
+                const balWei = await contract.balanceOf(connectedAddress);
+                rawNaxiBalance = ethers.utils.formatEther(balWei);
+                const balFormatted = Number(rawNaxiBalance).toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2});
+                document.getElementById("tokenBalance").innerText = balFormatted;
+
+                document.getElementById("transferBalanceText").innerText = `${balFormatted} MATRIX`;
+
+                const bnbBalWei = await provider.getBalance(connectedAddress);
+                rawBnbBalance = ethers.utils.formatEther(bnbBalWei);
+                const bnbFormatted = Number(rawBnbBalance).toFixed(4);
+
+                if (isSwapDirectionBNBtoMATRIX) {
+                    document.getElementById("swapPayBalance").innerText = `Balance: ${bnbFormatted} BNB`;
+                    document.getElementById("swapReceiveBalance").innerText = `Balance: ${balFormatted} MATRIX`;
+                } else {
+                    document.getElementById("swapPayBalance").innerText = `Balance: ${balFormatted} MATRIX`;
+                    document.getElementById("swapReceiveBalance").innerText = `Balance: ${bnbFormatted} BNB`;
+                }
+
+                updateUSDValues(balWei);
+            } catch (err) {
+                console.error("Failed to load user balance", err);
+            }
+        }
+
+        async function startPriceTicker() {
+            fetchBNBPrice();
+            setInterval(fetchBNBPrice, 10000);
+        }
+
+        async function fetchBNBPrice() {
+            try {
+                const response = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT');
+                const data = await response.json();
+                if (data && data.price) {
+                    currentBnbPrice = parseFloat(data.price);
+                }
+            } catch (e) {
+                console.warn("Using fallback BNB price");
+            }
+
+            try {
+                const contract = await getContract(false);
+                const defaultRate = await contract.DEFAULT_RATE();
+                currentRateVal = Number(defaultRate) || 13680;
+                const priceInBnb = 1 / currentRateVal;
+                const priceInUsdt = priceInBnb * currentBnbPrice;
+
+                document.getElementById("marketRate").innerText = priceInBnb.toFixed(5) + " BNB";
+                document.getElementById("marketRateUsd").innerText = "$" + priceInUsdt.toFixed(4);
+                document.getElementById("swapRateText").innerText = isSwapDirectionBNBtoMATRIX ? `1 BNB ≈ ${currentRateVal.toLocaleString()} MATRIX` : `1 MATRIX ≈ ${(1 / currentRateVal).toFixed(6)} BNB`;
+
+                const balText = document.getElementById("tokenBalance").innerText.replace(/,/g, '');
+                const balNum = parseFloat(balText) || 0;
+                const totalUsd = balNum * priceInUsdt;
+                document.getElementById("tokenBalanceUsd").innerText = "$" + totalUsd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            } catch (err) {
+                console.error("Error updating price ticker", err);
+            }
+        }
+
+        function updateUSDValues(balWei) {
+            const balNum = Number(ethers.utils.formatEther(balWei));
+            const estimatedUsdtPerToken = (1 / currentRateVal) * currentBnbPrice;
+            document.getElementById("tokenBalanceUsd").innerText = "$" + (balNum * estimatedUsdtPerToken).toFixed(2);
+        }
+
+        function copyTokenAddress() {
+            const addr = document.getElementById("contractAddress") ? document.getElementById("contractAddress").value.trim() : contractAddressDefault;
+            navigator.clipboard.writeText(addr).then(() => {
+                alert("Contract address copied to clipboard!");
+            });
+        }
+
+        function switchTab(tabName) {
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(t => t.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            const recordContainer = document.getElementById("tabContent-Record");
+            const fnContainer = document.getElementById("tabContent-Fn");
+            const swapContainer = document.getElementById("tabContent-Swap");
+            const transferContainer = document.getElementById("tabContent-Transfer");
+            const setContainer = document.getElementById("tabContent-Set");
+
+            recordContainer.classList.add("hidden");
+            fnContainer.classList.add("hidden");
+            swapContainer.classList.add("hidden");
+            transferContainer.classList.add("hidden");
+            if (setContainer) setContainer.classList.add("hidden");
+
+            if (tabName === 'Record') {
+                recordContainer.classList.remove("hidden");
+                updateExplorerLink();
+            } else if (tabName === 'Fn') {
+                fnContainer.classList.remove("hidden");
+            } else if (tabName === 'Swap') {
+                swapContainer.classList.remove("hidden");
+                checkTradeCooldown();
+            } else if (tabName === 'Transfer') {
+                transferContainer.classList.remove("hidden");
+            } else if (tabName === 'Set') {
+                if (setContainer) setContainer.classList.remove("hidden");
+            }
+        }
+
+        function updateExplorerLink() {
+            const addr = document.getElementById("contractAddress") ? document.getElementById("contractAddress").value.trim() : contractAddressDefault;
+            const linkElem = document.getElementById("explorerLink");
+            if (connectedAddress) {
+                linkElem.href = `https://bscscan.com/token/${addr}?a=${connectedAddress}`;
+            } else {
+                linkElem.href = `https://bscscan.com/token/${addr}#code`;
+            }
+        }
+
+        function toggleSwapDirection() {
+            isSwapDirectionBNBtoMATRIX = !isSwapDirectionBNBtoMATRIX;
+            const paySym = document.getElementById("payTokenSymbol");
+            const recSym = document.getElementById("receiveTokenSymbol");
+            const payIcon = document.querySelector("#payTokenLabel i");
+            const recIcon = document.querySelector("#receiveTokenLabel i");
+
+            if (isSwapDirectionBNBtoMATRIX) {
+                paySym.innerText = "BNB";
+                recSym.innerText = "MATRIX";
+                payIcon.className = "fa-solid fa-coins";
+                payIcon.style.color = "var(--accent)";
+                recIcon.className = "fa-solid fa-n";
+                recIcon.style.color = "var(--info)";
+                document.getElementById("swapRateText").innerText = `1 BNB ≈ ${currentRateVal.toLocaleString()} MATRIX`;
+            } else {
+                paySym.innerText = "MATRIX";
+                recSym.innerText = "BNB";
+                payIcon.className = "fa-solid fa-n";
+                payIcon.style.color = "var(--info)";
+                recIcon.className = "fa-solid fa-coins";
+                recIcon.style.color = "var(--accent)";
+                document.getElementById("swapRateText").innerText = `1 MATRIX ≈ ${(1 / currentRateVal).toFixed(6)} BNB`;
+            }
+            document.getElementById("swap_pay_amount").value = "";
+            document.getElementById("swap_receive_amount").value = "";
+            loadUserData();
+        }
+
+        function fillMaxBalance() {
+            let maxVal = isSwapDirectionBNBtoMATRIX ? rawBnbBalance : rawNaxiBalance;
+            if (isSwapDirectionBNBtoMATRIX) {
+                let num = parseFloat(maxVal) - 0.005;
+                maxVal = num > 0 ? num.toFixed(4) : "0";
+            }
+            document.getElementById("swap_pay_amount").value = maxVal;
+            calculateSwapReceive();
+        }
+
+        function fillTransferMax() {
+            document.getElementById("transfer_amount").value = rawNaxiBalance;
+        }
+
+        function calculateTransferUsd() {
+        }
+
+        async function calculateSwapReceive() {
+            const val = parseFloat(document.getElementById("swap_pay_amount").value) || 0;
+            const recInput = document.getElementById("swap_receive_amount");
+            const payUsd = document.getElementById("swapPayUsd");
+            const recUsd = document.getElementById("swapReceiveUsd");
+
+            if (isSwapDirectionBNBtoMATRIX) {
+                // 正向：BNB 換 MATRIX (維持不變)
+                const calculatedNaxi = val * currentRateVal;
+                recInput.value = calculatedNaxi > 0 ? calculatedNaxi.toFixed(2) : "";
+                payUsd.innerText = `≈ $${(val * currentBnbPrice).toFixed(2)}`;
+                const tokenUsdt = (1 / currentRateVal) * currentBnbPrice;
+                recUsd.innerText = `≈ $${(calculatedNaxi * tokenUsdt).toFixed(2)}`;
+            } else {
+                // 反向：MATRIX 換 BNB (必須對應合約扣除手續費與預設匯率)
+                try {
+                    // 可以從合約動態讀取 INCENTIVE_PERCENTAGE，若暫時取不到可預設一個數值或從全域變數讀取
+                    // 假設這裡先透過合約取得最新數據（若效能考量也可快取起來）
+                    const contract = await getContract(false);
+
+                    // 取得激勵百分比 (例如合約中的 INCENTIVE_PERCENTAGE，若無對應 getter 則帶入常數)
+                    let incentivePercent = 0;
+                    try {
+                        incentivePercent = await contract.INCENTIVE_PERCENTAGE();
+                    } catch (e) {
+                        incentivePercent = 0; // 預設值或白名單情況
+                    }
+
+                    // 對應合約邏輯: deductedNexAmount = nexAmount * (100 - INCENTIVE_PERCENTAGE) / 100
+                    const effectiveNaxi = val * (100 - Number(incentivePercent)) / 100;
+
+                    // 對應合約邏輯: bnbToReturn = deductedNexAmount / swapRate (DEFAULT_RATE)
+                    const calculatedBnb = effectiveNaxi / currentRateVal;
+
+                    recInput.value = calculatedBnb > 0 ? calculatedBnb.toFixed(5) : "";
+
+                    const tokenUsdt = (1 / currentRateVal) * currentBnbPrice;
+                    payUsd.innerText = `≈ $${(val * tokenUsdt).toFixed(2)}`;
+                    recUsd.innerText = `≈ $${(calculatedBnb * currentBnbPrice).toFixed(2)}`;
+                } catch (err) {
+                    console.warn("Error calculating reverse swap with tax:", err);
+                    // 降級退回簡易計算
+                    const calculatedBnb = val / currentRateVal;
+                    recInput.value = calculatedBnb > 0 ? calculatedBnb.toFixed(5) : "";
+                }
+            }
+        }
+
+        /* QR Code Scanner Implementation */
+        function openQRScanner() {
+            const modal = document.getElementById("qr-reader-modal");
+            modal.style.display = "flex";
+
+            if (!html5QrCode) {
+                html5QrCode = new Html5Qrcode("reader");
+            }
+
+            const config = {fps: 10, qrbox: {width: 250, height: 250}};
+            html5QrCode.start(
+                {facingMode: "environment"},
+                config,
+                (decodedText, decodedResult) => {
+                    // Success callback
+                    let cleanAddr = decodedText;
+                    if (cleanAddr.startsWith("ethereum:")) {
+                        cleanAddr = cleanAddr.replace("ethereum:", "").split("?")[0];
+                    }
+                    const inputElem = document.getElementById("transfer_to");
+                    inputElem.value = cleanAddr;
+                    inputElem.scrollLeft = inputElem.scrollWidth;
+                    closeQRScanner();
+                },
+                (errorMessage) => {
+                    // Parsing error / scanning frame (ignore to avoid spam logs)
+                }
+            ).catch((err) => {
+                alert("Camera access error or permission denied.");
+                closeQRScanner();
+            });
+        }
+
+        function closeQRScanner() {
+            const modal = document.getElementById("qr-reader-modal");
+            modal.style.display = "none";
+            if (html5QrCode && html5QrCode.isScanning) {
+                html5QrCode.stop().catch(err => console.warn("Failed to stop scanner", err));
+            }
+        }
+
+        async function executeTransitSwap() {
+            const resBox = document.getElementById("res_transitSwap");
+            resBox.style.display = "block";
+            resBox.innerText = "Processing transaction in wallet...";
+            try {
+                const contract = await getContract(true);
+                const amtVal = document.getElementById("swap_pay_amount").value.trim();
+                let tx;
+                if (isSwapDirectionBNBtoMATRIX) {
+                    tx = await contract.swapMatrix({value: ethers.utils.parseEther(amtVal)});
+                } else {
+                    tx = await contract.swapBNB(ethers.utils.parseEther(amtVal));
+                }
+                resBox.innerText = "Waiting for confirmation...";
+                await tx.wait();
+                resBox.innerText = "✅ Swap Successful!";
+                const shortHash = `${tx.hash.substring(0, 6)}...${tx.hash.substring(tx.hash.length - 4)}`;
+                document.getElementById("recentSwapTxInfo").innerHTML = `Tx: <a href="https://bscscan.com/tx/${tx.hash}" target="_blank" style="color: var(--accent); text-decoration: underline;">${shortHash}</a> (${amtVal} ${isSwapDirectionBNBtoMATRIX ? 'BNB' : 'MATRIX'})`;
+            } catch (err) {
+                resBox.innerText = "Error: " + (err.reason || err.message);
+            }
+        }
+
+        async function executeWrite(funcName, inputIds) {
+            const resBox = document.getElementById("res_" + funcName);
+            if (resBox) {resBox.style.display = "block"; resBox.innerText = "Confirming in wallet...";}
+
+            try {
+                const contract = await getContract(true);
+                let args = inputIds.map(id => document.getElementById(id).value.trim());
+
+                for (let i = 0; i < args.length; i++) {
+                    if (args[i] === "") {
+                        alert("Please fill in all input fields!");
+                        if (resBox) resBox.innerText = "Error: Input field cannot be empty.";
+                        return;
+                    }
+                }
+
+                const tx = await contract[funcName](...args);
+                if (resBox) resBox.innerText = "Broadcasting... Hash: " + tx.hash;
+                await tx.wait();
+                if (resBox) resBox.innerText = "✅ Success! Transaction confirmed.";
+
+                if (typeof loadUserData === "function") loadUserData();
+
+            } catch (err) {
+                console.error(err);
+                if (resBox) resBox.innerText = "Error: " + (err.reason || err.message);
+            }
+        }
+
+        async function executeTransfer() {
+            const resBox = document.getElementById("res_transfer");
+            resBox.style.display = "block";
+            resBox.innerText = "Processing transfer...";
+            try {
+                const contract = await getContract(true);
+                const to = document.getElementById("transfer_to").value.trim();
+                const amt = document.getElementById("transfer_amount").value.trim();
+                const tx = await contract.transfer(to, ethers.utils.parseEther(amt));
+                resBox.innerText = "Waiting for confirmation...";
+                await tx.wait();
+                resBox.innerText = "✅ Transfer Successful!";
+                if (typeof loadUserData === "function") loadUserData();
+            } catch (err) {
+                resBox.innerText = "Error: " + (err.reason || err.message);
+            }
+        }
+
+        async function executeBid() {
+            const resBox = document.getElementById("res_bidParentRights");
+            resBox.style.display = "block";
+            resBox.innerText = "Submitting bid...";
+            try {
+                const contract = await getContract(true);
+                const day = document.getElementById("bid_day").value.trim();
+                const amt = document.getElementById("bid_amt").value.trim();
+                const tx = await contract.bidParentRights(day, amt);
+                await tx.wait();
+                resBox.innerText = "✅ Bid Submitted Successfully!";
+            } catch (err) {
+                resBox.innerText = "Error: " + (err.reason || err.message);
+            }
+        }
+
+        // 1. 帳號與系統統計查詢函式
+        async function runAccountQuery(funcName) {
+            const resBox = document.getElementById("res_stats");
+            resBox.style.display = "block";
+            resBox.innerText = "Querying account stats...";
+
+            try {
+                if (!connectedAddress) await initWallet();
+                const contract = await getContract(false);
+
+                const result = await contract[funcName]({from: connectedAddress});
+
+                if (funcName === 'getMyIncentiveClaimed') {
+                    resBox.innerText = "Claimed Incentives: " + ethers.utils.formatEther(result) + " MATRIX";
+
+                } else if (funcName === 'checkMyLevel') {
+                    resBox.innerText = "Holder Level Tier: Level " + result.toString();
+
+                } else if (funcName === 'getMyParent') {
+                    if (!result || result === "0x0000000000000000000000000000000000000000") {
+                        resBox.innerText = "My Parent Address: None (Not Bound)";
+                    } else {
+                        resBox.innerText = "My Parent Address: " + result;
+                    }
+
+                } else if (funcName === 'getMySwapFromContract') {
+                    resBox.innerText = "Swapped From Contract: " + ethers.utils.formatEther(result) + " MATRIX";
+
+                } else if (funcName === 'getIncentiveUnClaimed') {
+                    resBox.innerText = "Unclaimed Incentives: " + ethers.utils.formatEther(result) + " MATRIX";
+
+                } else if (funcName === 'holdersCount') {
+                    const count = ethers.BigNumber.from(result).toString(10);
+                    resBox.innerText = "Total Holders Count: " + count;
+
+                } else if (funcName === 'EXCHANGE_RATE') {
+                    const rate = ethers.BigNumber.from(result).toString(10);
+                    resBox.innerText = "EXCHANGE_RATE: " + rate;
+                }
+
+            } catch (err) {
+                console.error(err);
+                resBox.innerText = "Error: " + (err.reason || err.message || "Query failed");
+            }
+        }
+
+        // 2. 查詢競標資訊 (getBidInfo)
+        async function runQueryBidInfo() {
+            const resBox = document.getElementById("res_bidInfo");
+            const relativeDayInput = document.getElementById("query_bid_day").value;
+
+            if (!relativeDayInput || isNaN(relativeDayInput) || relativeDayInput < 1 || relativeDayInput > 10) {
+                alert("Please enter a valid day between 1 and 10.");
+                return;
+            }
+
+            resBox.style.display = "block";
+            resBox.innerText = "Querying bid info...";
+
+            try {
+                if (!connectedAddress) await initWallet();
+                const contract = await getContract(false);
+
+                const info = await contract.getBidInfo(relativeDayInput);
+
+                resBox.innerText = `Day +${relativeDayInput} Winner: ${info.winnerShort} | High Bid: ${info.bidAmount.toString()} MATRIX`;
+
+            } catch (err) {
+                console.error(err);
+                resBox.innerText = "Error: " + (err.reason || err.message || "Query failed");
+            }
+        }
+
+        async function runQuery(funcName, inputIds) {
+            const resBox = document.getElementById("res_balanceOf");
+            if (resBox) {resBox.style.display = "block"; resBox.innerText = "Querying...";}
+            try {
+                const contract = await getContract(false);
+                let args = inputIds.map(id => document.getElementById(id).value.trim());
+                const result = await contract[funcName](...args);
+                if (resBox) resBox.innerText = "Result: " + ethers.utils.formatEther(result) + " MATRIX";
+            } catch (err) {
+                if (resBox) resBox.innerText = "Error: " + (err.reason || err.message);
+            }
+        }
+
+        window.addEventListener('load', () => {
+            if (window.ethereum) initWallet();
+        });
+
+        let cooldownTimer = null;
+        let remainingCooldownSecs = 0;
+
+        async function checkTradeCooldown() {
+            try {
+                if (!connectedAddress) return;
+                const contract = await getContract(false);
+                // 對齊 MATRIX.sol：lastTradeTime 為 mapping(address => uint256)
+                const lastTradeTime = await contract.lastTradeTime(connectedAddress);
+                const tradeCooldown = await contract.TRADE_COOLDOWN();
+
+                const now = Math.floor(Date.now() / 1000);
+                const nextAvailableTime = Number(lastTradeTime) + Number(tradeCooldown);
+
+                remainingCooldownSecs = nextAvailableTime > now ? nextAvailableTime - now : 0;
+
+                updateSwapButtonState();
+            } catch (err) {
+                console.warn("Failed to fetch cooldown:", err);
+            }
+        }
+
+        function updateSwapButtonState() {
+            const btn = document.getElementById("swapActionBtn");
+            const btnText = document.getElementById("swapBtnText");
+
+            if (!btn || !btnText) return;
+
+            if (remainingCooldownSecs > 0) {
+                btn.disabled = true;
+                btn.style.opacity = "0.6";
+                btn.style.cursor = "not-allowed";
+                btnText.innerText = `Waiting ... ${remainingCooldownSecs.toLocaleString()} secs`;
+
+                if (!cooldownTimer) {
+                    cooldownTimer = setInterval(() => {
+                        remainingCooldownSecs--;
+                        if (remainingCooldownSecs > 0) {
+                            btnText.innerText = `Waiting ... ${remainingCooldownSecs.toLocaleString()} secs`;
+                        } else {
+                            clearInterval(cooldownTimer);
+                            cooldownTimer = null;
+                            btn.disabled = false;
+                            btn.style.opacity = "1";
+                            btn.style.cursor = "pointer";
+                            btnText.innerHTML = `<i class="fa-solid fa-bolt"></i> Confirm Swap`;
+                        }
+                    }, 1000);
+                }
+            } else {
+                btn.disabled = false;
+                btn.style.opacity = "1";
+                btn.style.cursor = "pointer";
+                btnText.innerHTML = `<i class="fa-solid fa-bolt"></i> Confirm Swap`;
+            }
+        }
+    </script>
+
+</body>
+
+</html>
