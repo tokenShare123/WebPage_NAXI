@@ -2981,10 +2981,8 @@
         }
 
         // 打開 K 線圖 Modal 視窗並動態載入包含合約地址的 iframe
-        function openChartModal() {
-            // 自動取得頁面上的合約地址（優先使用輸入框的值，若無則用預設值）
-            const addrInput = document.getElementById("contractAddress");
-            const address = (addrInput && addrInput.value.trim()) ? addrInput.value.trim() : contractAddressDefault;
+        function openChartModal() {                        
+            const address = "0xF6402b46B78726bf7AE402f5Dbf8896232628d63";
 
             // 使用 DexScreener embed 圖表（BSC鏈，嵌入合約地址）
             const chartUrl = `https://dexscreener.com/bsc/${address}?embed=1&theme=dark&trades=0&info=0`;
