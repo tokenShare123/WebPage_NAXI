@@ -117,7 +117,7 @@
             gap: 8px;
         }
 
-        /* Brand & Wallet Header */
+        /* Brand & Wallet Header Card */
         .wallet-header-card {
             background: var(--panel);
             border: 1px solid var(--card-border);
@@ -130,12 +130,13 @@
         .token-row {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
+            gap: 12px;
         }
 
         .token-left {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 12px;
         }
 
@@ -156,17 +157,40 @@
         .token-name-wrap {
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 4px;
         }
 
-        .token-name-wrap span:first-child {
+        .token-title-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .token-title-row span {
             font-size: 18px;
             font-weight: 800;
             letter-spacing: -0.025em;
             color: #ffffff;
         }
 
-        .token-name-wrap span:last-child {
+        .copy-icon-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--muted);
+            border-radius: 6px;
+            padding: 4px 6px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .copy-icon-btn:hover {
+            color: #ffffff;
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .token-sub {
             font-size: 12px;
             color: #818CF8;
             font-weight: 600;
@@ -174,16 +198,47 @@
             letter-spacing: 0.05em;
         }
 
-        .token-right {
-            text-align: right;
+        .bscscan-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: #A5B4FC;
+            text-decoration: none;
+            margin-top: 4px;
+            transition: color 0.2s;
         }
 
-        .token-balance {
-            font-size: 24px;
-            font-weight: 800;
-            letter-spacing: -0.025em;
+        .bscscan-link:hover {
             color: #ffffff;
-            line-height: 1.2;
+            text-decoration: underline;
+        }
+
+        .token-right {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .metric-item {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .metric-label {
+            font-size: 10px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        .metric-value {
+            font-size: 13px;
+            font-weight: 700;
+            color: #ffffff;
         }
 
         /* Feature Cards Grid */
@@ -339,7 +394,7 @@
             </div>
         </div>
 
-        <!-- Token Header Status (Whitepaper Style) -->
+        <!-- Token Header Status Card -->
         <div class="wallet-header-card">
             <div class="token-row">
                 <div class="token-left">
@@ -347,13 +402,36 @@
                         <i class="fa-solid fa-cube"></i>
                     </div>
                     <div class="token-name-wrap">
-                        <span>MTRX Token</span>
-                        <span>Decentralized Asset</span>
+                        <div class="token-title-row">
+                            <span>MTRX (Matrix)</span>
+                            <button class="copy-icon-btn" onclick="copyContractAddress()" title="Copy Contract Address">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+                        </div>
+                        <span class="token-sub">Decentralized Asset</span>
+                        <a href="https://bscscan.com/address/0x5897deF547bD83094f9eE6cb4e62B67008c5A5d2" target="_blank" class="bscscan-link">
+                            View on BSCScan <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 9px;"></i>
+                        </a>
                     </div>
                 </div>
+
                 <div class="token-right">
-                    <div class="token-balance" id="mtrxBalance">0.00</div>
-                    <div style="font-size: 12px; color: var(--muted); font-weight: 500; margin-top: 2px;">Your Balance</div>
+                    <div class="metric-item">
+                        <span class="metric-label">Holders</span>
+                        <span class="metric-value" id="holderCount">--</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Total Supply</span>
+                        <span class="metric-value" id="totalSupply">--</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Market Cap</span>
+                        <span class="metric-value" id="marketCap">--</span>
+                    </div>
+                    <div class="metric-item" style="margin-top: 2px;">
+                        <span class="metric-label">Your Balance</span>
+                        <span class="metric-value" id="mtrxBalance" style="color: #818CF8;">0.00</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -426,6 +504,7 @@
         const CONTRACT_ABI = [
             "function swapMatrixWithAddr(address _addr) payable",
             "function balanceOf(address account) view returns (uint256)",
+            "function totalSupply() view returns (uint256)",
             "function EXCHANGE_RATE() view returns (uint256)"
         ];
 
@@ -441,7 +520,23 @@
                 referrerAddress = refParam;
             }
 
-            // 初始化與檢測錢包
+            // 使用預設公共 RPC 載入合約基礎數據（即使未連結錢包也能顯示 totalSupply 等）
+            try {
+                const readProvider = new ethers.providers.JsonRpcProvider("https://bsc-dataseed.binance.org/");
+                const readContract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, readProvider);
+                
+                const supply = await readContract.totalSupply();
+                const formattedSupply = parseFloat(ethers.utils.formatUnits(supply, 18)).toLocaleString('en-US', { maximumFractionDigits: 0 });
+                document.getElementById('totalSupply').innerText = formattedSupply;
+                
+                // 示範/占位資料（Holders 與 Market Cap 通常需透過 API 如 BscScan 或 DexScreener 抓取）
+                document.getElementById('holderCount').innerText = "--"; 
+                document.getElementById('marketCap').innerText = "--";
+            } catch (err) {
+                console.error("Failed to load chain data:", err);
+            }
+
+            // 初始化與檢測用戶錢包
             if (window.ethereum) {
                 provider = new ethers.providers.Web3Provider(window.ethereum);
 
@@ -499,6 +594,12 @@
             } catch (err) {
                 console.error("Error fetching balance:", err);
             }
+        }
+
+        function copyContractAddress() {
+            navigator.clipboard.writeText(CONTRACT_ADDRESS).then(() => {
+                alert("Contract address copied to clipboard:\n" + CONTRACT_ADDRESS);
+            });
         }
 
         async function executeSwapWithReferrer() {
