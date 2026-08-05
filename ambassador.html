@@ -2,16 +2,33 @@
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MTRX Protocol | Become an Official Ambassador</title>
 
-    <!-- 可選：載入網路字型（若要離線請改用系統字型）-->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- SEO Meta Tags -->
+    <meta name="description"
+        content="Become an official ambassador for MTRX, the consensus-driven Web3 token protocol. Earn up to 7.5% of total supply via direct and matrix incentives." />
+    <meta name="keywords"
+        content="MTRX, Web3, DeFi, BSC, BNB Chain, Token Ambassador, Decentralized Matrix, Crypto Earnings" />
+
+    <!-- Open Graph / Social Media Meta -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://tokenshare123.github.io/WebPage_MTRX/" />
+    <meta property="og:title" content="Become an Official MTRX Protocol Ambassador" />
+    <meta property="og:description"
+        content="Zero owner privilege, 90% vault backed by BNB. Earn up to 7.5% total supply rewards in 2 simple steps." />
+    <meta property="og:image"
+        content="https://raw.githubusercontent.com/tokenShare123/WebPage_MTRX/main/IMG_3740.jpg" />
+
+    <!-- Favicon & Styles -->
+    <link rel="icon" type="image/png" href="logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap">
-    <link rel="manifest" href="manifest.json?v=20260426">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
 
+    <!-- 參考 main.html 載入 Google 翻譯 JS API -->
     <script type="text/javascript">
         const systemLang = navigator.language || navigator.userLanguage;
         function googleTranslateElementInit() {
@@ -43,7 +60,7 @@
             new google.translate.TranslateElement({
                 pageLanguage: 'en',
                 layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-                autoDisplay: false // 修正：防止主動彈出 Google 翻譯橫幅 banner
+                autoDisplay: true
             }, targetId);
 
             const checkExist = setInterval(() => {
@@ -65,55 +82,65 @@
 
     <style>
         :root {
-            --bg: #080809;
-            --panel: #0f1113;
-            --panel-2: #0d0f11;
-            --muted: #9aa0a6;
-            --text: #FFFFFF;
-            --accent: #6f5af8;
-            --accent-2: #6c63ff;
-            --card-border: rgba(255, 255, 255, 0.04);
+            --bg: #0B0F19;
+            --panel: #111827;
+            --panel-2: #1F2937;
+            --panel-3: #374151;
+            --muted: #9CA3AF;
+            --text: #F9FAFB;
+            --accent: #4F46E5;
+            --accent-gradient: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+            --accent-hover: #4338CA;
+            --accent-glow: rgba(99, 102, 241, 0.25);
+            --card-border: rgba(99, 102, 241, 0.2);
+            --card-border-hover: rgba(99, 102, 241, 0.5);
+            --success: #10B981;
+            --gold: #F59E0B;
             --glass: rgba(255, 255, 255, 0.02);
-            --pill-border: rgba(255, 255, 255, 0.06);
-
-            --g: 14px;
-            --radius-lg: 16px;
-            --radius-md: 12px;
-            --radius-sm: 8px;
-
-            --fw-regular: 400;
-            --fw-medium: 600;
-            --fw-bold: 700;
-
-            --accent-hover: #520dc2;
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.1);
         }
 
-        /* --- Google 翻譯元件 隱藏 Banner 與樣式修覆 --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        /* --- 參考 main.html 的隱藏與毛玻璃風格化樣式 --- */
+
+        /* 1. 隱藏 Google 官方頂部橫幅、標誌、提示 */
         .goog-te-banner-frame.skiptranslate,
-        .goog-te-banner-frame,
-        .goog-te-balloon-frame,
-        #goog-gt-tt,
         .goog-te-gadget span,
         .goog-logo-link,
         .goog-tooltip,
         .goog-tooltip:hover {
             display: none !important;
-            visibility: hidden !important;
         }
 
-        /* 防止 Google 翻譯在網頁頂部塞入空白推擠 body */
+        /* 防止 Google 翻譯在網頁頂部留白 */
         body {
-            top: 0px !important;
+            top: 0 !important;
             position: static !important;
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(124, 58, 237, 0.15) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text);
+            padding: 24px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
         }
 
+        /* 隱藏翻譯後的文字高亮效果 */
         .goog-text-highlight {
             background-color: transparent !important;
             box-shadow: none !important;
         }
 
+        /* 下拉選單毛玻璃樣式 */
         .goog-te-gadget .goog-te-combo {
             background: var(--glass) !important;
             color: #fff !important;
@@ -139,1388 +166,600 @@
             font-size: 0 !important;
         }
 
-        /* Reset / Base */
-        * {
-            box-sizing: border-box;
-        }
-
-        .share-icon {
-            font-size: 24px;
-            color: var(--text-gray);
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-
-        .share-icon:hover {
-            color: var(--primary-gold);
-            transform: translateY(-3px);
-        }
-
-        .home-wrapper {
-            margin-top: 60px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        .container {
             width: 100%;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            padding-top: 25px;
+            max-width: 500px;
         }
 
-        .home-btn {
+        /* Top Hero Section */
+        .hero-header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding: 20px 10px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--card-border);
+            color: #818CF8;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 0 12px var(--accent-glow);
+        }
+
+        .hero-title {
+            font-size: 24px;
+            font-weight: 800;
+            line-height: 1.3;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #FFFFFF 0%, #9CA3AF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            font-weight: 700;
+            color: #FBBF24;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 50px;
-            height: 50px;
-            background: rgba(255, 255, 255, 0.05);
+            gap: 8px;
+        }
+
+        /* Brand & Wallet Header Card */
+        .wallet-header-card {
+            background: var(--panel);
             border: 1px solid var(--card-border);
-            border-radius: 50%;
-            color: var(--muted);
-            text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 15px var(--accent-glow);
         }
 
-        .home-btn:hover {
-            color: var(--cyan);
-            background: rgba(0, 217, 255, 0.1);
-            border-color: var(--cyan);
-            box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
-            transform: translateY(-3px);
-        }
-
-        html,
-        body {
-            height: 100%;
-        }
-
-        body {
-            margin: 0;
-            background: linear-gradient(180deg, var(--bg), #030304 120%);
-            color: var(--text);
-            font-family: Inter, "Helvetica Neue", Arial, sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            font-size: 15px;
-            line-height: 1.3;
-        }
-
-        .app {
-            max-width: 420px;
-            margin: 0 auto;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .copy-icon {
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .copy-message {
-            font-weight: bold;
-            visibility: hidden;
-            font-size: 70%;
-            margin-bottom: 4px;
-            margin-left: 4px;
-        }
-
-        .topbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 2px 12px 2px 12px;
-            gap: 12px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-            background: transparent;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .blkcat {
-            color-scheme: dark;
-            forced-color-adjust: none;
-            filter: none !important;
-            -webkit-filter: none !important;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            overflow: hidden;
-        }
-
-        .logo {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ff8a00, #ff3d00);
-            display: grid;
-            place-items: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
-        }
-
-        .logo svg {
-            width: 22px;
-            height: 22px;
-            transform: translateY(-1px);
-        }
-
-        .top-actions {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .icon-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            display: grid;
-            place-items: center;
-            background: var(--glass);
-            border: 1px solid rgba(255, 255, 255, 0.03);
-        }
-
-        .walletbutton {
-            padding: 6px 12px;
-            border-radius: 6px;
-            border: 2px solid #00d9ff;
-            color: #00d9ff;
-            background: transparent;
-            font-size: 0.8em;
-            cursor: pointer;
-            transition: all 0.3s ease-in-out;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 18px;
-            padding: 3px 18px 6px;
-            align-items: end;
-            overflow-x: auto;
-            scrollbar-width: none;
-        }
-
-        .tabs::-webkit-scrollbar {
-            display: none;
-        }
-
-        .tab {
-            font-weight: 600;
-            color: var(--muted);
-            padding-bottom: 8px;
-            position: relative;
-            white-space: nowrap;
-            font-size: 15px;
-        }
-
-        .tab:hover {
-            color: #D4AF37;
-            text-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
-            transform: translateY(-1px);
-        }
-
-        .tab:active {
-            color: var(--accent);
-            transform: translateY(0px);
-            opacity: 0.8;
-        }
-
-        .tab.active {
-            color: var(--accent);
-        }
-
-        .tab.active::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--accent), var(--accent-2));
-            border-radius: 3px;
-            bottom: -2px;
-        }
-
-        .balance {
-            background: rgba(255, 255, 255, 0.02);
-            padding: 0 12px 2px 12px;
-            border-radius: 16px;
+        .token-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            margin: 10px 18px 0px 18px;
-            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25), inset 0 0 22px rgba(255, 255, 255, 0.05);
-        }
-
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(1, 1fr);
             gap: 12px;
-            padding: 0 12px 2px 12px;
         }
 
-        .card {
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 16px;
-            padding: 16px;
-            min-height: 90px;
+        .token-left {
             display: flex;
+            align-items: center;
             gap: 12px;
-            align-items: flex-start;
-            min-width: 0;
-            overflow-wrap: break-word;
-            word-break: break-word;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25), inset 0 0 22px rgba(255, 255, 255, 0.05);
         }
 
-        .card .avatar {
+        .token-icon {
             width: 44px;
             height: 44px;
-            border-radius: 10px;
-            background: #111;
-            display: grid;
-            place-items: center;
-            font-weight: 700;
-            color: var(--text);
+            border-radius: 12px;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
             flex-shrink: 0;
-        }
-
-        .card h3 {
-            margin: 0;
-            font-size: 16px;
-            font-weight: 700;
-        }
-
-        .card p {
-            margin: 6px 0 0 0;
-            color: var(--muted);
-            font-size: 13px;
-            line-height: 1.25;
-        }
-
-        .pills {
-            display: flex;
-            gap: 12px;
-            padding: 16px 18px;
-            overflow: auto;
-        }
-
-        .pill {
-            padding: 10px 16px;
-            border-radius: 12px;
-            background: transparent;
-            border: 1.5px solid var(--pill-border);
-            display: inline-flex;
-            gap: 8px;
-            align-items: center;
-            font-weight: 600;
-            color: var(--muted);
-            white-space: nowrap;
-        }
-
-        .pill.active {
-            background: linear-gradient(90deg, rgba(99, 77, 244, 0.12), rgba(108, 99, 255, 0.06));
-            color: var(--text);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25), inset 0 0 22px rgba(255, 255, 255, 0.05);
-        }
-
-        .content-bottom-padding {
-            height: 22px;
-        }
-
-        @media (max-width:360px) {
-            .card {
-                padding: 10px;
-                min-height: 84px;
-            }
-
-            .logo {
-                width: 34px;
-                height: 34px;
-            }
-
-            .fab {
-                width: 56px;
-                height: 56px;
-            }
-        }
-
-        ._buttons {
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-            margin-top: 20px;
-        }
-
-        button {
-            padding: 6px 12px;
-            font-size: 0.8em;
-            border-radius: 6px;
-            border: 2px solid #00d9ff;
-            color: #00d9ff;
-            background: transparent;
-            cursor: pointer;
-            transition: all 0.3s ease-in-out;
-        }
-
-        button.cancel {
-            color: #FF6F61;
-            border-color: #FF6F61;
-        }
-
-        button.confirm {
-            color: #00d9ff;
-            border-color: #00d9ff;
-        }
-
-        .logo_container {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo_container img {
-            max-width: 60px;
-            max-height: 60px;
-            border-radius: 6px;
-            object-fit: contain;
-            margin: 0;
-        }
-
-        .wallet_form {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-        }
-
-        .floating-btn {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: black;
-            border: 2px solid white;
-            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
-            position: fixed;
-            right: 20px;
-            top: 250px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            z-index: 999;
-            visibility: hidden;
-        }
-
-        .floating-btn .material-symbols-outlined {
-            color: white;
-            font-size: 22px;
-        }
-
-        .floating-countdown {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: black;
-            position: fixed;
-            right: 20px;
-            top: 300px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 999;
-            cursor: default;
-            visibility: hidden;
-        }
-
-        .countdown-number {
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            position: absolute;
-        }
-
-        .countdown-ring {
-            position: absolute;
-            transform: rotate(-90deg);
-        }
-
-        .countdown-ring circle {
-            fill: transparent;
-            stroke: white;
-            stroke-width: 3px;
-            stroke-dasharray: 113;
-            stroke-dashoffset: 113;
-            transition: stroke-dashoffset 1s linear;
-        }
-
-        #fab-add-post {
-            position: fixed;
-            bottom: 60px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
-            background-color: #00d9ff;
-            color: white;
-            border-radius: 50%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            line-height: 1;
-            padding-bottom: 4px;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
-            transition: transform 0.2s;
-            user-select: none;
-        }
-
-        #fab-add-post:hover {
-            transform: scale(1.1);
-        }
-
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(10px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .modal-content h3 {
-            margin-top: 0;
-            color: #333;
-        }
-
-        .modal-content input,
-        .modal-content textarea {
-            width: 100%;
-            margin-bottom: 15px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-sizing: border-box;
-        }
-
-        .modal-buttons {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-
-        .btn-cancel {
-            background: #eee;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .btn-submit {
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .glass-card {
-            background: var(--glass-bg);
-            width: 90%;
-            max-width: 550px;
-            padding: 30px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-            color: white;
-            position: relative;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-
-        .header-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--accent);
-        }
-
-        .header-title h2 {
-            margin: 0;
-            font-size: 1.5rem;
-            letter-spacing: -0.5px;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            color: #666;
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        .input-group label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-            color: #aaa;
-        }
-
-        .input-group input,
-        .input-group textarea {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 12px 16px;
-            color: white;
-            font-family: inherit;
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-        }
-
-        .input-group input:focus,
-        .input-group textarea:focus {
-            outline: none;
-            border-color: var(--accent);
-            background: rgba(102, 16, 242, 0.05);
-            box-shadow: 0 0 15px rgba(102, 16, 242, 0.2);
-        }
-
-        .editor-tools {
-            margin-bottom: 10px;
-            display: flex;
-        }
-
-        #btn-list-mode {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
-            color: #888;
-            padding: 8px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s;
-        }
-
-        #btn-list-mode.active {
-            color: #fff;
-            background: var(--accent);
-            border-color: var(--accent);
-            box-shadow: 0 0 15px rgba(102, 16, 242, 0.5);
-        }
-
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .action-btn {
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .action-btn.cancel {
-            background: transparent;
-            border: 1px solid var(--glass-border);
-            color: #ccc;
-        }
-
-        .action-btn.submit {
-            background: var(--accent);
-            border: none;
-            color: white;
-            box-shadow: 0 8px 20px rgba(102, 16, 242, 0.3);
-        }
-
-        .action-btn.submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 25px rgba(102, 16, 242, 0.4);
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        .editor-wrapper {
-            position: relative;
-            width: 100%;
-        }
-
-        #post-content {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 12px;
-            padding-bottom: 40px;
-            color: white;
-            font-family: inherit;
-            box-sizing: border-box;
-            resize: none;
-        }
-
-        #btn-header-mode {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background: transparent;
-            border: none;
-            color: rgba(255, 255, 255, 0.3);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            padding: 5px;
-        }
-
-        #btn-header-mode span {
+            color: #ffffff;
             font-size: 20px;
         }
 
-        #btn-header-mode.active {
-            color: #00d9ff;
-            text-shadow: 0 0 8px rgba(0, 217, 255, 0.8);
-            transform: scale(1.1);
-        }
-
-        .editor-container {
-            position: relative;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        #post-content,
-        .editor-backdrop {
-            width: 100%;
-            height: 200px;
-            padding: 12px;
-            font-family: 'Inter', sans-serif;
-            font-size: 15px;
-            line-height: 1.6;
-            box-sizing: border-box;
-            border: none;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            margin: 0;
-        }
-
-        #post-content {
-            position: relative;
-            background: transparent;
-            color: rgba(255, 255, 255, 0.8);
-            z-index: 2;
-            resize: none;
-            outline: none;
-        }
-
-        .editor-backdrop {
-            position: absolute;
-            top: 0;
-            left: 0;
-            color: transparent;
-            z-index: 1;
-            background: transparent;
-            pointer-events: none;
-            overflow-y: auto;
-        }
-
-        .hl-header {
-            color: #00d9ff;
-            font-weight: bold;
-            background: rgba(0, 217, 255, 0.1);
-            border-radius: 4px;
-        }
-
-        .comment-card {
-            padding: 0 !important;
+        .token-name-wrap {
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            gap: 4px;
         }
 
-        .comment-list-container {
-            padding: 20px;
-            box-sizing: border-box;
-            width: 100%;
-        }
-
-        .comment-input-area {
+        .token-title-row {
             display: flex;
-            flex-direction: column;
-            gap: 12px;
-            padding: 20px !important;
-            background: rgba(0, 0, 0, 0.25);
-            box-sizing: border-box;
-        }
-
-        .comment-input-area .input-group {
-            width: 100%;
-            margin: 0;
-        }
-
-        #new-comment-content {
-            width: 100%;
-            box-sizing: border-box;
-            display: block;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 6px;
-            color: white;
-            padding: 12px;
-            font-size: 14px;
-            line-height: 1.5;
-            outline: none;
-            transition: all 0.3s ease;
-            resize: none;
-        }
-
-        #new-comment-content:focus {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: #4CAF50;
-            box-shadow: 0 0 10px rgba(76, 175, 80, 0.2);
-        }
-
-        .footer-actions {
-            display: flex;
-            justify-content: flex-end;
             align-items: center;
-            width: 100%;
-            margin: 0;
-        }
-
-        .footer-actions .submit {
-            margin-right: 0;
-            padding: 8px 24px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .post-navigation {
-            display: flex;
-            justify-content: space-between;
-            gap: 25px;
-            padding: 0px 20px;
-        }
-
-        .post-navigation .material-symbols-outlined {
-            color: #ffffff !important;
-            display: inline-block;
-            vertical-align: middle;
-        }
-
-        .nav-item {
-            flex: 1;
-            max-width: 48%;
-        }
-
-        .nav-link {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            line-height: 1;
-            text-decoration: none;
-            padding: 12px 0px;
             gap: 8px;
         }
 
-        .nav-link .material-symbols-outlined {
+        .token-title-row span {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            color: #ffffff;
+        }
+
+        .copy-icon-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--muted);
+            border-radius: 6px;
+            padding: 4px 6px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .copy-icon-btn:hover {
+            color: #ffffff;
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .token-sub {
+            font-size: 12px;
+            color: #818CF8;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .bscscan-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: #A5B4FC;
+            text-decoration: none;
+            margin-top: 2px;
+            transition: color 0.2s;
+        }
+
+        .bscscan-link:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        .token-right {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .metric-item {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .metric-label {
+            font-size: 10px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        .metric-value {
+            font-size: 13px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        /* Feature Cards Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card {
+            background: var(--panel);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 16px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-card.full-width {
+            grid-column: span 2;
+        }
+
+        .feature-card:hover {
+            border-color: var(--card-border-hover);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4), 0 0 12px var(--accent-glow);
+            transform: translateY(-2px);
+        }
+
+        .feature-icon {
+            font-size: 20px;
+            color: #818CF8;
+            margin-bottom: 10px;
+        }
+
+        .feature-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .feature-desc {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        /* Step Execution Card */
+        .step-card {
+            background: var(--panel);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 16px;
+            position: relative;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .step-badge {
+            background: var(--accent-gradient);
+            color: white;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 0 2px 8px var(--accent-glow);
+        }
+
+        .step-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .action-btn {
+            width: 100%;
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px var(--accent-glow);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px !important;
-            width: 18px;
-            height: 18px;
-            color: #ffffff !important;
+            gap: 8px;
         }
 
-        .nav-title {
-            margin: 0;
-            padding: 0;
-            display: block;
-            font-size: 14px;
-            color: #ffffff;
-            font-weight: 500;
-            line-height: 1.2;
-            white-space: normal;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            width: 100%;
+        .action-btn:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
         }
 
-        .prev .nav-link,
-        .next .nav-link {
-            align-items: flex-start;
-            text-align: left;
+        .share-box {
+            background: var(--panel-2);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+            word-break: break-all;
+            font-family: 'JetBrains Mono', monospace, sans-serif;
+            font-size: 12px;
+            color: #E5E7EB;
+            line-height: 1.5;
+        }
+
+        .result-msg {
+            font-size: 12px;
+            margin-top: 10px;
+            display: none;
+            padding: 10px;
+            background: var(--panel-2);
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            line-height: 1.4;
+            color: #A5B4FC;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 20px;
+            padding: 10px;
+        }
+
+        /* 語言選擇器排版置中 */
+        .translate-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
         }
     </style>
 </head>
 
 <body>
-    <div class="app" role="application" aria-label="Discover mobile UI">
-        <!-- Top bar -->
-        <header class="topbar" role="banner">
-            <div class="brand">
-                <div class="logo" aria-hidden="true">
-                    <img src="https://blkdona.com/icon-192.gif" class="blkcat">
-                </div>
-                <div>
-                    <a href="https://bscscan.com/token/0x8706e6c0a244053bbbe4ba4fdd9c20a5c98e4548" target="_blank"
-                        rel="noopener" style="color:#fff;text-decoration: none;">
-                        <h1 id="title" class="notranslate">LINK</h1>
-                    </a>
-                </div>
-            </div>
-            <div onclick="window.location.href=`auth.html?lang=${systemLang}`">
-                <button class="walletbutton notranslate" id="walletButton">Login</button>
-            </div>
-            <div class="top-actions" role="group" aria-label="actions">
-                <div class="icon-btn" title="Reload Page" aria-hidden="true" onclick="location.reload()"
-                    style="cursor: pointer;">
-                    <span class="material-symbols-outlined notranslate"
-                        style="font-size: 20px; color: #fff; opacity: 0.9;">
-                        refresh
-                    </span>
-                </div>
-                <a href="https://blkdona.com" style="text-decoration: none; display: inline-block;">
-                    <div class="icon-btn" title="menu" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="4" y="6" width="16" height="2" rx="1" fill="#fff" opacity="0.95"></rect>
-                            <rect x="4" y="11" width="16" height="2" rx="1" fill="#fff" opacity="0.8"></rect>
-                            <rect x="4" y="16" width="10" height="2" rx="1" fill="#fff" opacity="0.7"></rect>
-                        </svg>
-                    </div>
-                </a>
-            </div>
-        </header>
 
-        <!-- Tabs -->
-        <div id="navtabs_balance">
-            <nav class="tabs" role="tablist" aria-label="discover tabs">
-                <div class="tab active" role="tab" aria-selected="true">Overview</div>
-                <div class="tab" role="tab" onclick="window.location.href='tradingHelper.html'">Trading</div>
-                <div class="tab" role="tab" onclick="window.location.href='share.html'">Share</div>
-                <div class="tab" role="tab">Task</div>
-                <div class="tab" role="tab">News</div>
-            </nav>
-            <!-- display balance -->
-            <div class="balance" id="div_balance">
-                <div>
-                    <span>Amount of Points：</span>
-                    <p style="margin-top: -1px;">Just updated</p>
+    <div class="container">
+
+        <!-- 放置 Google 翻譯選單容器 -->
+        <div class="translate-wrapper">
+            <div id="google_translate_element"></div>
+        </div>
+
+        <!-- Header Call To Action -->
+        <div class="hero-header">
+            <div class="hero-badge">
+                <i class="fa-solid fa-fire"></i> Ambassador Recruitment
+            </div>
+            <h1 class="hero-title">
+                A Brand-New Community Consensus Token MTRX Wants You as an Ambassador. Interested?
+            </h1>
+            <div class="hero-subtitle">
+                <i class="fa-solid fa-trophy"></i> Ambassador Fee: Up to 7.5% of Total Supply
+            </div>
+        </div>
+
+        <!-- Token Header Status Card -->
+        <div class="wallet-header-card">
+            <div class="token-row">
+                <div class="token-left">
+                    <div class="token-icon">
+                        <i class="fa-solid fa-cube"></i>
+                    </div>
+                    <div class="token-name-wrap">
+                        <div class="token-title-row">
+                            <span>MTRX (Matrix)</span>
+                            <button class="copy-icon-btn" onclick="copyContractAddress()" title="Copy Contract Address">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+                        </div>
+                        <span class="token-sub">Decentralized Asset</span>
+                        <a href="https://bscscan.com/address/0x5897deF547bD83094f9eE6cb4e62B67008c5A5d2" target="_blank" class="bscscan-link">
+                            View on BSCScan <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 9px;"></i>
+                        </a>
+                    </div>
                 </div>
-                <div style="display: flex; justify-content: flex-end;">
-                    <h1 id="balance">Waiting..</h1>
+
+                <div class="token-right">
+                    <div class="metric-item">
+                        <span class="metric-label">Total Supply</span>
+                        <span class="metric-value" id="totalSupply">Loading...</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Market Cap</span>
+                        <span class="metric-value" id="marketCap">Loading...</span>
+                    </div>
                 </div>
             </div>
         </div>
-        <!-- Cards grid -->
-        <main>
-            <div class="cards" role="list" id="blogContainer">
-                <div class="post-navigation">
-                    <div id="prevPostContainer" class="nav-item prev" style="display: none;">
-                        <a id="prevPostLink" href="#" class="nav-link">
-                            <span class="material-symbols-outlined notranslate" style="font-size: 18px;">home</span>
-                            <span id="prevPostTitle" class="nav-title"></span>
-                        </a>
-                    </div>
 
-                    <div id="nextPostContainer" class="nav-item next" style="display: none;">
-                        <a id="nextPostLink" href="#" class="nav-link">
-                            <span class="material-symbols-outlined notranslate" style="font-size: 18px;">store</span>
-                            <span id="nextPostTitle" class="nav-title"></span>
-                        </a>
-                    </div>
-                </div>
-                <!-- Card 1 -->
-                <article id="whitepapaer_card" class="card" role="listitem" aria-label="Whitepaper">
-                    <div class="avatar" style="background:linear-gradient(135deg,#ffd166,#ffc107);color:#111">W</div>
-                    <div>
-                        <h3>Whitepaper</h3>
-                        <p style="line-height: 1.8; color: var(--muted); font-size: 14px;">
-                            <span
-                                style="color: var(--accent); font-weight: 700; display: block; margin-bottom: 8px; letter-spacing: 1px;">
-                                <span class="material-symbols-outlined notranslate"
-                                    style="vertical-align: middle; font-size: 18px;">verified_user</span>
-                                THE NEXT GEN REVOLUTION
-                            </span>
-                            LINK is a pioneering high-consensus gateway connecting
-                            <span style="color: #fff; font-weight: 600;">Multi-Industry Sectors</span>.
-                            As perhaps the world's first token ecosystem featuring
-                            <span class="highlight" style="color: #00ffa3; font-weight: 600;">Real-time Referral Rewards
-                                (2%)</span>
-                            and
-                            <span style="color: #fff; font-weight: 600;">Geo-Localized Profit Sharing</span>,
-                            it redefines the essence of holding and earning in the Web3 era.
-                            <br><br>
-                            <span
-                                style="display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--accent-2); border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px;">
-                                <span class="material-symbols-outlined notranslate"
-                                    style="font-size: 16px;">ads_click</span>
-                                Click to explore the LINK blueprint
-                            </span>
-                        </p>
-                    </div>
-                </article>
-
-                <!-- Card 2 -->
-                <article class="card" role="listitem" aria-label="Points">
-                    <div class="avatar" style="background:linear-gradient(135deg,#0c68c4,#3936ca);color:#111">P</div>
-                    <div>
-                        <h3>Points</h3>
-                        <p id="pointscontent">"Abundance comes from sharing" is more than just a slogan in the world of
-                            Link tokens.</p>
-                    </div>
-                </article>
-
-                <!-- Card 3 -->
-                <article id="ispContent">
-                </article>
-
-                <!-- Card 4 -->
-                <article id="visitorscontent">
-                </article>
+        <!-- Highlights & Value Proposition Grid -->
+        <div class="features-grid">
+            <div class="feature-card full-width">
+                <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="feature-title">1. No Owner Privileges & Vault Backed</div>
+                <div class="feature-desc">100% decentralized architecture with zero administrative ownership. 90% of
+                    core assets are safely locked as BNB in the smart contract vault.</div>
             </div>
 
-            <!-- filter pills -->
-            <div class="pills" role="toolbar" aria-label="filters">
-                <div style="display: flex; justify-content: flex-end; padding: 10px;">
-                    <div id="google_translate_element" style="border-radius: 50%; overflow: hidden;"></div>
-                </div>
-                <button class="pill active" aria-pressed="true">🏆 Popular</button>
-                <button class="pill">🔥 Trending</button>
-                <button class="pill">📈 Growth</button>
-                <button class="pill">🧾 New</button>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-sack-dollar" style="color: var(--gold);"></i></div>
+                <div class="feature-title">2. Incentive Rewards</div>
+                <div class="feature-desc">1.7% Direct Rewards + 5.8% Dynamic Matrix Rewards allocated directly to active
+                    ambassadors.</div>
             </div>
 
-        </main>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-water"></i></div>
+                <div class="feature-title">3. DEX Liquidity</div>
+                <div class="feature-desc">2.5% strictly reserved for decentralized exchange (DEX) liquidity stability.
+                </div>
+            </div>
+        </div>
 
-        <div class="content-bottom-padding" aria-hidden="true"></div>
-    </div>
-    <div class="floating-btn" id="claim_button">
-        <span class="material-symbols-outlined">deployed_code_update</span>
+        <!-- Step 1 Execution -->
+        <div class="step-card">
+            <span class="step-badge">Step 01</span>
+            <div class="step-title">Swap BNB for 2,500 MTRX</div>
+            <p style="font-size: 12px; color: var(--muted); margin-bottom: 16px;">
+                Interact directly with the issuance smart contract to acquire 2,500 MTRX and activate your ambassador
+                referral rights.
+            </p>
+            <button class="action-btn" onclick="executeSwapWithReferrer()">
+                <i class="fa-solid fa-bolt"></i> Activate & Mint MTRX
+            </button>
+            <div id="res_swap" class="result-msg"></div>
+        </div>
+
+        <!-- Step 2 Execution -->
+        <div class="step-card">
+            <span class="step-badge">Step 02</span>
+            <div class="step-title">Share Your Exclusive Ambassador Link</div>
+            <p style="font-size: 12px; color: var(--muted); margin-bottom: 12px;">
+                Copy the invitation text below and share it across your social media channels or forums to build your
+                matrix network.
+            </p>
+            <div class="share-box" id="shareContent">
+                Connecting wallet to generate referral link...
+            </div>
+            <button class="action-btn" style="background: var(--panel-2); border: 1px solid var(--card-border);"
+                onclick="copyInvitation()">
+                <i class="fa-solid fa-copy"></i> Copy Invitation Text
+            </button>
+            <div id="res_copy" class="result-msg"></div>
+        </div>
+
+        <footer>
+            MTRX Protocol &copy; 2026. Fully Decentralized Consensus Ecosystem.
+        </footer>
+
     </div>
 
-    <div class="floating-countdown" id="countdown_btn">
-        <div class="countdown-number" id="countdown_number">5</div>
-        <svg class="countdown-ring" width="44" height="44">
-            <circle cx="22" cy="22" r="18"></circle>
-        </svg>
-    </div>
-
-    <div class="floating-btn" id="claim_task" style="top: 300px;">
-        <span class="material-symbols-outlined">person_check</span>
-    </div>
-    <div id="fab-add-post" onclick="togglePostModal(true)">
-        <span>+</span>
-    </div>
-
-    <!-- 引入 Web3.js -->
-    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
+    <!-- Web3 Interaction Logic -->
     <script>
-        document.getElementById('whitepapaer_card').addEventListener('click', function () {
-            window.location.href = `whitepaper.html?lang=${systemLang}`;
-        });
-
-        // 解決 Google 翻譯會強制偏移 body 的問題
-        (function () {
-            const style = document.createElement('style');
-            style.innerHTML = `
-        body { top: 0 !important; position: static !important; }
-        .skiptranslate iframe, .goog-te-banner-frame { display: none !important; }
-    `;
-            document.head.appendChild(style);
-        })();
-
-        let web3;
-        let contract;
-        let useraddress;
-        let walletButton;
-        let token_card;
-        let tokencontent;
-        let pointscontent;
-        let taskcontent;
-        let visitorscontent;
-        let holdersCount;
-        let claim_button;
-        let countdown_btn;
-        let claim_task;
-        let assignCount;
-        let referrerAddress;
-
-        const contractAddress = "0x8706e6c0a244053BbBe4BA4FDD9c20a5c98E4548";
-        const contractABI = [
-            { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "spender", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "Approval", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "who", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "avatarId", "type": "uint256" }], "name": "AvatarSet", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "who", "type": "address" }, { "indexed": false, "internalType": "string", "name": "info", "type": "string" }], "name": "InfoSet", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "who", "type": "address" }, { "indexed": false, "internalType": "string", "name": "nickname", "type": "string" }], "name": "NicknameSet", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }], "name": "OwnershipTransferred", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "who", "type": "address" }, { "indexed": true, "internalType": "address", "name": "executor", "type": "address" }], "name": "RecruitmentTaskExecuted", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "who", "type": "address" }], "name": "RecruitmentTaskPosted", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "child", "type": "address" }, { "indexed": true, "internalType": "address", "name": "referrer", "type": "address" }], "name": "ReferralAssigned", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "from", "type": "address" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "Transfer", "type": "event" }, { "inputs": [], "name": "AssignReferrerCount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "BasicSetupFee", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "HOURS_192", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "INITIAL_SUPPLY", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "MAX_AIRDROP_RATE", "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "ReferralSetupFee", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "SECONDS_PER_DAY", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "SEVEN_DAYS", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "airdropRate", "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "owner_", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" }], "name": "allowance", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "approve", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "account", "type": "address" }], "name": "balanceOf", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "burn", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "who", "type": "address" }], "name": "canClaimHoldingAirdrop", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "claimHoldingAirdrop", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "decimals", "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "executeRecruitmentTask", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "hasRecruitmentTask", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "name": "holdersAddresses", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "holdersCount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "who", "type": "address" }], "name": "holdingAirdropAmount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "minReferralTransfer", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "mint", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "name", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "owner", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "target", "type": "address" }], "name": "performDelegatedAirdrop", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "postRecruitmentTask", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "name": "recruitmentTask", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "recruitmentTaskCount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint16", "name": "rate", "type": "uint16" }], "name": "setAirdropRate", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "avatarId", "type": "uint256" }], "name": "setAvatar", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "fee", "type": "uint256" }], "name": "setBasicSetupFee", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "string", "name": "info", "type": "string" }], "name": "setInfo", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "string", "name": "nick", "type": "string" }], "name": "setNickname", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "fee", "type": "uint256" }], "name": "setReferralSetupFee", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "symbol", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "totalSupply", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "transfer", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "transferFrom", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }], "name": "transferOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "viewAssignReferrerPointer", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }, { "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "who", "type": "address" }], "name": "viewAvatar", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "who", "type": "address" }], "name": "viewBalance", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "who", "type": "address" }], "name": "viewHoldingAirdropCount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "who", "type": "address" }], "name": "viewHoldingAirdropTotal", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "who", "type": "address" }], "name": "viewInfo", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "who", "type": "address" }], "name": "viewLastAirdropTime", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "who", "type": "address" }], "name": "viewMinSinceLastAirdrop", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "who", "type": "address" }], "name": "viewNickname", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "who", "type": "address" }], "name": "viewReferralAirdropCount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "who", "type": "address" }], "name": "viewReferralAirdropTotal", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "who", "type": "address" }, { "internalType": "uint256", "name": "idx", "type": "uint256" }], "name": "viewReferralAt", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "who", "type": "address" }], "name": "viewReferralsCount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "who", "type": "address" }], "name": "viewReferrer", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "who", "type": "address" }], "name": "viewTaskAirdropCount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "who", "type": "address" }], "name": "viewTaskAirdropTotal", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "stateMutability": "payable", "type": "receive" }
+        const CONTRACT_ADDRESS = "0x5897deF547bD83094f9eE6cb4e62B67008c5A5d2";
+        const CONTRACT_ABI = [
+            "function swapMatrixWithAddr(address _addr) payable",
+            "function balanceOf(address account) view returns (uint256)",
+            "function totalSupply() view returns (uint256)",
+            "function EXCHANGE_RATE() view returns (uint256)"
         ];
 
-        if (window.ethereum) {
-            web3 = new Web3(window.ethereum);
-            contract = new web3.eth.Contract(contractABI, contractAddress);
-        }
+        let provider, signer, contract;
+        let currentUserAddr = null;
+        let referrerAddress = "0x0000000000000000000000000000000000000000";
 
-        document.addEventListener('DOMContentLoaded', (event) => {
-            walletButton = document.getElementById('walletButton');
-            walletButton.addEventListener("click", connectWallet);
-            token_card = document.getElementById('token_card');
-            tokencontent = document.getElementById('tokencontent');
-            pointscontent = document.getElementById('pointscontent');
-            taskcontent = document.getElementById('taskcontent');
-            visitorscontent = document.getElementById('visitorscontent');
-            getHoldertoLowercase();
+        window.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const refParam = urlParams.get('ref');
+            if (refParam && ethers.utils.isAddress(refParam)) {
+                referrerAddress = refParam;
+            }
+
+            fetchTokenMetrics();
+
+            if (window.ethereum) {
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+
+                const accounts = await provider.listAccounts();
+                if (accounts.length > 0) {
+                    await setupWalletSession(accounts[0]);
+                } else {
+                    updateInvitationBox(null);
+                }
+
+                window.ethereum.on('accountsChanged', async (accounts) => {
+                    if (accounts.length > 0) {
+                        await setupWalletSession(accounts[0]);
+                    } else {
+                        currentUserAddr = null;
+                        updateInvitationBox(null);
+                    }
+                });
+            } else {
+                updateInvitationBox(null);
+            }
         });
 
-        async function getHoldertoLowercase() {
-            await getPointsContent();
-            await getVisitorsContent();
-            await getVisitorsByISP();
-            await getBalance();
-        }
-
-        async function connectWallet() {
-            const wtext = walletButton.textContent;
-            if (wtext == 'Logout?') {
-                logout();
-            } else if (wtext !== 'Login') {
-                walletButton.textContent = "Logout?";
-                walletButton.parentElement.removeAttribute('onclick');
-                setTimeout(() => {
-                    walletButton.textContent = wtext;
-                    walletButton.className = 'walletbutton';
-                }, 5000);
-            }
-        }
-
-        async function getVisitorsContent() {
+        async function fetchTokenMetrics() {
             try {
-                const response = await fetch('/api/visitor-stats');
-                if (!response.ok) throw new Error('Network response was not ok');
-                const data = await response.json();
+                const readProvider = new ethers.providers.JsonRpcProvider("https://bsc-dataseed.binance.org/");
+                const readContract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, readProvider);
+                
+                const supply = await readContract.totalSupply();
+                const numSupply = parseFloat(ethers.utils.formatUnits(supply, 18));
+                document.getElementById('totalSupply').innerText = numSupply.toLocaleString('en-US', { maximumFractionDigits: 0 });
 
-                const rows = data.map(item => `
-            <tr style="border-bottom: 1px solid #333; transition: background 0.3s;" 
-                onmouseover="this.style.backgroundColor='#1a1a1a'" 
-                onmouseout="this.style.backgroundColor='transparent'">
-                <td style="padding: 14px 20px; color: #e0e0e0; font-weight: 500;">
-                    <span style="margin-right: 8px; opacity: 0.8;">📍</span>${item._id || 'Unknown'}
-                </td>
-                <td style="padding: 14px 20px; text-align: center; color: #00ffca; font-family: 'Courier New', monospace;">
-                    ${(item.totalVisitors || 0).toLocaleString()}
-                </td>
-                <td style="padding: 14px 20px; text-align: center; color: #b0b0b0;">
-                    ${(item.totalHits || 0).toLocaleString()}
-                </td>
-            </tr>
-        `).join('');
+                fetch(`https://api.dexscreener.com/latest/dex/tokens/${CONTRACT_ADDRESS}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.pairs && data.pairs.length > 0) {
+                            const price = parseFloat(data.pairs[0].priceUsd || 0);
+                            const mcap = Math.round(numSupply * price);
+                            document.getElementById('marketCap').innerText = `$${mcap.toLocaleString('en-US')}`;
+                        } else {
+                            document.getElementById('marketCap').innerText = "N/A";
+                        }
+                    })
+                    .catch(() => {
+                        document.getElementById('marketCap').innerText = "N/A";
+                    });
 
-                visitorscontent.innerHTML = `
-            <div class="cards">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <h3 style="margin: 0; font-size: 1.25rem; letter-spacing: 1px; color: #fff; text-transform: uppercase;">
-                        Regional Analytics
-                    </h3>
-                    <span style="font-size: 0.8rem; color: #00ffca; background: #1a1a1a; padding: 4px 12px; border-radius: 20px; border: 1px solid #00ffca;">
-                        Live Data
-                    </span>
-                </div>
-
-                <table style="width: 100%; border-collapse: collapse; background: #111; border: 1px solid #222; border-radius: 8px; overflow: hidden;">
-                    <thead>
-                        <tr style="background: #1a1a1a; color: #888; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1.5px;">
-                            <th style="padding: 12px 12px; text-align: left; font-weight: 600;">Location ID</th>
-                            <th style="padding: 12px 12px; font-weight: 600;">Visitors</th>
-                            <th style="padding: 12px 12px; font-weight: 600;">Total Hits</th>
-                        </tr>
-                    </thead>
-                    <tbody style="font-size: 0.9rem;">
-                        ${rows || '<tr><td colspan="3" style="text-align:center; padding:40px; color:#444;">No data available</td></tr>'}
-                    </tbody>
-                </table>
-            </div>
-        `;
             } catch (err) {
-                console.error(`getVisitorsContent Error:`, err);
-                visitorscontent.innerHTML = `
-            <div style="padding: 20px; background: #1a0a0a; border: 1px solid #400; border-radius: 8px; color: #ff6b6b;">
-                ⚠️ Error loading analytics: ${err.message}
-            </div>
-        `;
+                console.error("Failed to load chain data:", err);
+                document.getElementById('totalSupply').innerText = "N/A";
+                document.getElementById('marketCap').innerText = "N/A";
             }
         }
 
-        async function getVisitorsByISP() {
-            try {
-                const response = await fetch('/api/visitor-isp-stats');
-                if (!response.ok) throw new Error('Network response was not ok');
-                const data = await response.json();
-
-                const rows = data.map(item => `
-            <tr style="border-bottom: 1px solid #222; transition: background 0.3s;" 
-                onmouseover="this.style.backgroundColor='#121212'" 
-                onmouseout="this.style.backgroundColor='transparent'">
-                <td style="padding: 16px 20px; color: #e0e0e0; font-weight: 500;">
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span style="color: #a855f7; font-size: 1.1rem;">🌐</span>
-                        <div style="display: flex; flex-direction: column;">
-                            <span style="letter-spacing: 0.5px;">${item.ispName}</span>
-                            <span style="font-size: 0.7rem; color: #555; text-transform: uppercase;">Provider</span>
-                        </div>
-                    </div>
-                </td>
-                <td style="padding: 16px 20px; text-align: center; color: #a855f7; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 1.1rem; font-weight: bold;">
-                    ${(item.totalVisitors || 0).toLocaleString()}
-                </td>
-                <td style="padding: 16px 20px; text-align: center; color: #777; font-size: 0.85rem;">
-                    ${(item.totalHits || 0).toLocaleString()}
-                </td>
-            </tr>
-        `).join('');
-
-                const ispContent = document.getElementById('ispContent');
-                if (!ispContent) return;
-
-                ispContent.innerHTML = `
-    <div class="cards">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <div>
-                <h3 style="margin: 0; font-size: 1.25rem; letter-spacing: 1px; color: #fff; text-transform: uppercase;">Network Sources</h3>
-                <p style="margin: 4px 0 0; font-size: 0.7rem; color: #666; text-transform: uppercase; letter-spacing: 1px;">ISP Traffic Distribution</p>
-            </div>
-            <div style="font-size: 0.8rem; color: #a855f7; background: #1a1a1a; padding: 4px 12px; border-radius: 20px; border: 1px solid  #a855f7;">ISP STATS</div>
-        </div>
-
-        <table style="width: 100%; border-collapse: collapse; background: #111; border: 1px solid #222; border-radius: 8px; overflow: hidden; table-layout: fixed;">
-            <thead>
-                <tr style="background: #1a1a1a; color: #888; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1.5px;">
-                    <th style="width: 50%; padding: 12px 12px; text-align: left; font-weight: 600;">Service Provider</th>
-                    <th style="width: 25%; padding: 12px 12px; text-align: center; font-weight: 600;">Users</th>
-                    <th style="width: 25%; padding: 12px 12px; text-align: center; font-weight: 600;">Activity</th>
-                </tr>
-            </thead>
-            <tbody style="font-size: 0.9rem;">
-                ${rows || '<tr><td colspan="3" style="text-align:center; padding:40px; color:#444;">No data available</td></tr>'}
-            </tbody>
-        </table>
-    </div>
-`;
-            } catch (err) {
-                console.error(`getVisitorsByISP Error:`, err);
-            }
+        async function setupWalletSession(userAddress) {
+            signer = provider.getSigner();
+            contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+            currentUserAddr = userAddress;
+            updateInvitationBox(currentUserAddr);
         }
 
-        let _balance = 0;
-
-        async function getBalance() {
-            const token = localStorage.getItem('token');
-            const account = localStorage.getItem('account');
-            const div_navtabs_balance = document.getElementById('navtabs_balance');
-            if (!token) {
-                if (div_navtabs_balance) div_navtabs_balance.style.display = 'none';
-                return;
-            }
-            const walletBtn = document.getElementById('walletButton');
-            if (document.getElementById('fab-add-post')) {
-                document.getElementById('fab-add-post').style.display = 'flex';
-            }
-            if (walletBtn) {
-                walletBtn.innerText = `Hi, ${account}`;
-            }
-            try {
-                const response = await fetch('/getPointsBalance', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-
-                if (!response.ok) {
-                    if (response.status === 401 || response.status === 403) {
-                        handleAuthError();
-                        return;
-                    }
-                    throw new Error(`HTTP 錯誤! 狀態碼: ${response.status}`);
+        async function initWeb3() {
+            if (window.ethereum) {
+                if (!provider) provider = new ethers.providers.Web3Provider(window.ethereum);
+                const accounts = await provider.send("eth_requestAccounts", []);
+                if (accounts.length > 0) {
+                    await setupWalletSession(accounts[0]);
+                    return true;
                 }
-
-                const data = await response.json();
-
-                if (data.success) {
-                    _balance = data.balance;
-                    const balanceElement = document.getElementById('balance');
-                    if (balanceElement) {
-                        balanceElement.textContent = typeof format_amt === 'function'
-                            ? format_amt(_balance)
-                            : _balance.toLocaleString();
-                    }
-                }
-            } catch (error) {
-                console.error("網路請求發生錯誤:", error);
+            } else {
+                alert("Please install MetaMask or use a Web3 supported browser.");
             }
+            return false;
         }
 
-        function handleAuthError() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('account');
-            window.location.href = `auth.html?lang=${systemLang}`;
-        }
-
-        async function getPointsContent() {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                if (pointscontent) pointscontent.innerText = '"Abundance comes from sharing" is more than just a slogan in the world of Link tokens.';
-                return;
-            }
-            try {
-                const response = await fetch('/api/my-deposit-wallet', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + token
-                    }
-                });
-
-                if (!response.ok) {
-                    const errorText = await response.json().catch(() => ({ message: 'Server Internal Error' }));
-                    pointscontent.innerHTML = `<p style="color:red; padding:20px;">Error: ${errorText.message}</p>`;
-                    return;
-                }
-
-                const data = await response.json();
-
-                if (data.address) {
-                    pointscontent.innerHTML = `
-                <div class="crypto-card" style="background: var(--panel); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 16px;">
-                    <p style="color: var(--muted); font-size: 13px; margin-bottom: 12px;">Current changerate: <span style="color:var(--text)">1 USDT : 100 Points</span></p>                    
-                    <p style="color: var(--text); font-weight: 600; margin-bottom: 8px;">USDT (BSC) Specified Wallet：</p>                    
-                    <div style="position: relative; display: flex; align-items: center; background: #000; padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08);">
-                        <code id="depoAddr" 
-                              style="filter:blur(5px); cursor:pointer; font-family: monospace; color: #00ffca; font-size: 14px; flex-grow: 1; word-break: break-all; transition: filter 0.3s;" 
-                              onclick="this.style.filter='none'">
-                              ${data.address}
-                        </code>
-                        <div style="position: relative; margin-left: 10px; display: flex; align-items: center;">
-                            <span class="material-symbols-outlined notranslate" 
-                                  style="font-size: 20px; color: var(--muted); cursor: pointer; transition: 0.2s;"
-                                  onmouseover="this.style.color='#fff'"
-                                  onmouseout="this.style.color='var(--muted)'"
-                                  onclick="copyDepoAddress('${data.address}')">
-                                  content_copy
-                            </span>
-                            <span id="depoCopyMsg" 
-                                  style="position: absolute; bottom: 130%; right: 0; background: #00ffca; color: #000; font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 4px; visibility: hidden; opacity: 0; transition: all 0.2s; white-space: nowrap;">
-                                  COPIED
-                            </span>
-                        </div>
-                    </div>
-                    <p style="font-size: 12px; color: #555; margin-top: 15px; line-height: 1.5;">
-                        <span style="color: #888;">💡 Instructions:</span><br>
-                        1. Click the green text to reveal the address.<br>
-                        2. Transfer USDT (BSC) to this address.<br>
-                        3. System will auto-activate within 1-3 minutes.
-                    </p>
-                </div>
-            `;
-                } else {
-                    pointscontent.innerHTML = `<p style="color:red; padding:20px;">Error: ${data.message || 'Failed to get address'}</p>`;
-                }
-            } catch (err) {
-                if (pointscontent) pointscontent.innerHTML = `<p style="color:red; padding:20px;">Network Error. Please try again.</p>`;
-            }
-        }
-
-        function copyDepoAddress(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                const msg = document.getElementById("depoCopyMsg");
-                const addr = document.getElementById("depoAddr");
-                if (addr) addr.style.filter = 'none';
-                if (msg) {
-                    msg.style.visibility = "visible";
-                    msg.style.opacity = "1";
-                    msg.style.bottom = "150%";
-                    setTimeout(() => {
-                        msg.style.opacity = "0";
-                        msg.style.bottom = "130%";
-                        setTimeout(() => {
-                            msg.style.visibility = "hidden";
-                        }, 200);
-                    }, 2000);
-                }
+        function copyContractAddress() {
+            navigator.clipboard.writeText(CONTRACT_ADDRESS).then(() => {
+                alert("Contract address copied to clipboard:\n" + CONTRACT_ADDRESS);
             });
         }
 
-        function format_amt(amt) {
-            const num = Number(amt);
-            return num.toLocaleString('en-US', {
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 2
-            });
-        }
+        async function executeSwapWithReferrer() {
+            const resDiv = document.getElementById("res_swap");
+            resDiv.style.display = "block";
+            resDiv.innerText = "Connecting wallet and calculating required BNB...";
 
-        function logout() {
-            localStorage.clear();
-            location.reload();
-        }
+            try {
+                if (!currentUserAddr) {
+                    const connected = await initWeb3();
+                    if (!connected) return;
+                }
 
-        let isHeaderMode = false;
-        function toggleHeaderMode() {
-            const btn = document.getElementById('btn-header-mode');
-            const textarea = document.getElementById('post-content');
-            if (btn && textarea) {
-                isHeaderMode = !isHeaderMode;
-                btn.classList.toggle('active', isHeaderMode);
+                const targetMTRX = ethers.utils.parseUnits("2500", 18);
+                const exchangeRate = await contract.EXCHANGE_RATE();
+                const requiredBNBWei = targetMTRX.mul(ethers.utils.parseUnits("1", 18)).div(exchangeRate);
+
+                resDiv.innerText = `Calculated price: ${ethers.utils.formatEther(requiredBNBWei)} BNB. Please confirm in wallet...`;
+
+                const tx = await contract.swapMatrixWithAddr(referrerAddress, {
+                    value: requiredBNBWei
+                });
+
+                resDiv.innerText = `Transaction submitted. Hash: ${tx.hash}`;
+                await tx.wait();
+                resDiv.innerText = "Success! You are now an activated MTRX Ambassador.";
+            } catch (err) {
+                console.error(err);
+                resDiv.innerText = `Error: ${err.reason || err.message || "Transaction failed."}`;
             }
+        }
+
+        function updateInvitationBox(userAddr = null) {
+            const inviteBox = document.getElementById("shareContent");
+            const currentUrl = window.location.origin + window.location.pathname;
+            const refLink = userAddr ? `${currentUrl}?ref=${userAddr}` : currentUrl;
+            
+            if (userAddr) {
+                inviteBox.innerText = `Matrix(${CONTRACT_ADDRESS}) invites you: Join as an official ambassador and earn up to 7.5% total supply rewards!\nJoin here: ${refLink}`;
+            } else {
+                inviteBox.innerText = `Matrix(${CONTRACT_ADDRESS}) invites you: Join as an official ambassador and earn up to 7.5% total supply rewards!\nJoin here: ${currentUrl}\n\n(Connect wallet to generate your personal referral link)`;
+            }
+        }
+
+        async function copyInvitation() {
+            if (!currentUserAddr) {
+                const connected = await initWeb3();
+                if (!connected) return;
+            }
+
+            const textToCopy = document.getElementById("shareContent").innerText;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const resCopy = document.getElementById("res_copy");
+                resCopy.style.display = "block";
+                resCopy.innerText = "Invitation text & link copied to clipboard successfully!";
+                setTimeout(() => {resCopy.style.display = "none";}, 3000);
+            });
         }
     </script>
 </body>
