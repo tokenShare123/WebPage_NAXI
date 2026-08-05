@@ -417,10 +417,6 @@
 
                 <div class="token-right">
                     <div class="metric-item">
-                        <span class="metric-label">Holders</span>
-                        <span class="metric-value" id="holderCount">Loading...</span>
-                    </div>
-                    <div class="metric-item">
                         <span class="metric-label">Total Supply</span>
                         <span class="metric-value" id="totalSupply">Loading...</span>
                     </div>
@@ -516,7 +512,7 @@
                 referrerAddress = refParam;
             }
 
-            // 1. 抓取 Total Supply (直接讀取鏈上記錄)
+            // 1. 抓取 Total Supply 與 Market Cap
             fetchTokenMetrics();
 
             // 2. 初始化與檢測用戶錢包
@@ -555,7 +551,7 @@
                 const numSupply = parseFloat(ethers.utils.formatUnits(supply, 18));
                 document.getElementById('totalSupply').innerText = numSupply.toLocaleString('en-US', { maximumFractionDigits: 0 });
 
-                // 嘗試從 DexScreener API 抓取價格計算 Market Cap
+                // 從 DexScreener API 抓取價格計算 Market Cap
                 fetch(`https://api.dexscreener.com/latest/dex/tokens/${CONTRACT_ADDRESS}`)
                     .then(res => res.json())
                     .then(data => {
@@ -571,24 +567,9 @@
                         document.getElementById('marketCap').innerText = "N/A";
                     });
 
-                // 嘗試從第三方開放 API 獲取 Holder 數據
-                fetch(`https://api.bscscan.com/api?module=token&action=tokenholderlist&contractaddress=${CONTRACT_ADDRESS}&page=1&offset=100&apikey=YourApiKeyToken`)
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.status === "1" && Array.isArray(data.result)) {
-                            document.getElementById('holderCount').innerText = data.result.length.toLocaleString('en-US');
-                        } else {
-                            document.getElementById('holderCount').innerText = "N/A";
-                        }
-                    })
-                    .catch(() => {
-                        document.getElementById('holderCount').innerText = "N/A";
-                    });
-
             } catch (err) {
                 console.error("Failed to load chain data:", err);
                 document.getElementById('totalSupply').innerText = "N/A";
-                document.getElementById('holderCount').innerText = "N/A";
                 document.getElementById('marketCap').innerText = "N/A";
             }
         }
