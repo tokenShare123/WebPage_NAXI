@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Become a MTRX Ambassador</title>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Ethers.js for Web3 interaction -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #0b0e14;
+            --card-bg: #151a23;
+            --accent: #00ffcc;
+            --accent-hover: #00cc88;
+            --text-main: #ffffff;
+            --text-sub: #94a3b8;
+            --border-color: #232d3f;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 650px;
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 35px 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            color: var(--accent);
+            line-height: 1.3;
+            margin-bottom: 12px;
+        }
+
+        .header p.subtitle {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #f59e0b;
+        }
+
+        .tokenomics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .info-card h4 {
+            color: var(--text-sub);
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .info-card p {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .steps-container {
+            border-top: 1px solid var(--border-color);
+            padding-top: 25px;
+        }
+
+        .steps-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .step-box {
+            background: rgba(0, 255, 204, 0.03);
+            border: 1px dashed var(--accent);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .btn-action {
+            width: 100%;
+            background: var(--accent);
+            color: #000;
+            border: none;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-action:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        .link-input-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .link-input-group input {
+            flex: 1;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .btn-copy {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-copy:hover {
+            background: #2563eb;
+        }
+
+        .footer-info {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-sub);
+            margin-top: 20px;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <h1>A brand new community consensus token MTRX wants YOU as an Ambassador. Interested?</h1>
+        <p class="subtitle"><i class="fa-solid fa-gift"></i> Ambassador Fee: Up to 7.5% of Total Supply</p>
+    </div>
+
+    <!-- Highlights -->
+    <div class="tokenomics-grid">
+        <div class="info-card">
+            <h4>Security & Trust</h4>
+            <p><i class="fa-solid fa-shield-halved" style="color: #10b981;"></i> No Ownership (Renounced)<br>90% Assets Locked in BNB</p>
+        </div>
+        <div class="info-card">
+            <h4>Ambassador Rewards</h4>
+            <p><i class="fa-solid fa-chart-pie" style="color: #3b82f6;"></i> 1.7% Direct Reward<br>+ 5.8% Matrix Rewards</p>
+        </div>
+        <div class="info-card" style="grid-column: 1 / -1;">
+            <h4>DEX Liquidity</h4>
+            <p><i class="fa-solid fa-water" style="color: #00ffcc;"></i> 2.5% Allocated for DEX Liquidity</p>
+        </div>
+    </div>
+
+    <!-- Steps -->
+    <div class="steps-container">
+        <h3 class="steps-title">Become an Ambassador in 2 Steps</h3>
+
+        <!-- Step 1 -->
+        <div class="step-box">
+            <div class="step-header">
+                <i class="fa-solid fa-circle-1"></i>
+                <span>Step 1: Swap for 2,500 MTRX</span>
+            </div>
+            <p style="font-size: 0.9rem; color: var(--text-sub);">Interact with the smart contract using BNB to get your initial 2,500 MTRX tokens and activate your referral position.</p>
+            <button class="btn-action" onclick="swapMatrix()">Swap Now via BNB</button>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-box">
+            <div class="step-header">
+                <i class="fa-solid fa-circle-2"></i>
+                <span>Step 2: Share Your Referral Link</span>
+            </div>
+            <p style="font-size: 0.9rem; color: var(--text-sub);">Copy your unique invitation link below and share it on social media, Telegram, or forums to earn commissions!</p>
+            
+            <div class="link-input-group">
+                <input type="text" id="refLink" readonly value="Connect Wallet to Generate Link...">
+                <button class="btn-copy" onclick="copyReferralLink()"><i class="fa-solid fa-copy"></i> Copy</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contract Info -->
+    <div class="footer-info">
+        <p>Smart Contract Address:</p>
+        <p style="color: var(--accent);">0x5897deF547bD83094f9eE6cb4e62B67008c5A5d2</p>
+    </div>
+</div>
+
+<script>
+    const contractAddress = "0x5897deF547bD83094f9eE6cb4e62B67008c5A5d2";
+    // 簡易 ABI 聲明
+    const contractABI = [
+        "function swapMatrixWithAddr(address _addr) public payable"
+    ];
+
+    let userAddress = null;
+
+    // 自動取得網址中的推薦人地址
+    function getReferrerAddress() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const ref = urlParams.get('ref');
+        // 如果沒有推薦人，預設使用合約地址本身或預設地址
+        return (ref && ethers.utils.isAddress(ref)) ? ref : contractAddress;
+    }
+
+    // 連接錢包並生成推薦連結
+    async function initWallet() {
+        if (window.ethereum) {
+            try {
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                const accounts = await provider.send("eth_requestAccounts", []);
+                userAddress = accounts[0];
+                
+                // 生成推薦連結
+                const baseUrl = window.location.origin + window.location.pathname;
+                const shareText = `Matrix(${contractAddress}) invites you to become an Ambassador! Join now: ${baseUrl}?ref=${userAddress}`;
+                document.getElementById("refLink").value = shareText;
+            } catch (error) {
+                console.error("Wallet connection failed:", error);
+            }
+        }
+    }
+
+    // 呼叫智能合約 swapMatrixWithAddr
+    async function swapMatrix() {
+        if (!window.ethereum) {
+            alert("Please install MetaMask or Web3 Wallet!");
+            return;
+        }
+
+        try {
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+            const contract = new ethers.Contract(contractAddress, contractABI, signer);
+
+            const referrer = getReferrerAddress();
+            
+            // 觸發交易 (請根據你的合約需求調整 value)
+            const tx = await contract.swapMatrixWithAddr(referrer, {
+                value: ethers.utils.parseEther("0.1") // 假設交換所需 0.1 BNB
+            });
+
+            alert("Transaction Submitted! Hash: " + tx.hash);
+            await tx.wait();
+            alert("Successfully swapped 2,500 MTRX!");
+
+            // 重新初始化以生成連結
+            initWallet();
+
+        } catch (error) {
+            console.error(error);
+            alert("Transaction failed: " + (error.reason || error.message));
+        }
+    }
+
+    function copyReferralLink() {
+        const copyText = document.getElementById("refLink");
+        if (!userAddress) {
+            alert("Please connect your wallet first by clicking Swap!");
+            return;
+        }
+        copyText.select();
+        copyText.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(copyText.value);
+        alert("Referral text & link copied to clipboard!");
+    }
+
+    // 頁面載入時自動嘗試連接
+    window.addEventListener('DOMContentLoaded', () => {
+        initWallet();
+    });
+</script>
+
+</body>
+</html>
