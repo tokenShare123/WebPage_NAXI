@@ -1,358 +1,471 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MTRAX (MTRX) Swap & Referral</title>
-    <!-- Ethers.js CDN (v5.7.2) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
-    <!-- Font Awesome 圖標庫 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MTRX Protocol | Become an Official Ambassador</title>
     
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Become an official ambassador for MTRX, the consensus-driven Web3 token protocol. Earn up to 7.5% of total supply via direct and matrix incentives." />
+    <meta name="keywords" content="MTRX, Web3, DeFi, BSC, BNB Chain, Token Ambassador, Decentralized Matrix, Crypto Earnings" />
+
+    <!-- Open Graph / Social Media Meta -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://tokenshare123.github.io/WebPage_MTRX/" />
+    <meta property="og:title" content="Become an Official MTRX Protocol Ambassador" />
+    <meta property="og:description" content="Zero owner privilege, 90% vault backed by BNB. Earn up to 7.5% total supply rewards in 2 simple steps." />
+    <meta property="og:image" content="https://raw.githubusercontent.com/tokenShare123/WebPage_MTRX/main/IMG_3740.jpg" />
+
+    <!-- Favicon & Styles -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --accent: #38bdf8;
-            --accent-hover: #0284c7;
-            --text: #f8fafc;
-            --text-muted: #94a3b8;
-            --border: #334155;
+            --bg: #060608;
+            --panel: #0e1013;
+            --panel-2: #14171a;
+            --panel-3: #1c2128;
+            --muted: #8b949e;
+            --text: #F0F6FC;
+            --accent: #6f5af8;
+            --accent-hover: #5a45d0;
+            --accent-glow: rgba(111, 90, 248, 0.35);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --card-border-hover: rgba(111, 90, 248, 0.4);
+            --success: #00ea91;
+            --gold: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-color);
+            background-color: var(--bg);
             color: var(--text);
+            padding: 24px 12px;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            margin: 0;
-            padding: 20px;
         }
 
         .container {
-            background-color: var(--card-bg);
-            border-radius: 16px;
-            padding: 24px;
             width: 100%;
-            max-width: 480px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--border);
+            max-width: 500px;
         }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
+        /* Top Hero Section */
+        .hero-header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding: 20px 10px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
             align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .title {
-            font-size: 1.25rem;
-            font-weight: bold;
-        }
-
-        .connect-btn {
-            background-color: var(--accent);
-            color: #000;
-            border: none;
-            padding: 8px 16px;
+            gap: 6px;
+            background: rgba(111, 90, 248, 0.15);
+            border: 1px solid var(--accent);
+            color: #a78bfa;
+            padding: 6px 14px;
             border-radius: 20px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .connect-btn:hover {
-            background-color: var(--accent-hover);
-            color: #fff;
+        .hero-title {
+            font-size: 24px;
+            font-weight: 800;
+            line-height: 1.3;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .info-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 12px 16px;
+        .hero-subtitle {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* Brand & Wallet Header */
+        .wallet-header-card {
+            background: var(--panel);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 20px;
             margin-bottom: 20px;
-            font-size: 0.9rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
         }
 
-        .info-row {
+        .token-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 6px;
-        }
-
-        .info-row:last-child {
-            margin-bottom: 0;
-        }
-
-        .input-group {
-            background-color: rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 12px;
-            margin-bottom: 16px;
-        }
-
-        .input-label {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-bottom: 6px;
-        }
-
-        .input-row {
-            display: flex;
             align-items: center;
         }
 
-        input[type="number"], input[type="text"] {
-            background: transparent;
-            border: none;
+        .token-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .token-icon {
+            width: 44px;
+            height: 44px;
+            filter: drop-shadow(0px 2px 8px rgba(111, 90, 248, 0.4));
+        }
+
+        .token-name-wrap {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .token-right {
+            text-align: right;
+        }
+
+        .token-balance {
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        /* Feature Cards Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card {
+            background: var(--panel);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 16px;
+            transition: border-color 0.2s;
+        }
+
+        .feature-card.full-width {
+            grid-column: span 2;
+        }
+
+        .feature-card:hover {
+            border-color: var(--card-border-hover);
+        }
+
+        .feature-icon {
+            font-size: 20px;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .feature-title {
+            font-size: 13px;
+            font-weight: 700;
             color: var(--text);
-            font-size: 1.2rem;
-            width: 100%;
-            outline: none;
+            margin-bottom: 4px;
+        }
+
+        .feature-desc {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.4;
+        }
+
+        /* Step Execution Card */
+        .step-card {
+            background: var(--panel);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .step-badge {
+            background: var(--accent);
+            color: white;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .step-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 12px;
         }
 
         .action-btn {
             width: 100%;
-            background-color: var(--accent);
-            color: #000;
+            background: var(--accent);
+            color: white;
             border: none;
-            padding: 14px;
             border-radius: 12px;
-            font-size: 1rem;
-            font-weight: bold;
+            padding: 14px;
+            font-weight: 700;
+            font-size: 14px;
             cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 10px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 14px var(--accent-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .action-btn:hover {
-            background-color: var(--accent-hover);
-            color: #fff;
+            background: var(--accent-hover);
+            transform: translateY(-1px);
         }
 
-        .status-box {
-            margin-top: 16px;
-            font-size: 0.85rem;
-            color: var(--accent);
+        .share-box {
+            background: var(--panel-2);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
             word-break: break-all;
+            font-family: monospace;
+            font-size: 12px;
+            color: var(--muted);
         }
 
-        .icon-btn {
-            cursor: pointer;
-            margin-left: 8px;
-            color: var(--accent);
+        .result-msg {
+            font-size: 12px;
+            margin-top: 10px;
+            display: none;
+            padding: 10px;
+            background: var(--panel-2);
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            line-height: 1.4;
         }
-        
-        .icon-btn:hover {
-            opacity: 0.8;
+
+        footer {
+            text-align: center;
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 20px;
+            padding: 10px;
         }
     </style>
 </head>
+
 <body>
 
-<div class="container">
-    <div class="header">
-        <div class="title">MTRAX Swap</div>
-        <button id="connectBtn" class="connect-btn" onclick="initWallet()">連接錢包</button>
+    <div class="container">
+
+        <!-- Header Call To Action -->
+        <div class="hero-header">
+            <div class="hero-badge">
+                <i class="fa-solid fa-fire"></i> Ambassador Recruitment
+            </div>
+            <h1 class="hero-title">
+                A Brand-New Community Consensus Token MTRX Wants You as an Ambassador. Interested?
+            </h1>
+            <div class="hero-subtitle">
+                <i class="fa-solid fa-trophy"></i> Ambassador Fee: Up to 7.5% of Total Supply
+            </div>
+        </div>
+
+        <!-- Token Header Status -->
+        <div class="wallet-header-card">
+            <div class="token-row">
+                <div class="token-left">
+                    <div class="token-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+                            <defs>
+                                <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#6f5af8" />
+                                    <stop offset="100%" stop-color="#3b82f6" />
+                                </linearGradient>
+                            </defs>
+                            <circle cx="50" cy="50" r="46" fill="url(#bgGrad)" />
+                            <circle cx="50" cy="50" r="41" fill="none" stroke="#FFFFFF" stroke-opacity="0.3" stroke-width="2" stroke-dasharray="6 3" />
+                            <path d="M 33,67 V 33 L 42,33 L 58,55 V 33 H 67 V 67 L 58,67 L 42,45 V 67 Z" fill="#FFFFFF" />
+                        </svg>
+                    </div>
+                    <div class="token-name-wrap">
+                        <span>MTRX Token</span>
+                    </div>
+                </div>
+                <div class="token-right">
+                    <div class="token-balance" id="mtrxBalance">0.00</div>
+                    <div style="font-size: 11px; color: var(--muted);">Your Balance</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Highlights & Value Proposition Grid -->
+        <div class="features-grid">
+            <div class="feature-card full-width">
+                <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="feature-title">1. No Owner Privileges & Vault Backed</div>
+                <div class="feature-desc">100% decentralized architecture with zero administrative ownership. 90% of core assets are safely locked as BNB in the smart contract vault.</div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-sack-dollar" style="color: var(--gold);"></i></div>
+                <div class="feature-title">2. Incentive Rewards</div>
+                <div class="feature-desc">1.7% Direct Rewards + 5.8% Dynamic Matrix Rewards allocated directly to active ambassadors.</div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-water"></i></div>
+                <div class="feature-title">3. DEX Liquidity</div>
+                <div class="feature-desc">2.5% strictly reserved for decentralized exchange (DEX) liquidity stability.</div>
+            </div>
+        </div>
+
+        <!-- Step 1 Execution -->
+        <div class="step-card">
+            <span class="step-badge">Step 01</span>
+            <div class="step-title">Swap BNB for 2,500 MTRX</div>
+            <p style="font-size: 12px; color: var(--muted); margin-bottom: 16px;">
+                Interact directly with the issuance smart contract to acquire 2,500 MTRX and activate your ambassador referral rights.
+            </p>
+            <button class="action-btn" onclick="executeSwapWithReferrer()">
+                <i class="fa-solid fa-bolt"></i> Activate & Mint MTRX
+            </button>
+            <div id="res_swap" class="result-msg"></div>
+        </div>
+
+        <!-- Step 2 Execution -->
+        <div class="step-card">
+            <span class="step-badge">Step 02</span>
+            <div class="step-title">Share Your Exclusive Ambassador Link</div>
+            <p style="font-size: 12px; color: var(--muted); margin-bottom: 12px;">
+                Copy the invitation text below and share it across your social media channels or forums to build your matrix network.
+            </p>
+            <div class="share-box" id="shareContent">
+Matrix(0x5897deF547bD83094f9eE6cb4e62B67008c5A5d2) invites you to join the ambassador program!
+            </div>
+            <button class="action-btn" style="background: var(--panel-3); border: 1px solid var(--card-border);" onclick="copyInvitation()">
+                <i class="fa-solid fa-copy"></i> Copy Invitation Text
+            </button>
+            <div id="res_copy" class="result-msg"></div>
+        </div>
+
+        <footer>
+            MTRX Protocol &copy; 2026. Fully Decentralized Consensus Ecosystem.
+        </footer>
+
     </div>
 
-    <!-- 合約地址設定 (隱藏或預設) -->
-    <input type="hidden" id="contractAddress" value="0xYourContractAddressHere">
+    <!-- Web3 Interaction Logic -->
+    <script>
+        const CONTRACT_ADDRESS = "0x5897deF547bD83094f9eE6cb4e62B67008c5A5d2";
+        const CONTRACT_ABI = [
+            "function swapMatrixWithAddr(address _addr) payable",
+            "function balanceOf(address account) view returns (uint256)"
+        ];
 
-    <!-- 錢包與推薦資訊卡片 -->
-    <div class="info-card">
-        <div class="info-row">
-            <span>目前錢包：</span>
-            <span id="userAddress">未連接</span>
-        </div>
-        <div class="info-row">
-            <span>推薦人 (Parent)：</span>
-            <span id="parentAddressDisplay">無</span>
-        </div>
-        <div class="info-row">
-            <span>我的推廣連結：</span>
-            <span>
-                <i class="fa-solid fa-share-nodes icon-btn" onclick="copyReferralLink()" title="複製推廣連結"></i> 點擊複製
-            </span>
-        </div>
-    </div>
+        let provider, signer, contract;
+        let referrerAddress = "0x0000000000000000000000000000000000000000";
 
-    <!-- Swap 介面 -->
-    <div class="input-group">
-        <div class="input-label">預計兌換的 MTRX 數量</div>
-        <div class="input-row">
-            <input type="number" id="mtrxAmountInput" placeholder="0.0" oninput="onAmountChange()">
-            <span style="font-weight: bold; margin-left: 8px;">MTRX</span>
-        </div>
-    </div>
+        // Parse referral query parameter from URL (e.g., ?ref=0x...)
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const refParam = urlParams.get('ref');
+            if (refParam && ethers.utils.isAddress(refParam)) {
+                referrerAddress = refParam;
+            }
+            updateInvitationBox();
+        });
 
-    <div class="input-group">
-        <div class="input-label">預估需支付的 BNB 數量 (依 EXCHANGE_RATE 自動計算)</div>
-        <div class="input-row">
-            <input type="text" id="bnbAmountInput" placeholder="0.0" readonly>
-            <span style="font-weight: bold; margin-left: 8px;">BNB</span>
-        </div>
-    </div>
-
-    <button class="action-btn" id="swapActionBtn" onclick="handleSwap()">
-        <span id="swapBtnText"><i class="fa-solid fa-bolt"></i> 立即兌換</span>
-    </button>
-
-    <div class="status-box" id="res_transitSwap"></div>
-</div>
-
-<script>
-    // 預設配置
-    const contractAddressDefault = "0xYourContractAddressHere"; // 請更換為你的 MTRAX 合約地址
-    
-    // 合約最小化 ABI (包含 swapMatrixWithAddr 與 EXCHANGE_RATE)
-    const fullAbi = [
-        "function EXCHANGE_RATE() view returns (uint256)",
-        "function swapMatrixWithAddr(address parent) payable",
-        "function swapBNB(uint256 matrixAmount)"
-    ];
-
-    // 全局變數
-    let provider = null;
-    let signer = null;
-    let connectedAddress = null;
-    let parentAddress = "0x0000000000000000000000000000000000000000"; // 預設零地址
-
-    // 頁面加載時自動執行
-    window.addEventListener('DOMContentLoaded', () => {
-        // 1. 解析 URL 中的 parent 參數
-        const urlParams = new URLSearchParams(window.location.search);
-        const parentParam = urlParams.get('parent');
-        
-        if (parentParam && ethers.utils.isAddress(parentParam)) {
-            parentAddress = parentParam;
-            document.getElementById('parentAddressDisplay').innerText = 
-                `${parentParam.substring(0, 6)}...${parentParam.substring(parentParam.length - 4)}`;
-        }
-        
-        // 2. 檢測 MetaMask 狀態
-        if (window.ethereum) {
-            provider = new ethers.providers.Web3Provider(window.ethereum);
-        }
-    });
-
-    // 初始化與連接錢包
-    async function initWallet() {
-        if (!window.ethereum) {
-            alert("請安裝 MetaMask 或其他 Web3 錢包");
-            return;
+        async function initWeb3() {
+            if (window.ethereum) {
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send("eth_requestAccounts", []);
+                signer = provider.getSigner();
+                contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+                
+                const userAddr = await signer.getAddress();
+                updateInvitationBox(userAddr);
+                fetchBalance(userAddr);
+            } else {
+                alert("Please install MetaMask or use a Web3 supported browser.");
+            }
         }
 
-        try {
-            await provider.send("eth_requestAccounts", []);
-            signer = provider.getSigner();
-            connectedAddress = await signer.getAddress();
-            
-            // 更新 UI
-            document.getElementById('connectBtn').innerText = 
-                `${connectedAddress.substring(0, 6)}...${connectedAddress.substring(connectedAddress.length - 4)}`;
-            document.getElementById('userAddress').innerText = 
-                `${connectedAddress.substring(0, 6)}...${connectedAddress.substring(connectedAddress.length - 4)}`;
-        } catch (err) {
-            console.error("連接錢包失敗:", err);
-            showResult('res_transitSwap', "連接錢包失敗: " + err.message);
-        }
-    }
-
-    // 當使用者輸入預期 MTRX 數量時，自動計算需要的 BNB
-    async function onAmountChange() {
-        const mtrxInput = document.getElementById('mtrxAmountInput').value;
-        const bnbInput = document.getElementById('bnbAmountInput');
-        
-        if (!mtrxInput || parseFloat(mtrxInput) <= 0) {
-            bnbInput.value = "";
-            return;
+        async function fetchBalance(userAddr) {
+            try {
+                if (!contract) return;
+                const bal = await contract.balanceOf(userAddr);
+                document.getElementById('mtrxBalance').innerText = parseFloat(ethers.utils.formatUnits(bal, 18)).toFixed(2);
+            } catch (err) {
+                console.error("Error fetching balance:", err);
+            }
         }
 
-        try {
-            if (!provider) provider = new ethers.providers.Web3Provider(window.ethereum);
-            
-            const contractAddr = document.getElementById('contractAddress').value || contractAddressDefault;
-            const contract = new ethers.Contract(contractAddr, fullAbi, provider);
-            
-            // 讀取合約 EXCHANGE_RATE
-            const exchangeRate = await contract.EXCHANGE_RATE(); 
-            
-            // 計算：BNB(Wei) = MTRX(Wei) / EXCHANGE_RATE
-            const mtrxWei = ethers.utils.parseEther(mtrxInput.toString());
-            const bnbWei = mtrxWei.div(exchangeRate);
-            
-            bnbInput.value = ethers.utils.formatEther(bnbWei);
-        } catch (err) {
-            console.error("計算匯率失敗:", err);
-            bnbInput.value = "計算錯誤";
-        }
-    }
+        async function executeSwapWithReferrer() {
+            const resDiv = document.getElementById("res_swap");
+            resDiv.style.display = "block";
+            resDiv.innerText = "Connecting wallet and preparing transaction...";
 
-    // 執行 Swap 兌換
-    async function handleSwap() {
-        const mtrxAmount = document.getElementById('mtrxAmountInput').value;
-        
-        if (!mtrxAmount || parseFloat(mtrxAmount) <= 0) {
-            alert("請輸入有效的 MTRX 兌換數量");
-            return;
+            try {
+                if (!contract) await initWeb3();
+                
+                // Call swapMatrixWithAddr(address _addr) function from smart contract
+                const tx = await contract.swapMatrixWithAddr(referrerAddress, {
+                    value: ethers.utils.parseEther("0.1") // Adjust required BNB value according to protocol rate
+                });
+
+                resDiv.innerText = `Transaction submitted. Hash: ${tx.hash}`;
+                await tx.wait();
+                resDiv.innerText = "Success! You are now an activated MTRX Ambassador.";
+                
+                const userAddr = await signer.getAddress();
+                fetchBalance(userAddr);
+            } catch (err) {
+                console.error(err);
+                resDiv.innerText = `Error: ${err.reason || err.message || "Transaction failed."}`;
+            }
         }
 
-        try {
-            if (!signer) await initWallet();
-
-            showResult('res_transitSwap', "正在讀取匯率與準備交易...");
-
-            const contractAddr = document.getElementById('contractAddress').value || contractAddressDefault;
-            const contract = new ethers.Contract(contractAddr, fullAbi, signer);
-
-            // 1. 取得最新匯率並計算應發送的 BNB (Wei)
-            const exchangeRate = await contract.EXCHANGE_RATE(); 
-            const mtrxWei = ethers.utils.parseEther(mtrxAmount.toString());
-            const bnbWei = mtrxWei.div(exchangeRate);
-
-            showResult('res_transitSwap', "請在錢包中確認交易...");
-
-            // 2. 呼叫 swapMatrixWithAddr 並帶入 parent 與 BNB value
-            const tx = await contract.swapMatrixWithAddr(parentAddress, { value: bnbWei });
-            
-            showResult('res_transitSwap', `交易已送出，等待區塊打包... Hash: ${tx.hash}`);
-            await tx.wait();
-            showResult('res_transitSwap', `兌換成功！交易 Hash: ${tx.hash}`);
-        } catch (err) {
-            console.error("Swap 執行失敗:", err);
-            showResult('res_transitSwap', `兌換失敗: ${err.reason || err.message}`);
+        function updateInvitationBox(userAddr = null) {
+            const inviteBox = document.getElementById("shareContent");
+            const currentUrl = window.location.origin + window.location.pathname;
+            const refLink = userAddr ? `${currentUrl}?ref=${userAddr}` : currentUrl;
+            inviteBox.innerText = `Matrix(${CONTRACT_ADDRESS}) invites you: Join as an official ambassador and earn up to 7.5% total supply rewards!\nJoin here: ${refLink}`;
         }
-    }
 
-    // 複製帶有當前錢包地址的推薦連結
-    async function copyReferralLink() {
-        if (!connectedAddress) {
-            alert("請先連接錢包以取得您的專屬推薦連結！");
-            return;
+        function copyInvitation() {
+            const textToCopy = document.getElementById("shareContent").innerText;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const resCopy = document.getElementById("res_copy");
+                resCopy.style.display = "block";
+                resCopy.innerText = "Invitation text & link copied to clipboard successfully!";
+                setTimeout(() => { resCopy.style.display = "none"; }, 3000);
+            });
         }
-        
-        const baseUrl = window.location.origin + window.location.pathname;
-        const referralUrl = `${baseUrl}?parent=${connectedAddress}`;
-        
-        try {
-            await navigator.clipboard.writeText(referralUrl);
-            alert(`推廣連結已複製到剪貼簿：\n${referralUrl}`);
-        } catch (err) {
-            console.error("複製失敗:", err);
-            alert(`複製失敗，請手動複製以下連結：\n${referralUrl}`);
-        }
-    }
-
-    // 顯示訊息輔助函式
-    function showResult(elementId, message) {
-        document.getElementById(elementId).innerText = message;
-    }
-</script>
+    </script>
 </body>
+
 </html>
