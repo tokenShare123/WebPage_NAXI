@@ -28,58 +28,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
 
-    <!-- 參考 main.html 載入 Google 翻譯 JS API -->
-    <script type="text/javascript">
-        const systemLang = navigator.language || navigator.userLanguage;
-        function googleTranslateElementInit() {
-            const targetId = 'google_translate_element';
-            if (!document.getElementById(targetId)) {
-                setTimeout(googleTranslateElementInit, 200);
-                return;
-            }
-
-            const urlParams = new URLSearchParams(window.location.search);
-            const langParam = urlParams.get('lang');
-
-            let targetLang = langParam || systemLang;
-
-            let googleLangCode = '/en/en';
-            if (targetLang.toLowerCase().includes('zh-tw')) googleLangCode = '/en/zh-TW';
-            else if (targetLang.toLowerCase().includes('zh-cn')) googleLangCode = '/en/zh-CN';
-            else if (targetLang.startsWith('ja')) googleLangCode = '/en/ja';
-            else if (targetLang.startsWith('ko')) googleLangCode = '/en/ko';
-            else if (targetLang.length >= 2 && !targetLang.startsWith('en')) {
-                googleLangCode = '/en/' + targetLang.split('-')[0];
-            }
-
-            if (googleLangCode !== '/en/en') {
-                document.cookie = "googtrans=" + googleLangCode + "; path=/; SameSite=Lax";
-                document.documentElement.lang = targetLang;
-            }
-
-            new google.translate.TranslateElement({
-                pageLanguage: 'en',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-                autoDisplay: true
-            }, targetId);
-
-            const checkExist = setInterval(() => {
-                const selectEl = document.querySelector('.goog-te-combo');
-                if (selectEl) {
-                    const finalValue = googleLangCode.split('/').pop();
-                    if (selectEl.value !== finalValue) {
-                        selectEl.value = finalValue;
-                        selectEl.dispatchEvent(new Event('change'));
-                    }
-                    clearInterval(checkExist);
-                }
-            }, 500);
-            setTimeout(() => clearInterval(checkExist), 8000);
-        }
-    </script>
-    <script type="text/javascript"
-        src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
     <style>
         :root {
             --bg: #0B0F19;
@@ -96,7 +44,6 @@
             --card-border-hover: rgba(99, 102, 241, 0.5);
             --success: #10B981;
             --gold: #F59E0B;
-            --glass: rgba(255, 255, 255, 0.02);
         }
 
         * {
@@ -106,21 +53,16 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
-        /* --- 參考 main.html 的隱藏與毛玻璃風格化樣式 --- */
-
-        /* 1. 隱藏 Google 官方頂部橫幅、標誌、提示 */
+        /* 徹底隱藏 Google 翻譯產生的頂部橫條、圖示與選擇器 */
         .goog-te-banner-frame.skiptranslate,
-        .goog-te-gadget span,
-        .goog-logo-link,
-        .goog-tooltip,
-        .goog-tooltip:hover {
+        .goog-te-gadget-icon,
+        .goog-te-gadget-simple img,
+        .goog-te-spinner-pos,
+        #google_translate_element {
             display: none !important;
         }
 
-        /* 防止 Google 翻譯在網頁頂部留白 */
         body {
-            top: 0 !important;
-            position: static !important;
             background-color: var(--bg);
             background-image: 
                 radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.15) 0px, transparent 50%),
@@ -132,38 +74,7 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-        }
-
-        /* 隱藏翻譯後的文字高亮效果 */
-        .goog-text-highlight {
-            background-color: transparent !important;
-            box-shadow: none !important;
-        }
-
-        /* 下拉選單毛玻璃樣式 */
-        .goog-te-gadget .goog-te-combo {
-            background: var(--glass) !important;
-            color: #fff !important;
-            border: 1px solid var(--card-border) !important;
-            border-radius: 10px !important;
-            padding: 6px 12px !important;
-            outline: none !important;
-            font-family: 'Inter', sans-serif !important;
-            font-size: 13px !important;
-            cursor: pointer !important;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-
-        .goog-te-combo option {
-            background-color: #1a1a1a !important;
-            color: #fff !important;
-        }
-
-        .goog-te-gadget {
-            color: transparent !important;
-            font-size: 0 !important;
+            top: 0px !important; /* 避免 Google 翻譯強制壓低頂部 body */
         }
 
         .container {
@@ -473,24 +384,14 @@
             margin-top: 20px;
             padding: 10px;
         }
-
-        /* 語言選擇器排版置中 */
-        .translate-wrapper {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 15px;
-        }
     </style>
 </head>
 
 <body>
 
-    <div class="container">
+    
 
-        <!-- 放置 Google 翻譯選單容器 -->
-        <div class="translate-wrapper">
-            <div id="google_translate_element"></div>
-        </div>
+    <div class="container">
 
         <!-- Header Call To Action -->
         <div class="hero-header">
@@ -597,9 +498,62 @@
 
         <footer>
             MTRX Protocol &copy; 2026. Fully Decentralized Consensus Ecosystem.
+            <div id="google_translate_element" style="border-radius: 50%; overflow: hidden;"></div>
         </footer>
 
     </div>
+
+    <!-- 抓取手機/瀏覽器系統語系並強制動態觸發 Google 即時翻譯 -->
+    <script type="text/javascript">
+        function getSubscriberLanguage() {
+            const rawLang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+            
+            // 轉換為 Google Translate 相容的語系標籤
+            if (rawLang.startsWith('zh-tw') || rawLang.startsWith('zh-hk')) return 'zh-TW';
+            if (rawLang.startsWith('zh')) return 'zh-CN';
+            
+            return rawLang.split('-')[0];
+        }
+
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                autoDisplay: false
+            }, 'google_translate_element');
+
+            const targetLang = getSubscriberLanguage();
+
+            if (targetLang === 'en') return;
+
+            // 寫入 Google 翻譯 Cookie
+            document.cookie = `googtrans=/en/${targetLang}; path=/`;
+            if (location.hostname !== 'localhost') {
+                document.cookie = `googtrans=/en/${targetLang}; domain=.${location.hostname.replace(/^www\./, '')}; path=/`;
+            }
+
+            // 動態監控並觸發下拉選單進行翻譯
+            triggerGoogleTranslate(targetLang);
+        }
+
+        function triggerGoogleTranslate(targetLang) {
+            let attempts = 0;
+            const interval = setInterval(() => {
+                attempts++;
+                const selectCombo = document.querySelector('.goog-te-combo');
+                
+                if (selectCombo) {
+                    selectCombo.value = targetLang;
+                    selectCombo.dispatchEvent(new Event('change'));
+                    clearInterval(interval);
+                }
+                
+                if (attempts > 20) {
+                    clearInterval(interval);
+                }
+            }, 500);
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <!-- Web3 Interaction Logic -->
     <script>
@@ -616,17 +570,21 @@
         let referrerAddress = "0x0000000000000000000000000000000000000000";
 
         window.addEventListener('DOMContentLoaded', async () => {
+            // 解析 URL 中的推薦人參數
             const urlParams = new URLSearchParams(window.location.search);
             const refParam = urlParams.get('ref');
             if (refParam && ethers.utils.isAddress(refParam)) {
                 referrerAddress = refParam;
             }
 
+            // 1. 抓取 Total Supply 與 Market Cap
             fetchTokenMetrics();
 
+            // 2. 初始化與檢測用戶錢包
             if (window.ethereum) {
                 provider = new ethers.providers.Web3Provider(window.ethereum);
 
+                // 檢查是否已經授權連結錢包
                 const accounts = await provider.listAccounts();
                 if (accounts.length > 0) {
                     await setupWalletSession(accounts[0]);
@@ -634,6 +592,7 @@
                     updateInvitationBox(null);
                 }
 
+                // 監聽錢包帳號切換
                 window.ethereum.on('accountsChanged', async (accounts) => {
                     if (accounts.length > 0) {
                         await setupWalletSession(accounts[0]);
@@ -652,10 +611,12 @@
                 const readProvider = new ethers.providers.JsonRpcProvider("https://bsc-dataseed.binance.org/");
                 const readContract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, readProvider);
                 
+                // 讀取 Total Supply
                 const supply = await readContract.totalSupply();
                 const numSupply = parseFloat(ethers.utils.formatUnits(supply, 18));
                 document.getElementById('totalSupply').innerText = numSupply.toLocaleString('en-US', { maximumFractionDigits: 0 });
 
+                // 從 DexScreener API 抓取價格計算 Market Cap
                 fetch(`https://api.dexscreener.com/latest/dex/tokens/${CONTRACT_ADDRESS}`)
                     .then(res => res.json())
                     .then(data => {
