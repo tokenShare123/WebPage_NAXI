@@ -130,13 +130,13 @@
         .token-row {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
             gap: 12px;
         }
 
         .token-left {
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             gap: 12px;
         }
 
@@ -205,7 +205,7 @@
             font-size: 11px;
             color: #A5B4FC;
             text-decoration: none;
-            margin-top: 4px;
+            margin-top: 2px;
             transition: color 0.2s;
         }
 
@@ -218,7 +218,7 @@
             text-align: right;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 8px;
         }
 
         .metric-item {
@@ -418,19 +418,15 @@
                 <div class="token-right">
                     <div class="metric-item">
                         <span class="metric-label">Holders</span>
-                        <span class="metric-value" id="holderCount">--</span>
+                        <span class="metric-value" id="holderCount">Loading...</span>
                     </div>
                     <div class="metric-item">
                         <span class="metric-label">Total Supply</span>
-                        <span class="metric-value" id="totalSupply">--</span>
+                        <span class="metric-value" id="totalSupply">Loading...</span>
                     </div>
                     <div class="metric-item">
                         <span class="metric-label">Market Cap</span>
-                        <span class="metric-value" id="marketCap">--</span>
-                    </div>
-                    <div class="metric-item" style="margin-top: 2px;">
-                        <span class="metric-label">Your Balance</span>
-                        <span class="metric-value" id="mtrxBalance" style="color: #818CF8;">0.00</span>
+                        <span class="metric-value" id="marketCap">Loading...</span>
                     </div>
                 </div>
             </div>
@@ -520,23 +516,10 @@
                 referrerAddress = refParam;
             }
 
-            // 使用預設公共 RPC 載入合約基礎數據（即使未連結錢包也能顯示 totalSupply 等）
-            try {
-                const readProvider = new ethers.providers.JsonRpcProvider("https://bsc-dataseed.binance.org/");
-                const readContract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, readProvider);
-                
-                const supply = await readContract.totalSupply();
-                const formattedSupply = parseFloat(ethers.utils.formatUnits(supply, 18)).toLocaleString('en-US', { maximumFractionDigits: 0 });
-                document.getElementById('totalSupply').innerText = formattedSupply;
-                
-                // 示範/占位資料（Holders 與 Market Cap 通常需透過 API 如 BscScan 或 DexScreener 抓取）
-                document.getElementById('holderCount').innerText = "--"; 
-                document.getElementById('marketCap').innerText = "--";
-            } catch (err) {
-                console.error("Failed to load chain data:", err);
-            }
+            // 1. 抓取 Total Supply (直接讀取鏈上記錄)
+            fetchTokenMetrics();
 
-            // 初始化與檢測用戶錢包
+            // 2. 初始化與檢測用戶錢包
             if (window.ethereum) {
                 provider = new ethers.providers.Web3Provider(window.ethereum);
 
@@ -554,7 +537,6 @@
                         await setupWalletSession(accounts[0]);
                     } else {
                         currentUserAddr = null;
-                        document.getElementById('mtrxBalance').innerText = "0.00";
                         updateInvitationBox(null);
                     }
                 });
@@ -563,13 +545,59 @@
             }
         });
 
+        async function fetchTokenMetrics() {
+            try {
+                const readProvider = new ethers.providers.JsonRpcProvider("https://bsc-dataseed.binance.org/");
+                const readContract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, readProvider);
+                
+                // 讀取 Total Supply
+                const supply = await readContract.totalSupply();
+                const numSupply = parseFloat(ethers.utils.formatUnits(supply, 18));
+                document.getElementById('totalSupply').innerText = numSupply.toLocaleString('en-US', { maximumFractionDigits: 0 });
+
+                // 嘗試從 DexScreener API 抓取價格計算 Market Cap
+                fetch(`https://api.dexscreener.com/latest/dex/tokens/${CONTRACT_ADDRESS}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.pairs && data.pairs.length > 0) {
+                            const price = parseFloat(data.pairs[0].priceUsd || 0);
+                            const mcap = Math.round(numSupply * price);
+                            document.getElementById('marketCap').innerText = `$${mcap.toLocaleString('en-US')}`;
+                        } else {
+                            document.getElementById('marketCap').innerText = "N/A";
+                        }
+                    })
+                    .catch(() => {
+                        document.getElementById('marketCap').innerText = "N/A";
+                    });
+
+                // 嘗試從第三方開放 API 獲取 Holder 數據
+                fetch(`https://api.bscscan.com/api?module=token&action=tokenholderlist&contractaddress=${CONTRACT_ADDRESS}&page=1&offset=100&apikey=YourApiKeyToken`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status === "1" && Array.isArray(data.result)) {
+                            document.getElementById('holderCount').innerText = data.result.length.toLocaleString('en-US');
+                        } else {
+                            document.getElementById('holderCount').innerText = "N/A";
+                        }
+                    })
+                    .catch(() => {
+                        document.getElementById('holderCount').innerText = "N/A";
+                    });
+
+            } catch (err) {
+                console.error("Failed to load chain data:", err);
+                document.getElementById('totalSupply').innerText = "N/A";
+                document.getElementById('holderCount').innerText = "N/A";
+                document.getElementById('marketCap').innerText = "N/A";
+            }
+        }
+
         async function setupWalletSession(userAddress) {
             signer = provider.getSigner();
             contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
             currentUserAddr = userAddress;
-            
             updateInvitationBox(currentUserAddr);
-            fetchBalance(currentUserAddr);
         }
 
         async function initWeb3() {
@@ -584,16 +612,6 @@
                 alert("Please install MetaMask or use a Web3 supported browser.");
             }
             return false;
-        }
-
-        async function fetchBalance(userAddr) {
-            try {
-                if (!contract) return;
-                const bal = await contract.balanceOf(userAddr);
-                document.getElementById('mtrxBalance').innerText = parseFloat(ethers.utils.formatUnits(bal, 18)).toFixed(2);
-            } catch (err) {
-                console.error("Error fetching balance:", err);
-            }
         }
 
         function copyContractAddress() {
@@ -613,18 +631,12 @@
                     if (!connected) return;
                 }
 
-                // Target: 2,500 MTRX
                 const targetMTRX = ethers.utils.parseUnits("2500", 18);
-
-                // Fetch EXCHANGE_RATE
                 const exchangeRate = await contract.EXCHANGE_RATE();
-
-                // Calculate required BNB (Wei)
                 const requiredBNBWei = targetMTRX.mul(ethers.utils.parseUnits("1", 18)).div(exchangeRate);
 
                 resDiv.innerText = `Calculated price: ${ethers.utils.formatEther(requiredBNBWei)} BNB. Please confirm in wallet...`;
 
-                // Execute swap
                 const tx = await contract.swapMatrixWithAddr(referrerAddress, {
                     value: requiredBNBWei
                 });
@@ -632,8 +644,6 @@
                 resDiv.innerText = `Transaction submitted. Hash: ${tx.hash}`;
                 await tx.wait();
                 resDiv.innerText = "Success! You are now an activated MTRX Ambassador.";
-
-                fetchBalance(currentUserAddr);
             } catch (err) {
                 console.error(err);
                 resDiv.innerText = `Error: ${err.reason || err.message || "Transaction failed."}`;
