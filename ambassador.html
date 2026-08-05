@@ -53,6 +53,15 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
+        /* 徹底隱藏 Google 翻譯產生的頂部橫條、圖示與選擇器 */
+        .goog-te-banner-frame.skiptranslate,
+        .goog-te-gadget-icon,
+        .goog-te-gadget-simple img,
+        .goog-te-spinner-pos,
+        #google_translate_element {
+            display: none !important;
+        }
+
         body {
             background-color: var(--bg);
             background-image: 
@@ -65,6 +74,7 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            top: 0px !important; /* 避免 Google 翻譯強制壓低頂部 body */
         }
 
         .container {
@@ -379,6 +389,9 @@
 
 <body>
 
+    <!-- 隱藏的 Google 翻譯 DOM 掛載節點 -->
+    <div id="google_translate_element"></div>
+
     <div class="container">
 
         <!-- Header Call To Action -->
@@ -489,6 +502,32 @@
         </footer>
 
     </div>
+
+    <!-- 抓取手機/瀏覽器系統語系並動態驅動 Google 自動翻譯 -->
+    <script type="text/javascript">
+        function getSubscriberLanguage() {
+            // 抓取裝置/瀏覽器語系 (例如 "zh-TW", "zh-CN", "ja", "en-US")
+            const userLang = navigator.language || navigator.userLanguage || 'en';
+            return userLang;
+        }
+
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                autoDisplay: false
+            }, 'google_translate_element');
+
+            // 取得使用者手機預設語系
+            const targetLang = getSubscriberLanguage();
+
+            // 只有當使用者語系不是英文 (en) 時才自動切換翻譯
+            if (!targetLang.startsWith('en')) {
+                document.cookie = `googtrans=/en/${targetLang}; path=/;`;
+                document.cookie = `googtrans=/en/${targetLang}; domain=${window.location.hostname}; path=/;`;
+            }
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <!-- Web3 Interaction Logic -->
     <script>
