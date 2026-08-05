@@ -405,7 +405,7 @@
                 matrix network.
             </p>
             <div class="share-box" id="shareContent">
-                Matrix(0x5897deF547bD83094f9eE6cb4e62B67008c5A5d2) invites you to join the ambassador program!
+                Connecting wallet to generate referral link...
             </div>
             <button class="action-btn" style="background: var(--panel-2); border: 1px solid var(--card-border);"
                 onclick="copyInvitation()">
@@ -430,31 +430,65 @@
         ];
 
         let provider, signer, contract;
+        let currentUserAddr = null;
         let referrerAddress = "0x0000000000000000000000000000000000000000";
 
-        // Parse referral query parameter from URL (e.g., ?ref=0x...)
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('DOMContentLoaded', async () => {
+            // 解析 URL 中的推薦人參數
             const urlParams = new URLSearchParams(window.location.search);
             const refParam = urlParams.get('ref');
             if (refParam && ethers.utils.isAddress(refParam)) {
                 referrerAddress = refParam;
             }
-            updateInvitationBox();
+
+            // 初始化與檢測錢包
+            if (window.ethereum) {
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+
+                // 檢查是否已經授權連結錢包
+                const accounts = await provider.listAccounts();
+                if (accounts.length > 0) {
+                    await setupWalletSession(accounts[0]);
+                } else {
+                    updateInvitationBox(null);
+                }
+
+                // 監聽錢包帳號切換
+                window.ethereum.on('accountsChanged', async (accounts) => {
+                    if (accounts.length > 0) {
+                        await setupWalletSession(accounts[0]);
+                    } else {
+                        currentUserAddr = null;
+                        document.getElementById('mtrxBalance').innerText = "0.00";
+                        updateInvitationBox(null);
+                    }
+                });
+            } else {
+                updateInvitationBox(null);
+            }
         });
+
+        async function setupWalletSession(userAddress) {
+            signer = provider.getSigner();
+            contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+            currentUserAddr = userAddress;
+            
+            updateInvitationBox(currentUserAddr);
+            fetchBalance(currentUserAddr);
+        }
 
         async function initWeb3() {
             if (window.ethereum) {
-                provider = new ethers.providers.Web3Provider(window.ethereum);
-                await provider.send("eth_requestAccounts", []);
-                signer = provider.getSigner();
-                contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-
-                const userAddr = await signer.getAddress();
-                updateInvitationBox(userAddr);
-                fetchBalance(userAddr);
+                if (!provider) provider = new ethers.providers.Web3Provider(window.ethereum);
+                const accounts = await provider.send("eth_requestAccounts", []);
+                if (accounts.length > 0) {
+                    await setupWalletSession(accounts[0]);
+                    return true;
+                }
             } else {
                 alert("Please install MetaMask or use a Web3 supported browser.");
             }
+            return false;
         }
 
         async function fetchBalance(userAddr) {
@@ -473,7 +507,10 @@
             resDiv.innerText = "Connecting wallet and calculating required BNB...";
 
             try {
-                if (!contract) await initWeb3();
+                if (!currentUserAddr) {
+                    const connected = await initWeb3();
+                    if (!connected) return;
+                }
 
                 // Target: 2,500 MTRX
                 const targetMTRX = ethers.utils.parseUnits("2500", 18);
@@ -495,8 +532,7 @@
                 await tx.wait();
                 resDiv.innerText = "Success! You are now an activated MTRX Ambassador.";
 
-                const userAddr = await signer.getAddress();
-                fetchBalance(userAddr);
+                fetchBalance(currentUserAddr);
             } catch (err) {
                 console.error(err);
                 resDiv.innerText = `Error: ${err.reason || err.message || "Transaction failed."}`;
@@ -507,10 +543,20 @@
             const inviteBox = document.getElementById("shareContent");
             const currentUrl = window.location.origin + window.location.pathname;
             const refLink = userAddr ? `${currentUrl}?ref=${userAddr}` : currentUrl;
-            inviteBox.innerText = `Matrix(${CONTRACT_ADDRESS}) invites you: Join as an official ambassador and earn up to 7.5% total supply rewards!\nJoin here: ${refLink}`;
+            
+            if (userAddr) {
+                inviteBox.innerText = `Matrix(${CONTRACT_ADDRESS}) invites you: Join as an official ambassador and earn up to 7.5% total supply rewards!\nJoin here: ${refLink}`;
+            } else {
+                inviteBox.innerText = `Matrix(${CONTRACT_ADDRESS}) invites you: Join as an official ambassador and earn up to 7.5% total supply rewards!\nJoin here: ${currentUrl}\n\n(Connect wallet to generate your personal referral link)`;
+            }
         }
 
-        function copyInvitation() {
+        async function copyInvitation() {
+            if (!currentUserAddr) {
+                const connected = await initWeb3();
+                if (!connected) return;
+            }
+
             const textToCopy = document.getElementById("shareContent").innerText;
             navigator.clipboard.writeText(textToCopy).then(() => {
                 const resCopy = document.getElementById("res_copy");
