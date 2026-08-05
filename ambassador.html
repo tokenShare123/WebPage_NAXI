@@ -5,39 +5,45 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>MTRX Protocol | Become an Official Ambassador</title>
-    
+
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Become an official ambassador for MTRX, the consensus-driven Web3 token protocol. Earn up to 7.5% of total supply via direct and matrix incentives." />
-    <meta name="keywords" content="MTRX, Web3, DeFi, BSC, BNB Chain, Token Ambassador, Decentralized Matrix, Crypto Earnings" />
+    <meta name="description"
+        content="Become an official ambassador for MTRX, the consensus-driven Web3 token protocol. Earn up to 7.5% of total supply via direct and matrix incentives." />
+    <meta name="keywords"
+        content="MTRX, Web3, DeFi, BSC, BNB Chain, Token Ambassador, Decentralized Matrix, Crypto Earnings" />
 
     <!-- Open Graph / Social Media Meta -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://tokenshare123.github.io/WebPage_MTRX/" />
     <meta property="og:title" content="Become an Official MTRX Protocol Ambassador" />
-    <meta property="og:description" content="Zero owner privilege, 90% vault backed by BNB. Earn up to 7.5% total supply rewards in 2 simple steps." />
-    <meta property="og:image" content="https://raw.githubusercontent.com/tokenShare123/WebPage_MTRX/main/IMG_3740.jpg" />
+    <meta property="og:description"
+        content="Zero owner privilege, 90% vault backed by BNB. Earn up to 7.5% total supply rewards in 2 simple steps." />
+    <meta property="og:image"
+        content="https://raw.githubusercontent.com/tokenShare123/WebPage_MTRX/main/IMG_3740.jpg" />
 
     <!-- Favicon & Styles -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
 
     <style>
         :root {
-            --bg: #060608;
-            --panel: #0e1013;
-            --panel-2: #14171a;
-            --panel-3: #1c2128;
-            --muted: #8b949e;
-            --text: #F0F6FC;
-            --accent: #6f5af8;
-            --accent-hover: #5a45d0;
-            --accent-glow: rgba(111, 90, 248, 0.35);
-            --card-border: rgba(255, 255, 255, 0.08);
-            --card-border-hover: rgba(111, 90, 248, 0.4);
-            --success: #00ea91;
-            --gold: #f59e0b;
+            --bg: #0B0F19;
+            --panel: #111827;
+            --panel-2: #1F2937;
+            --panel-3: #374151;
+            --muted: #9CA3AF;
+            --text: #F9FAFB;
+            --accent: #4F46E5;
+            --accent-gradient: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+            --accent-hover: #4338CA;
+            --accent-glow: rgba(99, 102, 241, 0.25);
+            --card-border: rgba(99, 102, 241, 0.2);
+            --card-border-hover: rgba(99, 102, 241, 0.5);
+            --success: #10B981;
+            --gold: #F59E0B;
         }
 
         * {
@@ -49,6 +55,10 @@
 
         body {
             background-color: var(--bg);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(124, 58, 237, 0.15) 0px, transparent 50%);
+            background-attachment: fixed;
             color: var(--text);
             padding: 24px 12px;
             display: flex;
@@ -73,9 +83,9 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: rgba(111, 90, 248, 0.15);
-            border: 1px solid var(--accent);
-            color: #a78bfa;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--card-border);
+            color: #818CF8;
             padding: 6px 14px;
             border-radius: 20px;
             font-size: 12px;
@@ -83,6 +93,7 @@
             margin-bottom: 16px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            box-shadow: 0 0 12px var(--accent-glow);
         }
 
         .hero-title {
@@ -90,15 +101,16 @@
             font-weight: 800;
             line-height: 1.3;
             margin-bottom: 12px;
-            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+            background: linear-gradient(135deg, #FFFFFF 0%, #9CA3AF 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
         }
 
         .hero-subtitle {
             font-size: 18px;
             font-weight: 700;
-            color: var(--gold);
+            color: #FBBF24;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -112,7 +124,7 @@
             border-radius: 20px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 15px var(--accent-glow);
         }
 
         .token-row {
@@ -130,15 +142,36 @@
         .token-icon {
             width: 44px;
             height: 44px;
-            filter: drop-shadow(0px 2px 8px rgba(111, 90, 248, 0.4));
+            border-radius: 12px;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+            flex-shrink: 0;
+            color: #ffffff;
+            font-size: 20px;
         }
 
         .token-name-wrap {
             display: flex;
-            align-items: center;
-            gap: 6px;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .token-name-wrap span:first-child {
             font-size: 18px;
-            font-weight: 700;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            color: #ffffff;
+        }
+
+        .token-name-wrap span:last-child {
+            font-size: 12px;
+            color: #818CF8;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .token-right {
@@ -146,8 +179,11 @@
         }
 
         .token-balance {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 800;
+            letter-spacing: -0.025em;
+            color: #ffffff;
+            line-height: 1.2;
         }
 
         /* Feature Cards Grid */
@@ -163,7 +199,8 @@
             border: 1px solid var(--card-border);
             border-radius: 16px;
             padding: 16px;
-            transition: border-color 0.2s;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
         .feature-card.full-width {
@@ -172,11 +209,13 @@
 
         .feature-card:hover {
             border-color: var(--card-border-hover);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4), 0 0 12px var(--accent-glow);
+            transform: translateY(-2px);
         }
 
         .feature-icon {
             font-size: 20px;
-            color: var(--accent);
+            color: #818CF8;
             margin-bottom: 10px;
         }
 
@@ -190,7 +229,7 @@
         .feature-desc {
             font-size: 12px;
             color: var(--muted);
-            line-height: 1.4;
+            line-height: 1.5;
         }
 
         /* Step Execution Card */
@@ -201,10 +240,11 @@
             padding: 20px;
             margin-bottom: 16px;
             position: relative;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
         }
 
         .step-badge {
-            background: var(--accent);
+            background: var(--accent-gradient);
             color: white;
             font-size: 11px;
             font-weight: 800;
@@ -213,6 +253,8 @@
             display: inline-block;
             margin-bottom: 12px;
             text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 0 2px 8px var(--accent-glow);
         }
 
         .step-title {
@@ -223,7 +265,7 @@
 
         .action-btn {
             width: 100%;
-            background: var(--accent);
+            background: var(--accent-gradient);
             color: white;
             border: none;
             border-radius: 12px;
@@ -231,7 +273,7 @@
             font-weight: 700;
             font-size: 14px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
             box-shadow: 0 4px 14px var(--accent-glow);
             display: flex;
             align-items: center;
@@ -240,8 +282,9 @@
         }
 
         .action-btn:hover {
-            background: var(--accent-hover);
+            filter: brightness(1.1);
             transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
         }
 
         .share-box {
@@ -251,9 +294,10 @@
             padding: 12px;
             margin-bottom: 12px;
             word-break: break-all;
-            font-family: monospace;
+            font-family: 'JetBrains Mono', monospace, sans-serif;
             font-size: 12px;
-            color: var(--muted);
+            color: #E5E7EB;
+            line-height: 1.5;
         }
 
         .result-msg {
@@ -265,6 +309,7 @@
             border-radius: 8px;
             border: 1px solid var(--card-border);
             line-height: 1.4;
+            color: #A5B4FC;
         }
 
         footer {
@@ -294,30 +339,21 @@
             </div>
         </div>
 
-        <!-- Token Header Status -->
+        <!-- Token Header Status (Whitepaper Style) -->
         <div class="wallet-header-card">
             <div class="token-row">
                 <div class="token-left">
                     <div class="token-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
-                            <defs>
-                                <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#6f5af8" />
-                                    <stop offset="100%" stop-color="#3b82f6" />
-                                </linearGradient>
-                            </defs>
-                            <circle cx="50" cy="50" r="46" fill="url(#bgGrad)" />
-                            <circle cx="50" cy="50" r="41" fill="none" stroke="#FFFFFF" stroke-opacity="0.3" stroke-width="2" stroke-dasharray="6 3" />
-                            <path d="M 33,67 V 33 L 42,33 L 58,55 V 33 H 67 V 67 L 58,67 L 42,45 V 67 Z" fill="#FFFFFF" />
-                        </svg>
+                        <i class="fa-solid fa-cube"></i>
                     </div>
                     <div class="token-name-wrap">
                         <span>MTRX Token</span>
+                        <span>Decentralized Asset</span>
                     </div>
                 </div>
                 <div class="token-right">
                     <div class="token-balance" id="mtrxBalance">0.00</div>
-                    <div style="font-size: 11px; color: var(--muted);">Your Balance</div>
+                    <div style="font-size: 12px; color: var(--muted); font-weight: 500; margin-top: 2px;">Your Balance</div>
                 </div>
             </div>
         </div>
@@ -327,19 +363,22 @@
             <div class="feature-card full-width">
                 <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
                 <div class="feature-title">1. No Owner Privileges & Vault Backed</div>
-                <div class="feature-desc">100% decentralized architecture with zero administrative ownership. 90% of core assets are safely locked as BNB in the smart contract vault.</div>
+                <div class="feature-desc">100% decentralized architecture with zero administrative ownership. 90% of
+                    core assets are safely locked as BNB in the smart contract vault.</div>
             </div>
 
             <div class="feature-card">
                 <div class="feature-icon"><i class="fa-solid fa-sack-dollar" style="color: var(--gold);"></i></div>
                 <div class="feature-title">2. Incentive Rewards</div>
-                <div class="feature-desc">1.7% Direct Rewards + 5.8% Dynamic Matrix Rewards allocated directly to active ambassadors.</div>
+                <div class="feature-desc">1.7% Direct Rewards + 5.8% Dynamic Matrix Rewards allocated directly to active
+                    ambassadors.</div>
             </div>
 
             <div class="feature-card">
                 <div class="feature-icon"><i class="fa-solid fa-water"></i></div>
                 <div class="feature-title">3. DEX Liquidity</div>
-                <div class="feature-desc">2.5% strictly reserved for decentralized exchange (DEX) liquidity stability.</div>
+                <div class="feature-desc">2.5% strictly reserved for decentralized exchange (DEX) liquidity stability.
+                </div>
             </div>
         </div>
 
@@ -348,7 +387,8 @@
             <span class="step-badge">Step 01</span>
             <div class="step-title">Swap BNB for 2,500 MTRX</div>
             <p style="font-size: 12px; color: var(--muted); margin-bottom: 16px;">
-                Interact directly with the issuance smart contract to acquire 2,500 MTRX and activate your ambassador referral rights.
+                Interact directly with the issuance smart contract to acquire 2,500 MTRX and activate your ambassador
+                referral rights.
             </p>
             <button class="action-btn" onclick="executeSwapWithReferrer()">
                 <i class="fa-solid fa-bolt"></i> Activate & Mint MTRX
@@ -361,12 +401,14 @@
             <span class="step-badge">Step 02</span>
             <div class="step-title">Share Your Exclusive Ambassador Link</div>
             <p style="font-size: 12px; color: var(--muted); margin-bottom: 12px;">
-                Copy the invitation text below and share it across your social media channels or forums to build your matrix network.
+                Copy the invitation text below and share it across your social media channels or forums to build your
+                matrix network.
             </p>
             <div class="share-box" id="shareContent">
-Matrix(0x5897deF547bD83094f9eE6cb4e62B67008c5A5d2) invites you to join the ambassador program!
+                Matrix(0x5897deF547bD83094f9eE6cb4e62B67008c5A5d2) invites you to join the ambassador program!
             </div>
-            <button class="action-btn" style="background: var(--panel-3); border: 1px solid var(--card-border);" onclick="copyInvitation()">
+            <button class="action-btn" style="background: var(--panel-2); border: 1px solid var(--card-border);"
+                onclick="copyInvitation()">
                 <i class="fa-solid fa-copy"></i> Copy Invitation Text
             </button>
             <div id="res_copy" class="result-msg"></div>
@@ -383,7 +425,8 @@ Matrix(0x5897deF547bD83094f9eE6cb4e62B67008c5A5d2) invites you to join the ambas
         const CONTRACT_ADDRESS = "0x5897deF547bD83094f9eE6cb4e62B67008c5A5d2";
         const CONTRACT_ABI = [
             "function swapMatrixWithAddr(address _addr) payable",
-            "function balanceOf(address account) view returns (uint256)"
+            "function balanceOf(address account) view returns (uint256)",
+            "function EXCHANGE_RATE() view returns (uint256)"
         ];
 
         let provider, signer, contract;
@@ -405,7 +448,7 @@ Matrix(0x5897deF547bD83094f9eE6cb4e62B67008c5A5d2) invites you to join the ambas
                 await provider.send("eth_requestAccounts", []);
                 signer = provider.getSigner();
                 contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-                
+
                 const userAddr = await signer.getAddress();
                 updateInvitationBox(userAddr);
                 fetchBalance(userAddr);
@@ -427,20 +470,31 @@ Matrix(0x5897deF547bD83094f9eE6cb4e62B67008c5A5d2) invites you to join the ambas
         async function executeSwapWithReferrer() {
             const resDiv = document.getElementById("res_swap");
             resDiv.style.display = "block";
-            resDiv.innerText = "Connecting wallet and preparing transaction...";
+            resDiv.innerText = "Connecting wallet and calculating required BNB...";
 
             try {
                 if (!contract) await initWeb3();
-                
-                // Call swapMatrixWithAddr(address _addr) function from smart contract
+
+                // Target: 2,500 MTRX
+                const targetMTRX = ethers.utils.parseUnits("2500", 18);
+
+                // Fetch EXCHANGE_RATE
+                const exchangeRate = await contract.EXCHANGE_RATE();
+
+                // Calculate required BNB (Wei)
+                const requiredBNBWei = targetMTRX.mul(ethers.utils.parseUnits("1", 18)).div(exchangeRate);
+
+                resDiv.innerText = `Calculated price: ${ethers.utils.formatEther(requiredBNBWei)} BNB. Please confirm in wallet...`;
+
+                // Execute swap
                 const tx = await contract.swapMatrixWithAddr(referrerAddress, {
-                    value: ethers.utils.parseEther("0.1") // Adjust required BNB value according to protocol rate
+                    value: requiredBNBWei
                 });
 
                 resDiv.innerText = `Transaction submitted. Hash: ${tx.hash}`;
                 await tx.wait();
                 resDiv.innerText = "Success! You are now an activated MTRX Ambassador.";
-                
+
                 const userAddr = await signer.getAddress();
                 fetchBalance(userAddr);
             } catch (err) {
@@ -462,7 +516,7 @@ Matrix(0x5897deF547bD83094f9eE6cb4e62B67008c5A5d2) invites you to join the ambas
                 const resCopy = document.getElementById("res_copy");
                 resCopy.style.display = "block";
                 resCopy.innerText = "Invitation text & link copied to clipboard successfully!";
-                setTimeout(() => { resCopy.style.display = "none"; }, 3000);
+                setTimeout(() => {resCopy.style.display = "none";}, 3000);
             });
         }
     </script>
