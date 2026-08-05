@@ -22,7 +22,7 @@
         content="https://raw.githubusercontent.com/tokenShare123/WebPage_MTRX/main/IMG_3740.jpg" />
 
     <!-- Favicon & Styles -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" href="logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -503,12 +503,16 @@
 
     </div>
 
-    <!-- 抓取手機/瀏覽器系統語系並動態驅動 Google 自動翻譯 -->
+    <!-- 抓取手機/瀏覽器系統語系並強制動態觸發 Google 即時翻譯 -->
     <script type="text/javascript">
         function getSubscriberLanguage() {
-            // 抓取裝置/瀏覽器語系 (例如 "zh-TW", "zh-CN", "ja", "en-US")
-            const userLang = navigator.language || navigator.userLanguage || 'en';
-            return userLang;
+            const rawLang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+            
+            // 轉換為 Google Translate 相容的語系標籤
+            if (rawLang.startsWith('zh-tw') || rawLang.startsWith('zh-hk')) return 'zh-TW';
+            if (rawLang.startsWith('zh')) return 'zh-CN';
+            
+            return rawLang.split('-')[0];
         }
 
         function googleTranslateElementInit() {
@@ -517,14 +521,36 @@
                 autoDisplay: false
             }, 'google_translate_element');
 
-            // 取得使用者手機預設語系
             const targetLang = getSubscriberLanguage();
 
-            // 只有當使用者語系不是英文 (en) 時才自動切換翻譯
-            if (!targetLang.startsWith('en')) {
-                document.cookie = `googtrans=/en/${targetLang}; path=/;`;
-                document.cookie = `googtrans=/en/${targetLang}; domain=${window.location.hostname}; path=/;`;
+            if (targetLang === 'en') return;
+
+            // 寫入 Google 翻譯 Cookie
+            document.cookie = `googtrans=/en/${targetLang}; path=/`;
+            if (location.hostname !== 'localhost') {
+                document.cookie = `googtrans=/en/${targetLang}; domain=.${location.hostname.replace(/^www\./, '')}; path=/`;
             }
+
+            // 動態監控並觸發下拉選單進行翻譯
+            triggerGoogleTranslate(targetLang);
+        }
+
+        function triggerGoogleTranslate(targetLang) {
+            let attempts = 0;
+            const interval = setInterval(() => {
+                attempts++;
+                const selectCombo = document.querySelector('.goog-te-combo');
+                
+                if (selectCombo) {
+                    selectCombo.value = targetLang;
+                    selectCombo.dispatchEvent(new Event('change'));
+                    clearInterval(interval);
+                }
+                
+                if (attempts > 20) {
+                    clearInterval(interval);
+                }
+            }, 500);
         }
     </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
