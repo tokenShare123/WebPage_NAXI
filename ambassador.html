@@ -69,6 +69,35 @@
             /* 避免 Google 翻譯強制壓低頂部 body */
         }
 
+        /* 左上角返回按鈕樣式 */
+        .back-home-btn {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 1000;
+            width: 40px;
+            height: 40px;
+            background: var(--panel);
+            border: 1px solid var(--card-border);
+            border-radius: 50%;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            transition: all 0.2s ease;
+        }
+
+        .back-home-btn:hover {
+            background: var(--accent);
+            color: #ffffff;
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px var(--accent-glow);
+        }
+
         .container {
             width: 100%;
             max-width: 500px;
@@ -424,7 +453,10 @@
 </head>
 
 <body>
-
+    <!-- 左上角返回按鈕 -->
+    <a href="index.html" class="back-home-btn" title="Back to Index">
+        <i class="fa-solid fa-arrow-left"></i>
+    </a>
     <div class="container">
 
         <!-- Header Call To Action -->
