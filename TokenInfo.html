@@ -7,20 +7,33 @@
     <title>BSC MTRX Token Metrics</title>
 
     <!-- SEO & Social Meta -->
-    <meta name="description" content="Binance Wallet MTRX Live Token Overview & Market Metrics" />
-    <meta property="og:title" content="BINANCE WALLET - MTRX Live Info" />
+    <meta name="description" content="BEP-20 MTRX Live Token Overview & Market Metrics" />
+    <meta property="og:title" content="MTRX Live Info" />
+    <meta name="description"
+        content="Become an official ambassador for MTRX, the consensus-driven Web3 token protocol. Earn up to 7.5% of total supply via direct and matrix incentives." />
+    <meta name="keywords"
+        content="MTRX, Web3, DeFi, BSC, BNB Chain, Token Incentive, Decentralized Matrix, Crypto Earnings" />
 
-    <!-- Favicon & Styles -->
+    <!-- Open Graph / Social Media Meta -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://tokenshare123.github.io/WebPage_NAXI/" />
+    <meta property="og:title" content="Become an Official MTRX Protocol Ambassador" />
+    <meta property="og:description"
+        content="Zero owner privilege, 90% vault backed by BNB. Earn up to 7.5% total supply rewards in 2 simple steps." />
+    <meta property="og:image"
+        content="https://raw.githubusercontent.com/tokenShare123/WebPage_NAXI/main/IMG_3740.jpg" />
+
+    <!-- logo & Styles -->
     <link rel="icon" type="image/png" href="logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <!-- 補上 Tailwind CSS CDN 解決樣式失效問題 -->
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
-    <!-- QRCode generator library to ensure reliable local canvas rendering -->
+    <!-- QRCode generator library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <style>
@@ -122,31 +135,6 @@
             margin-bottom: 20px;
             position: relative;
             z-index: 1;
-        }
-
-        .brand-title {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 800;
-            font-size: 18px;
-            letter-spacing: 0.5px;
-            color: #FFFFFF;
-        }
-
-        .brand-title i {
-            color: var(--binance-yellow);
-            font-size: 22px;
-        }
-
-        .time-stamp {
-            font-size: 12px;
-            color: var(--muted);
-            font-weight: 500;
-            margin-left: auto;
-            /* 強制推到最右邊 */
-            text-align: right;
-            /* 文字靠右 */
         }
 
         .token-header-section {
@@ -538,7 +526,6 @@
             visibility: hidden !important;
         }
 
-        /* 強制重置頁面位置，防止出現頂部白邊 */
         html {
             top: 0 !important;
         }
@@ -546,13 +533,10 @@
         body {
             top: 0 !important;
             position: static !important;
-            /* 絕對關鍵：防止 Google 改為 relative */
         }
 
-        /* --- 下拉選單美化 (位於 Footer) --- */
         .goog-te-gadget {
             font-size: 0 !important;
-            /* 隱藏 "Powered by" 文字 */
             color: transparent !important;
         }
 
@@ -566,7 +550,6 @@
             outline: none !important;
         }
 
-        /* 隱藏高亮與氣泡 */
         .goog-text-highlight {
             background-color: transparent !important;
             box-shadow: none !important;
@@ -621,7 +604,7 @@
                 </div>
 
                 <a href="https://app.binance.com/uni-qr/web3-token-details?utm_medium=share&tokenCA=0x5897def547bd83094f9ee6cb4e62b67008c5a5d2&binanceChainId=56&chain=bsc"
-                    class="chart-link-wrapper" title="Click to view live chart on Binance">
+                    target="_blank" class="chart-link-wrapper" title="Click to view live chart on Binance">
                     <div class="chart-box">
                         <canvas id="realtimeChart"></canvas>
                     </div>
@@ -687,18 +670,16 @@
         </footer>
 
     </div>
-    <!-- 抓取手機/瀏覽器系統語系並強制動態觸發 Google 即時翻譯 -->
+
+    <!-- Google 翻譯 -->
     <script type="text/javascript">
-        const systemLang = navigator.language || navigator.userLanguage;
         function googleTranslateElementInit() {
-            // 1. 取得目標語系 (網址優先，手機次之)
             const urlParams = new URLSearchParams(window.location.search);
             const langParam = urlParams.get('lang');
             const systemLang = navigator.language || navigator.userLanguage;
             let targetLang = langParam || systemLang;
 
-            // 2. 格式標準化 (Google 內部使用的格式是 /en/zh-TW)
-            let googleLangCode = '/en/en'; // 預設不翻譯
+            let googleLangCode = '/en/en';
             if (targetLang.toLowerCase().includes('zh-tw')) googleLangCode = '/en/zh-TW';
             else if (targetLang.toLowerCase().includes('zh-cn')) googleLangCode = '/en/zh-CN';
             else if (targetLang.startsWith('ja')) googleLangCode = '/en/ja';
@@ -707,22 +688,18 @@
                 googleLangCode = '/en/' + targetLang.split('-')[0];
             }
 
-            // 3. 強制寫入 Google 翻譯需要的 Cookie (關鍵步驟)
             if (googleLangCode !== '/en/en') {
                 document.cookie = "googtrans=" + googleLangCode + "; path=/";
                 document.cookie = "googtrans=" + googleLangCode + "; domain=.blkdona.com; path=/";
-                // 加上 html 標籤的標記幫助 Google 識別
                 document.documentElement.lang = targetLang;
             }
 
-            // 4. 初始化元件
             new google.translate.TranslateElement({
                 pageLanguage: 'en',
                 layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
                 autoDisplay: true
             }, 'google_translate_element');
 
-            // 5. 保險：原本的下拉選單模擬點擊邏輯 (雙重保險)
             const checkExist = setInterval(() => {
                 const selectEl = document.querySelector('.goog-te-combo');
                 if (selectEl) {
@@ -735,7 +712,7 @@
                 }
             }, 500);
             setTimeout(() => clearInterval(checkExist), 5000);
-            // 關鍵：動態監控並修正 body 的 top 偏移
+
             const fixLayout = () => {
                 document.body.style.top = '0px';
                 const banner = document.querySelector('.goog-te-banner-frame');
@@ -744,7 +721,6 @@
                 }
             };
 
-            // 每 500 毫秒執行一次，持續 5 秒，確保 Google 載入完成後也被修正
             let retryCount = 0;
             const interval = setInterval(() => {
                 fixLayout();
@@ -755,16 +731,19 @@
     </script>
     <script type="text/javascript"
         src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <!-- 主 JavaScript 邏輯 -->
     <script>
         const CONTRACT_ADDRESS = "0x5897def547bd83094f9ee6cb4e62b67008c5a5d2";
         let userAddress = "";
         let qrCodeObj = null;
 
-        window.addEventListener('DOMContentLoaded', () => {            
-            
+        window.addEventListener('DOMContentLoaded', async () => {            
             fetchAndRenderChart();
             fetchLiveTokenData();
-            initReferralLink();
+            
+            // 自動嘗試擷取/初始化錢包與推薦連結
+            await autoDetectWalletAndInitReferral();
 
             window.addEventListener('resize', () => fetchAndRenderChart());
         });        
@@ -912,10 +891,42 @@
             });
         }
 
-        function initReferralLink() {
+        /**
+         * 自動偵測連線中的 Web3 錢包並更新推薦網址
+         */
+        async function autoDetectWalletAndInitReferral() {
             const urlParams = new URLSearchParams(window.location.search);
-            const ref = urlParams.get('ref');
-            updateShareBox(ref || null);
+            const initialRef = urlParams.get('ref');
+
+            // 預設先使用網址上的 ref，若無則為 null
+            let detectedAddr = (initialRef && ethers.utils.isAddress(initialRef)) ? initialRef : null;
+
+            if (window.ethereum) {
+                try {
+                    const provider = new ethers.providers.Web3Provider(window.ethereum);
+                    // 僅檢查已連線帳號，不跳出主動請求彈窗
+                    const accounts = await provider.listAccounts();
+                    if (accounts && accounts.length > 0) {
+                        userAddress = accounts[0];
+                        detectedAddr = userAddress;
+                    }
+
+                    // 監聽使用者在 Web3 錢包內切換帳號或斷開連線
+                    window.ethereum.on('accountsChanged', (accounts) => {
+                        if (accounts.length > 0) {
+                            userAddress = accounts[0];
+                            updateShareBox(userAddress);
+                        } else {
+                            userAddress = "";
+                            updateShareBox(null);
+                        }
+                    });
+                } catch (e) {
+                    console.log("Wallet auto-detection error:", e);
+                }
+            }
+
+            updateShareBox(detectedAddr);
         }
 
         async function connectAndShare() {
