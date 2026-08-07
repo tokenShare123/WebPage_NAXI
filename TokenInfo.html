@@ -1,0 +1,972 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BSC MTRX Token Metrics</title>
+
+    <!-- SEO & Social Meta -->
+    <meta name="description" content="Binance Wallet MTRX Live Token Overview & Market Metrics" />
+    <meta property="og:title" content="BINANCE WALLET - MTRX Live Info" />
+
+    <!-- Favicon & Styles -->
+    <link rel="icon" type="image/png" href="logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- 補上 Tailwind CSS CDN 解決樣式失效問題 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+    <!-- QRCode generator library to ensure reliable local canvas rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <style>
+        :root {
+            --bg: #0B0F19;
+            --panel: #111827;
+            --panel-2: #1F2937;
+            --panel-3: #374151;
+            --muted: #9CA3AF;
+            --text: #F9FAFB;
+            --accent: #4F46E5;
+            --accent-gradient: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+            --accent-glow: rgba(99, 102, 241, 0.25);
+            --card-border: rgba(99, 102, 241, 0.2);
+            --card-border-hover: rgba(99, 102, 241, 0.5);
+            --binance-yellow: #F0B90B;
+            --green-up: #0ECB81;
+            --red-down: #F6465D;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            background-image:
+                radial-gradient(at 0% 0%, rgba(240, 185, 11, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(79, 70, 229, 0.12) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text);
+            padding: 24px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .back-home-btn {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 1000;
+            width: 40px;
+            height: 40px;
+            background: var(--panel);
+            border: 1px solid var(--card-border);
+            border-radius: 50%;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            transition: all 0.2s ease;
+        }
+
+        .back-home-btn:hover {
+            background: var(--accent);
+            color: #ffffff;
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 520px;
+        }
+
+        .binance-card {
+            background: rgba(17, 24, 39, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 20px var(--accent-glow);
+            margin-bottom: 20px;
+        }
+
+        .binance-watermark {
+            position: absolute;
+            right: -20px;
+            top: 30%;
+            font-size: 220px;
+            color: rgba(255, 255, 255, 0.02);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 800;
+            font-size: 18px;
+            letter-spacing: 0.5px;
+            color: #FFFFFF;
+        }
+
+        .brand-title i {
+            color: var(--binance-yellow);
+            font-size: 22px;
+        }
+
+        .time-stamp {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 500;
+            margin-left: auto;
+            /* 強制推到最右邊 */
+            text-align: right;
+            /* 文字靠右 */
+        }
+
+        .token-header-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .token-avatar-link {
+            display: block;
+            width: 48px;
+            height: 48px;
+            position: relative;
+            text-decoration: none;
+            transition: transform 0.2s ease;
+        }
+
+        .token-avatar-link:hover {
+            transform: scale(1.05);
+        }
+
+        .token-avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .token-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .chain-badge {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 18px;
+            height: 18px;
+            background: var(--binance-yellow);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #000;
+            box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .token-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .token-symbol {
+            font-size: 18px;
+            font-weight: 800;
+            color: #FFFFFF;
+        }
+
+        .token-address-wrapper {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .token-address {
+            font-size: 13px;
+            color: var(--muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s ease;
+        }
+
+        .token-address:hover {
+            color: var(--text);
+        }
+
+        .copy-tooltip {
+            position: absolute;
+            left: 100%;
+            margin-left: 8px;
+            background: var(--green-up);
+            color: #000;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(2px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .copy-tooltip.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero-metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .change-label {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+
+        .change-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--green-up);
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .mcap-text {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .mcap-text span {
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        .chart-link-wrapper {
+            display: block;
+            text-decoration: none;
+            width: 100%;
+            height: 85px;
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.2s ease;
+        }
+
+        .chart-link-wrapper:hover {
+            border-color: rgba(240, 185, 11, 0.6);
+            box-shadow: 0 0 12px rgba(240, 185, 11, 0.2);
+        }
+
+        .chart-box {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #realtimeChart {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .metrics-2x2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .metric-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .metric-cell .label {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .metric-cell .value {
+            font-size: 15px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        .card-footer-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-left-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .swap-now-btn {
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 8px 16px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px var(--accent-glow);
+            width: fit-content;
+        }
+
+        .swap-now-btn:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+            color: white;
+        }
+
+        .binance-sub-text {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .binance-sub-text .title {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--muted);
+            letter-spacing: 0.5px;
+        }
+
+        .binance-sub-text .desc {
+            font-size: 11px;
+            color: rgba(156, 163, 175, 0.6);
+        }
+
+        .qr-box {
+            background: #FFFFFF;
+            padding: 4px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 64px;
+            height: 64px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .qr-box img,
+        .qr-box canvas {
+            width: 100% !important;
+            height: 100% !important;
+            display: block;
+        }
+
+        .action-panel {
+            background: var(--panel);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        .action-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #FFFFFF;
+        }
+
+        .share-url-box {
+            background: var(--panel-2);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 12px;
+            color: #E5E7EB;
+            word-break: break-all;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .share-btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px var(--accent-glow);
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--panel-2);
+            border: 1px solid var(--card-border);
+            color: white;
+            border-radius: 12px;
+            padding: 12px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            background: var(--panel-3);
+            border-color: var(--card-border-hover);
+        }
+
+        .toast-msg {
+            display: none;
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid #10B981;
+            color: #10B981;
+            border-radius: 8px;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 24px;
+        }
+
+        iframe.goog-te-banner-frame,
+        .goog-te-banner-frame,
+        #goog-gt-tt,
+        .goog-te-balloon-frame,
+        .skiptranslate {
+            display: none !important;
+            visibility: hidden !important;
+        }
+
+        /* 強制重置頁面位置，防止出現頂部白邊 */
+        html {
+            top: 0 !important;
+        }
+
+        body {
+            top: 0 !important;
+            position: static !important;
+            /* 絕對關鍵：防止 Google 改為 relative */
+        }
+
+        /* --- 下拉選單美化 (位於 Footer) --- */
+        .goog-te-gadget {
+            font-size: 0 !important;
+            /* 隱藏 "Powered by" 文字 */
+            color: transparent !important;
+        }
+
+        .goog-te-gadget .goog-te-combo {
+            background: rgba(255, 255, 255, 0.1) !important;
+            color: #fff !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            border-radius: 8px !important;
+            padding: 6px 10px !important;
+            cursor: pointer;
+            outline: none !important;
+        }
+
+        /* 隱藏高亮與氣泡 */
+        .goog-text-highlight {
+            background-color: transparent !important;
+            box-shadow: none !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="index.html" class="back-home-btn" title="Return to Home">
+        <i class="fa-solid fa-arrow-left"></i>
+    </a>
+
+    <div class="container">
+
+        <div class="binance-card">
+            <i class="fa-solid fa-cube binance-watermark"></i>
+
+            <div class="card-header">
+                <div
+                    class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-semibold uppercase tracking-wider">
+                    <i class="fa-solid fa-shield-halved"></i> <span>Matrix v2.0</span>
+                </div>                
+            </div>
+
+            <div class="token-header-section">
+                <a href="https://bscscan.com/token/0x5897def547bd83094f9ee6cb4e62b67008c5a5d2" target="_blank"
+                    class="token-avatar-link" title="View MTRX Token Contract on BscScan">
+                    <div class="token-avatar">
+                        <img src="logo.png" alt="MTRX Logo">
+                        <div class="chain-badge">
+                            <i class="fa-solid fa-link" style="font-size: 8px;"></i>
+                        </div>
+                    </div>
+                </a>
+                <div class="token-meta">
+                    <div class="token-symbol">MTRX</div>
+                    <div class="token-address-wrapper">
+                        <div class="token-address" onclick="copyAddress()" title="Copy Contract Address">
+                            0x5897...c5a5d2 <i class="fa-regular fa-copy" style="font-size: 11px;"></i>
+                        </div>
+                        <span id="copiedTooltip" class="copy-tooltip">copied</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-metrics-grid">
+                <div>
+                    <div class="change-label">24h Change</div>
+                    <div class="change-value" id="priceChange">+7.95%</div>
+                    <div class="mcap-text">Market Cap <span id="marketCapVal">$141.1</span></div>
+                </div>
+
+                <a href="https://app.binance.com/uni-qr/web3-token-details?utm_medium=share&tokenCA=0x5897def547bd83094f9ee6cb4e62b67008c5a5d2&binanceChainId=56&chain=bsc"
+                    target="_blank" class="chart-link-wrapper" title="Click to view live chart on Binance">
+                    <div class="chart-box">
+                        <canvas id="realtimeChart"></canvas>
+                    </div>
+                </a>
+            </div>
+
+            <div class="metrics-2x2">
+                <div class="metric-cell">
+                    <div class="label">Price</div>
+                    <div class="value" id="priceVal">$0.060323</div>
+                </div>
+                <div class="metric-cell">
+                    <div class="label">Liquidity</div>
+                    <div class="value" id="liquidityVal">$116.73</div>
+                </div>
+                <div class="metric-cell">
+                    <div class="label">Holders</div>
+                    <div class="value" id="holdersVal">11</div>
+                </div>
+                <div class="metric-cell">
+                    <div class="label">24h Volume</div>
+                    <div class="value" id="volumeVal">$12.33</div>
+                </div>
+            </div>
+
+            <div class="card-footer-bar">
+                <div class="footer-left-group">
+                    <a href="https://pancakeswap.finance/swap?outputCurrency=0x5897def547bd83094f9ee6cb4e62b67008c5a5d2&chain=bsc"
+                        target="_blank" class="swap-now-btn">
+                        <i class="fa-solid fa-right-left"></i> Swap Now
+                    </a>
+                    <div class="binance-sub-text">
+                        <div class="title">BINANCE WEB3</div>
+                        <div class="desc">Simple · Secure · Rewarding</div>
+                    </div>
+                </div>
+                <div class="qr-box" id="qrcode"></div>
+            </div>
+        </div>
+
+        <div class="action-panel">
+            <div class="action-title">
+                <i class="fa-solid fa-share-nodes" style="color: #818CF8;"></i> Share Token Page (Includes Referral
+                Code)
+            </div>
+            <div class="share-url-box" id="shareUrlDisplay">
+                Loading wallet info or generating referral link...
+            </div>
+            <div class="share-btn-group">
+                <button class="btn-primary" onclick="connectAndShare()">
+                    <i class="fa-solid fa-wallet"></i> Connect Wallet
+                </button>
+                <button class="btn-secondary" onclick="copyShareLink()">
+                    <i class="fa-regular fa-copy"></i> Copy Share Link
+                </button>
+            </div>
+            <div class="toast-msg" id="toast">Referral link copied to clipboard successfully!</div>
+        </div>
+
+        <footer>
+            MTRX Protocol &copy; 2026. Binance Web3 Ecosystem Data.
+            <div id="google_translate_element"></div>
+        </footer>
+
+    </div>
+    <!-- 抓取手機/瀏覽器系統語系並強制動態觸發 Google 即時翻譯 -->
+    <script type="text/javascript">
+        const systemLang = navigator.language || navigator.userLanguage;
+        function googleTranslateElementInit() {
+            // 1. 取得目標語系 (網址優先，手機次之)
+            const urlParams = new URLSearchParams(window.location.search);
+            const langParam = urlParams.get('lang');
+            const systemLang = navigator.language || navigator.userLanguage;
+            let targetLang = langParam || systemLang;
+
+            // 2. 格式標準化 (Google 內部使用的格式是 /en/zh-TW)
+            let googleLangCode = '/en/en'; // 預設不翻譯
+            if (targetLang.toLowerCase().includes('zh-tw')) googleLangCode = '/en/zh-TW';
+            else if (targetLang.toLowerCase().includes('zh-cn')) googleLangCode = '/en/zh-CN';
+            else if (targetLang.startsWith('ja')) googleLangCode = '/en/ja';
+            else if (targetLang.startsWith('ko')) googleLangCode = '/en/ko';
+            else if (targetLang.length >= 2 && !targetLang.startsWith('en')) {
+                googleLangCode = '/en/' + targetLang.split('-')[0];
+            }
+
+            // 3. 強制寫入 Google 翻譯需要的 Cookie (關鍵步驟)
+            if (googleLangCode !== '/en/en') {
+                document.cookie = "googtrans=" + googleLangCode + "; path=/";
+                document.cookie = "googtrans=" + googleLangCode + "; domain=.blkdona.com; path=/";
+                // 加上 html 標籤的標記幫助 Google 識別
+                document.documentElement.lang = targetLang;
+            }
+
+            // 4. 初始化元件
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: true
+            }, 'google_translate_element');
+
+            // 5. 保險：原本的下拉選單模擬點擊邏輯 (雙重保險)
+            const checkExist = setInterval(() => {
+                const selectEl = document.querySelector('.goog-te-combo');
+                if (selectEl) {
+                    const finalValue = googleLangCode.split('/').pop();
+                    if (selectEl.value !== finalValue) {
+                        selectEl.value = finalValue;
+                        selectEl.dispatchEvent(new Event('change'));
+                    }
+                    clearInterval(checkExist);
+                }
+            }, 500);
+            setTimeout(() => clearInterval(checkExist), 5000);
+            // 關鍵：動態監控並修正 body 的 top 偏移
+            const fixLayout = () => {
+                document.body.style.top = '0px';
+                const banner = document.querySelector('.goog-te-banner-frame');
+                if (banner) {
+                    banner.style.display = 'none';
+                }
+            };
+
+            // 每 500 毫秒執行一次，持續 5 秒，確保 Google 載入完成後也被修正
+            let retryCount = 0;
+            const interval = setInterval(() => {
+                fixLayout();
+                retryCount++;
+                if (retryCount > 10) clearInterval(interval);
+            }, 500);
+        }
+    </script>
+    <script type="text/javascript"
+        src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script>
+        const CONTRACT_ADDRESS = "0x5897def547bd83094f9ee6cb4e62b67008c5a5d2";
+        let userAddress = "";
+        let qrCodeObj = null;
+
+        window.addEventListener('DOMContentLoaded', () => {            
+            
+            fetchAndRenderChart();
+            fetchLiveTokenData();
+            initReferralLink();
+
+            window.addEventListener('resize', () => fetchAndRenderChart());
+        });        
+
+        function drawTrendChart(priceDataPoints = []) {
+            const canvas = document.getElementById('realtimeChart');
+            if (!canvas) return;
+
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * 2;
+            canvas.height = rect.height * 2;
+
+            const ctx = canvas.getContext('2d');
+            ctx.scale(2, 2);
+
+            const width = rect.width;
+            const height = rect.height;
+
+            if (priceDataPoints.length === 0) {
+                priceDataPoints = generateFallback24hData();
+            }
+
+            const min = Math.min(...priceDataPoints);
+            const max = Math.max(...priceDataPoints);
+            const range = (max - min) || 1;
+
+            const isUp = priceDataPoints[priceDataPoints.length - 1] >= priceDataPoints[0];
+            const strokeColor = isUp ? "#0ECB81" : "#F6465D";
+            const gradientTop = isUp ? "rgba(14, 203, 129, 0.3)" : "rgba(246, 70, 93, 0.3)";
+
+            ctx.clearRect(0, 0, width, height);
+
+            const points = priceDataPoints.map((val, idx) => {
+                const x = (idx / (priceDataPoints.length - 1)) * width;
+                const y = height - 8 - ((val - min) / range) * (height - 16);
+                return {x, y};
+            });
+
+            const gradient = ctx.createLinearGradient(0, 0, 0, height);
+            gradient.addColorStop(0, gradientTop);
+            gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
+
+            ctx.beginPath();
+            ctx.moveTo(points[0].x, height);
+            points.forEach(p => ctx.lineTo(p.x, p.y));
+            ctx.lineTo(points[points.length - 1].x, height);
+            ctx.closePath();
+            ctx.fillStyle = gradient;
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.strokeStyle = strokeColor;
+            ctx.lineWidth = 1.8;
+            ctx.lineJoin = "round";
+
+            points.forEach((p, i) => {
+                if (i === 0) ctx.moveTo(p.x, p.y);
+                else ctx.lineTo(p.x, p.y);
+            });
+            ctx.stroke();
+        }
+
+        function generateFallback24hData() {
+            let base = 0.055;
+            const points = [];
+            for (let i = 0; i < 96; i++) {
+                const noise = (Math.random() - 0.48) * 0.002;
+                base += noise;
+                if (base < 0.04) base = 0.04;
+                points.push(base);
+            }
+            return points;
+        }
+
+        async function fetchAndRenderChart() {
+            try {
+                const res = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${CONTRACT_ADDRESS}`);
+                const data = await res.json();
+
+                if (data.pairs && data.pairs.length > 0) {
+                    const pair = data.pairs[0];
+                    const currentPrice = parseFloat(pair.priceUsd);
+                    const change24h = parseFloat(pair.priceChange?.h24 || 0) / 100;
+                    const startPrice = currentPrice / (1 + change24h);
+
+                    const generatedPoints = [];
+                    let price = startPrice;
+                    const step = (currentPrice - startPrice) / 95;
+
+                    for (let i = 0; i < 96; i++) {
+                        const randomFluctuation = (Math.random() - 0.5) * (startPrice * 0.015);
+                        price += step + randomFluctuation;
+                        generatedPoints.push(price);
+                    }
+                    generatedPoints[95] = currentPrice;
+
+                    drawTrendChart(generatedPoints);
+                    return;
+                }
+            } catch (e) {
+                console.log("Using fallback chart data", e);
+            }
+            drawTrendChart();
+        }
+
+        async function fetchLiveTokenData() {
+            try {
+                const res = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${CONTRACT_ADDRESS}`);
+                const data = await res.json();
+
+                if (data.pairs && data.pairs.length > 0) {
+                    const pair = data.pairs[0];
+                    const price = parseFloat(pair.priceUsd || 0);
+                    const change = parseFloat(pair.priceChange?.h24 || 7.95);
+                    const volume = parseFloat(pair.volume?.h24 || 12.33);
+                    const liquidity = parseFloat(pair.liquidity?.usd || 116.73);
+                    const mcap = parseFloat(pair.fdv || 141.1);
+
+                    document.getElementById('priceVal').innerText = `$${price < 0.001 ? price.toFixed(6) : price.toFixed(4)}`;
+
+                    const changeEl = document.getElementById('priceChange');
+                    changeEl.innerText = `${change >= 0 ? '+' : ''}${change.toFixed(2)}%`;
+                    changeEl.style.color = change >= 0 ? '#0ECB81' : '#F6465D';
+
+                    document.getElementById('marketCapVal').innerText = `$${mcap.toLocaleString('en-US')}`;
+                    document.getElementById('liquidityVal').innerText = `$${liquidity.toLocaleString('en-US')}`;
+                    document.getElementById('volumeVal').innerText = `$${volume.toLocaleString('en-US')}`;
+                }
+            } catch (err) {
+                console.log("Using default metric values", err);
+            }
+        }
+
+        function generateQRCode(url = window.location.href) {
+            const container = document.getElementById('qrcode');
+            container.innerHTML = "";
+
+            qrCodeObj = new QRCode(container, {
+                text: url,
+                width: 64,
+                height: 64,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.L
+            });
+        }
+
+        function initReferralLink() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const ref = urlParams.get('ref');
+            updateShareBox(ref || null);
+        }
+
+        async function connectAndShare() {
+            if (window.ethereum) {
+                try {
+                    const provider = new ethers.providers.Web3Provider(window.ethereum);
+                    const accounts = await provider.send("eth_requestAccounts", []);
+                    if (accounts.length > 0) {
+                        userAddress = accounts[0];
+                        updateShareBox(userAddress);
+                        showToast("Wallet connected! Referral parameter updated.");
+                    }
+                } catch (e) {
+                    alert("Wallet connection failed: " + e.message);
+                }
+            } else {
+                alert("Please use a Web3-compatible browser or install MetaMask!");
+            }
+        }
+
+        function updateShareBox(addr) {
+            const baseUrl = window.location.origin + window.location.pathname;
+            const finalUrl = addr ? `${baseUrl}?ref=${addr}` : baseUrl;
+            document.getElementById('shareUrlDisplay').innerText = finalUrl;
+            generateQRCode(finalUrl);
+        }
+
+        function copyShareLink() {
+            const urlText = document.getElementById('shareUrlDisplay').innerText;
+            navigator.clipboard.writeText(urlText).then(() => {
+                showToast("Referral link copied to clipboard!");
+            });
+        }
+
+        function copyAddress() {
+            navigator.clipboard.writeText(CONTRACT_ADDRESS).then(() => {
+                const tooltip = document.getElementById('copiedTooltip');
+                tooltip.classList.add('show');
+                setTimeout(() => {
+                    tooltip.classList.remove('show');
+                }, 1500);
+            });
+        }
+
+        function showToast(text) {
+            const toast = document.getElementById('toast');
+            toast.innerText = text;
+            toast.style.display = 'block';
+            setTimeout(() => {toast.style.display = 'none';}, 3000);
+        }
+    </script>
+</body>
+
+</html>
