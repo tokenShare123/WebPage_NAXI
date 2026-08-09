@@ -84,6 +84,32 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
+        /* 讓外層 tabs 垂直居中與彈性排列 */
+        .top-level-tabs {
+            align-items: center;
+        }
+
+        /* Token Icon 樣式：確保寬高一致且置中 */
+        .token-link-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            /* 寬高一致 */
+            height: 36px;
+            /* 寬高一致 */
+            margin-left: 8px;
+            color: var(--text, #ffffff);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .token-link-icon:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--primary, #007bff);
+        }
+
         .top-tab {
             flex: 1;
             background: none;
@@ -720,34 +746,42 @@
 
         /* Modal Overlay Base */
         /* Modal Overlay Base - 滿屏覆蓋 */
-.modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;       /* 強制滿寬 */
-    height: 100vh;      /* 強制滿高 */
-    background: rgba(0, 0, 0, 0.95);
-    backdrop-filter: blur(4px);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
-    padding: 0;         /* 移除四周留白 */
-}
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            /* 強制滿寬 */
+            height: 100vh;
+            /* 強制滿高 */
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            /* 移除四周留白 */
+        }
 
-/* K-Line Chart Modal Container - 滿螢幕尺寸 */
-.chart-modal-content {
-    background: var(--panel);
-    border: none;       /* 滿屏時可移除外框 */
-    border-radius: 0;   /* 滿屏時將圓角改為直角 */
-    width: 100%;        /* 寬度 100% */
-    height: 100%;       /* 高度 100% 佔滿全螢幕 */
-    max-width: none;    /* 取消最大寬度限制 */
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    box-shadow: none;
-}
+        /* K-Line Chart Modal Container - 滿螢幕尺寸 */
+        .chart-modal-content {
+            background: var(--panel);
+            border: none;
+            /* 滿屏時可移除外框 */
+            border-radius: 0;
+            /* 滿屏時將圓角改為直角 */
+            width: 100%;
+            /* 寬度 100% */
+            height: 100%;
+            /* 高度 100% 佔滿全螢幕 */
+            max-width: none;
+            /* 取消最大寬度限制 */
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: none;
+        }
 
         .chart-modal-header {
             display: flex;
@@ -781,6 +815,44 @@
             height: 100%;
             border: none;
         }
+
+        iframe.goog-te-banner-frame,
+        .goog-te-banner-frame,
+        #goog-gt-tt,
+        .goog-te-balloon-frame,
+        .skiptranslate {
+            display: none !important;
+            visibility: hidden !important;
+        }
+
+        html {
+            top: 0 !important;
+        }
+
+        body {
+            top: 0 !important;
+            position: static !important;
+        }
+
+        .goog-te-gadget {
+            font-size: 0 !important;
+            color: transparent !important;
+        }
+
+        .goog-te-gadget .goog-te-combo {
+            background: rgba(255, 255, 255, 0.1) !important;
+            color: #fff !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            border-radius: 8px !important;
+            padding: 6px 10px !important;
+            cursor: pointer;
+            outline: none !important;
+        }
+
+        .goog-text-highlight {
+            background-color: transparent !important;
+            box-shadow: none !important;
+        }
     </style>
 </head>
 
@@ -798,6 +870,9 @@
             <button class="top-tab" onclick="switchMainView('Whitepaper', this)">
                 <i class="fa-solid fa-book-open" style="margin-right: 6px;"></i>Whitepaper
             </button>
+            <a href="mtrx-arbitrage.html" class="token-link-icon" title="Token Arbitrage">
+                <i class="fa-solid fa-coins"></i>
+            </a>
         </div>
 
         <!-- MAIN VIEW 1: DASHBOARD (包含原本所有完整功能) -->
@@ -1344,8 +1419,7 @@
                         <div class="lg:w-1/2 space-y-6">
                             <div
                                 class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-semibold uppercase tracking-wider">
-                                <i class="fa-solid fa-shield-halved"></i> <span>Matrix Smart Contract Whitepaper
-                                    v2.0</span>
+                                <i class="fa-solid fa-shield-halved"></i> <span>Matrix Whitepaper v2.0</span>
                             </div>
                             <h2 class="text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
                                 MTRX <span
@@ -1962,9 +2036,8 @@
                                 <div class="space-y-3">
                                     <div class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Question 03
                                     </div>
-                                    <h3 class="text-lg font-bold text-white">Ready for 80% returns at 10% cost?</h3>
-                                    <p class="text-gray-400 text-sm">Are you willing to participate and witness the next
-                                        AI-driven ecosystem, capturing 80% upside at 10% entry cost?</p>
+                                    <h3 class="text-lg font-bold text-white">Are you ready to take the risk and potentially reap returns of tens of times your initial investment?</h3>
+                                    <p class="text-gray-400 text-sm"> Are you willing to participate in and witness the next AI-driven ecosystem (which may involve the risk of losses and is not guaranteed to generate profits)?</p>
                                 </div>
                                 <div class="pt-2 text-indigo-400/50 text-xs font-mono">03 / OPPORTUNITY</div>
                             </div>
@@ -2148,8 +2221,68 @@
                     <div class="flex items-center space-x-4">
                         <span>Use Arrow Keys or Buttons to Navigate</span>
                     </div>
+                    <div id="google_translate_element"></div>
                 </footer>
+                <!-- Google 翻譯 -->
+                <script type="text/javascript">
+                    function googleTranslateElementInit() {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const langParam = urlParams.get('lang');
+                        const systemLang = navigator.language || navigator.userLanguage;
+                        let targetLang = langParam || systemLang;
 
+                        let googleLangCode = '/en/en';
+                        if (targetLang.toLowerCase().includes('zh-tw')) googleLangCode = '/en/zh-TW';
+                        else if (targetLang.toLowerCase().includes('zh-cn')) googleLangCode = '/en/zh-CN';
+                        else if (targetLang.startsWith('ja')) googleLangCode = '/en/ja';
+                        else if (targetLang.startsWith('ko')) googleLangCode = '/en/ko';
+                        else if (targetLang.length >= 2 && !targetLang.startsWith('en')) {
+                            googleLangCode = '/en/' + targetLang.split('-')[0];
+                        }
+
+                        if (googleLangCode !== '/en/en') {
+                            document.cookie = "googtrans=" + googleLangCode + "; path=/";
+                            document.cookie = "googtrans=" + googleLangCode + "; domain=.blkdona.com; path=/";
+                            document.documentElement.lang = targetLang;
+                        }
+
+                        new google.translate.TranslateElement({
+                            pageLanguage: 'en',
+                            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                            autoDisplay: true
+                        }, 'google_translate_element');
+
+                        const checkExist = setInterval(() => {
+                            const selectEl = document.querySelector('.goog-te-combo');
+                            if (selectEl) {
+                                const finalValue = googleLangCode.split('/').pop();
+                                if (selectEl.value !== finalValue) {
+                                    selectEl.value = finalValue;
+                                    selectEl.dispatchEvent(new Event('change'));
+                                }
+                                clearInterval(checkExist);
+                            }
+                        }, 500);
+                        setTimeout(() => clearInterval(checkExist), 5000);
+
+                        const fixLayout = () => {
+                            document.body.style.top = '0px';
+                            const banner = document.querySelector('.goog-te-banner-frame');
+                            if (banner) {
+                                banner.style.display = 'none';
+                            }
+                        };
+
+                        let retryCount = 0;
+                        const interval = setInterval(() => {
+                            fixLayout();
+                            retryCount++;
+                            if (retryCount > 10) clearInterval(interval);
+                        }, 500);
+                    }
+                </script>
+                <script type="text/javascript"
+                    src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
                 <!-- Presentation Controller Script -->
                 <script>
                     let currentSlide = 1;
@@ -2981,7 +3114,7 @@
         }
 
         // 打開 K 線圖 Modal 視窗並動態載入包含合約地址的 iframe
-        function openChartModal() {                        
+        function openChartModal() {
             const address = "0xF6402b46B78726bf7AE402f5Dbf8896232628d63";
 
             // 使用 DexScreener embed 圖表（BSC鏈，嵌入合約地址）
