@@ -550,21 +550,28 @@
         }
 
         async function fetchHoldersData() {
-            try {
-                const res = await fetch(`https://api.geckoterminal.com/api/v2/networks/bsc/tokens/${CONTRACT_ADDRESS}`);
-                if (res.ok) {
-                    const json = await res.json();
-                    const holders = json?.data?.attributes?.holders_count;
-                    if (holders !== undefined && holders !== null) {
-                        document.getElementById("holdersVal").innerText = parseInt(holders).toLocaleString();
-                        return;
-                    }
-                }
-            } catch (e) {
-                console.warn("Holders API Fetch Failed:", e);
-            }
-            document.getElementById("holdersVal").innerText = "11";
-        }
+  const holdersEl = document.getElementById("holdersVal");
+
+  try {
+    // GoPlus 免費且不需要 API Key
+    const res = await fetch(`https://api.gopluslabs.io/api/v1/token_security/56?contract_addresses=${CONTRACT_ADDRESS}`);
+    if (!res.ok) throw new Error("網路請求失敗");
+
+    const json = await res.json();
+    const tokenData = json?.result?.[CONTRACT_ADDRESS.toLowerCase()];
+    const holders = tokenData?.holder_count;
+
+    if (holders !== undefined && holders !== null) {
+      holdersEl.innerText = parseInt(holders, 10).toLocaleString();
+      return;
+    }
+    
+    throw new Error("無法取得持有人數量");
+  } catch (e) {
+    console.warn("Holders API Fetch Failed:", e);
+    holdersEl.innerText = "--";
+  }
+}
 
         async function fetchMarketData() {
             try {
